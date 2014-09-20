@@ -1,0 +1,7 @@
+<script src="{{ url_for('static', filename='javascripts/vendor/modernizr.js') }}"></script>
+<script src="{{ url_for('static', filename='javascripts/vendor/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='javascripts/vendor/react/react.js') }}"></script>
+{% if config.DEBUG %}
+  <script src="{{ url_for('static', filename='javascripts/vendor/react/JSXTransformer.js') }}"></script>
+  <script type="text/jsx" src="{{ url_for('static', filename='jsx/search.jsx') }}"></script>
+{% endif %}
