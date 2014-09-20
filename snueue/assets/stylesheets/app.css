@@ -9035,22 +9035,22 @@ body {
   margin-top: 3rem;
 }
 
-/* line 69, ../scss/app.scss */
-.search .results-order-select {
+/* line 66, ../scss/app.scss */
+#search-form .results-sorting-select {
   height: 3.0625rem;
 }
 
-/* line 73, ../scss/app.scss */
+/* line 70, ../scss/app.scss */
 .media-item .media-title {
   color: #ffffff;
 }
 
-/* line 77, ../scss/app.scss */
+/* line 74, ../scss/app.scss */
 .media-item .media-expand {
   background: #151515;
 }
 
-/* line 81, ../scss/app.scss */
+/* line 78, ../scss/app.scss */
 .media-item .fa {
   color: #ffffff;
 }
