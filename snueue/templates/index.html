@@ -1,0 +1,54 @@
+<head>
+  <title>Snueue</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/app.css') }}">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="yield">
+    <div class="search row">
+      <form>
+        <div class="small-12 large-8 large-offset-2 columns">
+          <div class="row collapse">
+            <div class="small-10 columns">
+              <input id="resource" class="search-bar" type="text" placeholder="/r/music">
+            </div>
+            <div class="small-2 columns">
+              <select class="results-order-select">
+                <option value="hot">Hot</option>
+                <option value="top">Top</option>
+                <option value="new">New</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="small-12 large-2 columns end">
+          <div class="button"><i class="fa fa-play"></i></div>
+        </div>
+      </form>
+    </div>
+
+    <div id="queue">
+      <div class="media-item">
+        <div class="row">
+          <div class="small-7 large-offset-2 columns">
+            <h4 class="media-title">1 - Rick Astley - Never Gonna Give You Up</h4>
+          </div>
+          <div class="small-1 columns">
+            <div class="button media-expand"><i class="fa fa-chevron-down"></i></div>
+          </div>
+          <div class="small-1 columns end">
+            <div class="button secondary"><i class="fa fa-forward"></i></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-12 large-8 large-offset-2 columns">
+            <div class="flex-video">
+              <iframe width="420" height="315" src="//www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/vendor/modernizr.js') }}"></script>
+</body>
