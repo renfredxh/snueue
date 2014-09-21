@@ -86,9 +86,9 @@ var QueuedMediaItem = React.createClass({
   render: function() {
     return (
       <div className="media-item row">
-        <div className="small-9 large-offset-2 columns end">
+        <div className="small-8 large-offset-2 columns end">
           <h4 className="media-title">
-            {this.props.submission.title} <i className="fa fa-chevron-down right"></i>
+            {this.props.submission.title}
           </h4>
         </div>
       </div>
@@ -104,7 +104,7 @@ var MediaItem = React.createClass({
       <div className="media-item row">
         <div className="small-8 large-offset-2 columns">
           <h4 className="media-title">
-            {submission.title} <i className="fa fa-chevron-down right"></i>
+            {submission.title} <i className="slide-toggle fa fa-chevron-down right"></i>
           </h4>
           {player}
         </div>

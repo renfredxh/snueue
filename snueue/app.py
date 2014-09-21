@@ -38,7 +38,7 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    if MOCK:
+    if request.form['source'] == '':
         return jsonify(mock_data)
     return jsonify({
         'submissions': reddit.get_submissions(request.form['source'])

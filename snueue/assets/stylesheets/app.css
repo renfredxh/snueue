@@ -3904,7 +3904,7 @@ label.right {
 /* line 374, ../scss/vendor/foundation/foundation/components/_forms.scss */
 label.inline {
   margin: 0 0 1rem 0;
-  padding: 0.5625rem 0;
+  padding: 0.5rem 0;
 }
 /* line 376, ../scss/vendor/foundation/foundation/components/_forms.scss */
 label small {
@@ -4033,8 +4033,8 @@ textarea {
   -webkit-border-radius: 0px;
   background-color: #FFFFFF;
   font-family: inherit;
-  border: 1px solid #cccccc;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  border: 0px solid #cccccc;
+  box-shadow: inset 0px 0px 2px #bababa;
   color: rgba(0, 0, 0, 0.75);
   display: block;
   font-size: 0.875rem;
@@ -4265,7 +4265,7 @@ select {
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
   background-position: 100% center;
   background-repeat: no-repeat;
-  border: 1px solid #cccccc;
+  border: 0px solid #cccccc;
   padding: 0.5rem;
   font-size: 0.875rem;
   color: rgba(0, 0, 0, 0.75);
@@ -9027,7 +9027,7 @@ button {
 
 /* line 58, ../scss/app.scss */
 body {
-  background: #151515;
+  background: #1c1c1f;
 }
 
 /* line 62, ../scss/app.scss */
@@ -9053,4 +9053,16 @@ body {
 /* line 78, ../scss/app.scss */
 .media-item .fa {
   color: #ffffff;
+}
+
+/* line 82, ../scss/app.scss */
+.media-item .media-title {
+  background: #303030;
+  padding: 0.58rem 0.7rem;
+  margin: 0;
+}
+
+/* line 88, ../scss/app.scss */
+.media-item .slide-toggle {
+  padding: 0.25rem 0.5rem;
 }

@@ -56,7 +56,7 @@ button {
 }
 
 body {
-  background: #151515;
+  background: #1c1c1f;
 }
 
 #main {
@@ -77,4 +77,14 @@ body {
 
 .media-item .fa {
   color: #ffffff;
+}
+
+.media-item .media-title {
+  background: $secondary-color;
+  padding: 0.58rem 0.7rem;
+  margin: 0;
+}
+
+.media-item .slide-toggle {
+  padding: 0.25rem 0.5rem;
 }
