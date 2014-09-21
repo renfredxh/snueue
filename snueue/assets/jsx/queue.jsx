@@ -8,7 +8,6 @@ var Queue = React.createClass({
     this.setState({submissions: newSubmissions});
   },
   handleFetch: function(data) {
-    console.log(data);
     this.setState(data);
   },
   render: function() {
@@ -165,7 +164,6 @@ var MediaPlayer = React.createClass({
       default:
         state = 'unstarted'
     }
-    console.log(state)
     this.props.onStateChange(state);
   },
   componentDidMount: function() {

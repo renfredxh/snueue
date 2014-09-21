@@ -1,36 +1,13 @@
-import reddit
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, flash
 from flaskext.compass import Compass
-
-# Configuration
-DEBUG = True
-MOCK = True
+from flask.ext.assets import Environment, Bundle
+import reddit
+import config
 
 app = Flask(__name__, static_folder='assets')
-app.config.from_object(__name__)
+app.config.from_object('config')
 compass = Compass(app)
-
-mock_data = {
-    'submissions': [
-        {
-              'id': '1',
-              'title': 'Rick Astley - Never Gonna Give You Up',
-              'type': 'youtube',
-              'url': 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-              'media_id': 'dQw4w9WgXcQ',
-              'permalink': 'http://reddit.com'
-        },
-        {
-              'id': '4',
-              'title': 'KXVO "Pumpkin Dance',
-              'type': 'youtube',
-              'url': 'http://youtu.be/v4IC7qaNr7I',
-              'media_id': 'v4IC7qaNr7I',
-              'permalink': 'http://reddit.com'
-        }
-    ]
-}
 
 @app.route('/')
 def index():
@@ -40,7 +17,7 @@ def index():
 def search():
     source, sorting = request.form['source'], request.form['sorting']
     if source == '':
-        return jsonify(mock_data)
+        return jsonify(app.config['MOCK_API'])
     return jsonify({
         'submissions': reddit.get_submissions(source, sorting)
     })

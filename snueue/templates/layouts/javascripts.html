@@ -5,4 +5,7 @@
 {% if config.DEBUG %}
   <script src="{{ url_for('static', filename='javascripts/vendor/react/JSXTransformer.js') }}"></script>
   <script type="text/jsx" src="{{ url_for('static', filename='jsx/queue.jsx') }}"></script>
+{% else %}
+  <script src="{{ url_for('static', filename='javascripts/queue.js') }}"></script>
 {% endif %}
+
