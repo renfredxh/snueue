@@ -1,4 +1,5 @@
 Flask==0.10.1
+Flask-Assets==0.10
 Flask-Compass==0.2
 Jinja2==2.7.3
 MarkupSafe==0.23
@@ -6,10 +7,12 @@ PyExecJS==1.0.4
 PyReact==0.4.0
 Werkzeug==0.9.6
 argparse==1.2.1
+gunicorn==19.1.1
 ipython==2.2.0
 itsdangerous==0.24
 praw==2.1.18
 requests==2.4.1
 six==1.8.0
 update-checker==0.10
+webassets==0.10.1
 wsgiref==0.1.2
