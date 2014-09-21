@@ -1,6 +1,6 @@
 preferred_syntax = :sass
 http_path = '/'
-css_dir = 'assets/stylesheets/build'
+css_dir = 'assets/stylesheets'
 sass_dir = 'assets/scss'
 images_dir = 'assets/images'
 javascripts_dir = 'assets/javascripts'
