@@ -8,6 +8,7 @@ var Queue = React.createClass({
     this.setState({submissions: newSubmissions});
   },
   handleFetch: function(data) {
+    console.log(data);
     this.setState(data);
   },
   render: function() {
@@ -85,7 +86,7 @@ var MediaList = React.createClass({
 var QueuedMediaItem = React.createClass({
   render: function() {
     return (
-      <div className="media-item row">
+      <div className="media-item queued-media-item row">
         <div className="small-8 large-offset-2 columns end">
           <h4 className="media-title">
             {this.props.submission.title}
@@ -99,7 +100,7 @@ var QueuedMediaItem = React.createClass({
 var MediaItem = React.createClass({
   render: function() {
     var submission = this.props.submission;
-    var player = <MediaPlayer type={submission.type} url={submission.url} mediaId={submission.mediaId} />;
+    var player = <MediaPlayer type={submission.type} url={submission.url} mediaId={submission.media_id} />;
     return (
       <div className="media-item row">
         <div className="small-8 large-offset-2 columns">
@@ -154,7 +155,7 @@ var MediaPlayer = React.createClass({
       <div className="media-player row">
         <div className="small-12 columns">
           <div className="flex-video">
-            <div id="player" data-media-id={this.props.mediaId}></div>
+            <div id="player"></div>
           </div>
         </div>
       </div>
