@@ -38,10 +38,11 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
-    if request.form['source'] == '':
+    source, sorting = request.form['source'], request.form['sorting']
+    if source == '':
         return jsonify(mock_data)
     return jsonify({
-        'submissions': reddit.get_submissions(request.form['source'])
+        'submissions': reddit.get_submissions(source, sorting)
     })
 
 if __name__ == '__main__':

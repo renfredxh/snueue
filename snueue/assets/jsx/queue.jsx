@@ -41,7 +41,7 @@ var Search = React.createClass({
   render: function() {
     return (
       <form className="search-form" onSubmit={this.handleSubmit} ref="form">
-        <div className="small-12 large-8 large-offset-2 columns">
+        <div className="small-12 large-10 large-offset-1 columns">
           <div className="row collapse">
             <div className="small-10 columns">
               <input id="resource" className="search-bar" type="text" placeholder="/r/music" ref="source"/>
@@ -55,7 +55,7 @@ var Search = React.createClass({
             </div>
           </div>
         </div>
-        <div role="button" className="small-12 large-2 columns end">
+        <div role="button" className="small-12 large-1 columns end">
           <button type="submit" className="button"><i className="fa fa-arrow-right"></i></button>
         </div>
       </form>
@@ -87,7 +87,7 @@ var QueuedMediaItem = React.createClass({
   render: function() {
     return (
       <div className="media-item queued-media-item row">
-        <div className="small-8 large-offset-2 columns end">
+        <div className="small-10 large-offset-1 columns end">
           <h4 className="media-title">
             {this.props.submission.title}
           </h4>
@@ -107,7 +107,7 @@ var MediaItem = React.createClass({
     var player = <MediaPlayer onStateChange={this.handleStateChange} type={submission.type} url={submission.url} mediaId={submission.media_id} />;
     return (
       <div className="media-item row">
-        <div className="small-8 large-offset-2 columns">
+        <div className="small-10 large-offset-1 columns">
           <h4 className="media-title">
             {submission.title} <i className="slide-toggle fa fa-chevron-down right"></i>
           </h4>
