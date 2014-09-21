@@ -9031,12 +9031,12 @@ body {
 }
 
 /* line 62, ../scss/app.scss */
-#yield {
+#main {
   margin-top: 3rem;
 }
 
 /* line 66, ../scss/app.scss */
-#search-form .results-sorting-select {
+.search-form .results-sorting-select {
   height: 3.0625rem;
 }
 
