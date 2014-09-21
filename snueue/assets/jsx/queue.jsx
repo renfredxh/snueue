@@ -98,9 +98,13 @@ var QueuedMediaItem = React.createClass({
 });
 
 var MediaItem = React.createClass({
+  handleStateChange: function(state) {
+    if (state === 'ended')
+      this.props.onSkip();
+  },
   render: function() {
     var submission = this.props.submission;
-    var player = <MediaPlayer type={submission.type} url={submission.url} mediaId={submission.media_id} />;
+    var player = <MediaPlayer onStateChange={this.handleStateChange} type={submission.type} url={submission.url} mediaId={submission.media_id} />;
     return (
       <div className="media-item row">
         <div className="small-8 large-offset-2 columns">
@@ -140,8 +144,29 @@ var MediaPlayer = React.createClass({
         'onReady': function(e) {
           e.target.playVideo();
         },
+        'onStateChange': this.stateChange
       }
     });
+  },
+  stateChange: function(e) {
+    var state;
+    switch(e.data) {
+      case YT.PlayerState.PLAYING:
+        state = 'playing';
+        break;
+      case YT.PlayerState.PAUSED:
+        state = 'paused'
+        break;
+      case YT.PlayerState.ENDED:
+        state = 'ended';
+        break;
+      case YT.PlayerState.BUFFERING:
+        state = 'buffering'
+      default:
+        state = 'unstarted'
+    }
+    console.log(state)
+    this.props.onStateChange(state);
   },
   componentDidMount: function() {
     this.initializePlayer();
