@@ -14,10 +14,14 @@ def index():
     return render_template('index.html')
 
 @app.route('/submissions', methods=['POST'])
-def search():
+def submissions():
     source, sorting = request.form['source'], request.form['sorting']
     if source == '':
         return jsonify(app.config['MOCK_API'])
+    # Searches can be in the form "/r/subreddit_name" or "subreddit_name"
+    subreddit = re.search(r'(?:/r/)([^/]*)', source)
+    if subreddit:
+        source = subreddit.group(1)
     return jsonify({
         'submissions': reddit.get_submissions(source, sorting)
     })
