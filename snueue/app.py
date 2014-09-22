@@ -13,7 +13,7 @@ compass = Compass(app)
 def index():
     return render_template('index.html')
 
-@app.route('/search', methods=['POST'])
+@app.route('/submissions', methods=['POST'])
 def search():
     source, sorting = request.form['source'], request.form['sorting']
     if source == '':

@@ -32,7 +32,7 @@ var Search = React.createClass({
     e.preventDefault();
     var source = this.refs.source.getDOMNode().value.trim();
     var sorting = this.refs.sorting.getDOMNode().value.trim();
-    $.post("/search", {source: source, sorting: sorting}, $.proxy(function(data) {
+    $.post("/submissions", {source: source, sorting: sorting}, $.proxy(function(data) {
       this.props.onFetch(data);
     }, this));
     return;
