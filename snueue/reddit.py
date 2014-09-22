@@ -33,9 +33,14 @@ def media_type(submission):
     return 'youtube'
 
 def media_id(submission, type):
-    return {
-        'youtube': re.search('[A-Za-z0-9_-]{11}', submission.url).group()
-    }[media_type(submission)]
+    type = media_type(submission)
+    if type == 'youtube':
+        # Youtube video ids are an 11 digit base-64 encoded string usually
+        # embedded the form "v=<id>", "v%3D<id>" or "embed/<id>"
+        m = (re.search('(?<=v%3D)[A-Za-z0-9_-]{11}', submission.url) or
+             re.search('(?<=v=)[A-Za-z0-9_-]{11}', submission.url) or
+             re.search('[A-Za-z0-9_-]{11}', submission.url))
+        return m.group()
 
 def get_fetch_method(subreddit, sorting):
     return {
