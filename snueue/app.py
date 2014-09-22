@@ -1,3 +1,4 @@
+import re
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, flash
 from flaskext.compass import Compass
@@ -12,6 +13,10 @@ compass = Compass(app)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/r/<subreddit>')
+def index_with_subreddit(subreddit):
+    return render_template('index.html', source='/r/{}'.format(subreddit))
 
 @app.route('/submissions', methods=['POST'])
 def submissions():
