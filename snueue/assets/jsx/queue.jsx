@@ -8,7 +8,6 @@ var Queue = React.createClass({
     this.setState({submissions: newSubmissions});
   },
   handleFetch: function(data) {
-    console.log(data);
     this.setState(data);
   },
   render: function() {
@@ -98,9 +97,7 @@ var QueuedMediaItem = React.createClass({
     return (
       <div className="media-item queued-media-item row">
         <div className="small-10 large-offset-1 columns end">
-          <h4 className="media-title">
-            {this.props.submission.title}
-          </h4>
+          <MediaTitle submission={this.props.submission} />
         </div>
       </div>
     );
@@ -118,9 +115,7 @@ var MediaItem = React.createClass({
     return (
       <div className="media-item row">
         <div className="small-10 large-offset-1 columns">
-          <h4 className="media-title">
-            {submission.title} <i className="slide-toggle fa fa-chevron-down right"></i>
-          </h4>
+          <MediaTitle submission={submission} />
           {player}
         </div>
         <div className="small-1 columns end">
@@ -133,6 +128,18 @@ var MediaItem = React.createClass({
         </div>
       </div>
     );
+  }
+});
+
+var MediaTitle = React.createClass({
+  render: function() {
+    return (
+      <div className="media-title">
+        <a className="permalink" href={this.props.submission.permalink} target="_blank">
+          {this.props.submission.title}
+        </a>
+      </div>
+    )
   }
 });
 
