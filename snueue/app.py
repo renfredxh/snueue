@@ -1,3 +1,4 @@
+import re
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, jsonify, flash
 from flaskext.compass import Compass
@@ -13,11 +14,19 @@ compass = Compass(app)
 def index():
     return render_template('index.html')
 
-@app.route('/search', methods=['POST'])
-def search():
+@app.route('/r/<subreddit>')
+def index_with_subreddit(subreddit):
+    return render_template('index.html', source='/r/{}'.format(subreddit))
+
+@app.route('/submissions', methods=['POST'])
+def submissions():
     source, sorting = request.form['source'], request.form['sorting']
     if source == '':
         return jsonify(app.config['MOCK_API'])
+    # Searches can be in the form "/r/subreddit_name" or "subreddit_name"
+    subreddit = re.search(r'(?:/r/)([^/]*)', source)
+    if subreddit:
+        source = subreddit.group(1)
     return jsonify({
         'submissions': reddit.get_submissions(source, sorting)
     })

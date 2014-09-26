@@ -8,6 +8,7 @@ var Queue = React.createClass({
     this.setState({submissions: newSubmissions});
   },
   handleFetch: function(data) {
+    console.log(data);
     this.setState(data);
   },
   render: function() {
@@ -29,21 +30,31 @@ var Queue = React.createClass({
 
 var Search = React.createClass({
   handleSubmit: function(e) {
-    e.preventDefault();
+    if (typeof e !== 'undefined')
+      e.preventDefault();
     var source = this.refs.source.getDOMNode().value.trim();
     var sorting = this.refs.sorting.getDOMNode().value.trim();
-    $.post("/search", {source: source, sorting: sorting}, $.proxy(function(data) {
+    $.post("/submissions", {
+      source: source,
+      sorting: sorting
+    }, $.proxy(function(data) {
       this.props.onFetch(data);
     }, this));
     return;
   },
+  componentDidMount: function() {
+    if (snueue.sourceFromURL !== undefined) {
+      this.refs.source.getDOMNode().value = snueue.sourceFromURL;
+      this.handleSubmit();
+    }
+  },
   render: function() {
     return (
-      <form className="search-form" onSubmit={this.handleSubmit} ref="form">
+      <form id="source-form" className="search-form" onSubmit={this.handleSubmit} ref="form">
         <div className="small-12 large-10 large-offset-1 columns">
           <div className="row collapse">
             <div className="small-10 columns">
-              <input id="resource" className="search-bar" type="text" placeholder="/r/music" ref="source"/>
+              <input className="search-bar" type="text" placeholder="/r/music" ref="source"/>
             </div>
             <div className="small-2 columns">
               <select className="results-sorting-select" ref="sorting">
