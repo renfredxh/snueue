@@ -8,7 +8,7 @@ import config
 
 app = Flask(__name__, static_folder='assets')
 app.config.from_object('config.Production')
-compass = Compass(app)
+assets = Environment(app)
 
 @app.route('/')
 def index():

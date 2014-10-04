@@ -1,2 +1,4 @@
+build/**
+.webassets-cache/**
 app.css
 queue.js

@@ -26,4 +26,4 @@ class Production(Config):
 
 class Development(Config):
     DEBUG = True
-    ASSETS_DEBUG = False
+    ASSETS_DEBUG = True
