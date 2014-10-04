@@ -1,11 +1,22 @@
 /** @jsx React.DOM */
 var Queue = React.createClass({
   getInitialState: function() {
-    return {submissions: []};
+    return {submissions: [], history: []};
   },
   handleSkip: function() {
+    var newHistory = this.state.history;
+    newHistory.push(this.state.submissions[0])
     var newSubmissions = this.state.submissions.slice(1);
-    this.setState({submissions: newSubmissions});
+    this.setState({submissions: newSubmissions, history: newHistory});
+  },
+  handlePrevious: function() {
+    // Get up to the last elemt from history and place it back
+    // in the submission queue.
+    var newSubmissions = this.state.submissions;
+    newSubmissions.unshift(this.state.history.slice(-1)[0])
+    // Remove the last item from the history.
+    var newHistory = this.state.history.slice(0,-1);
+    this.setState({submissions: newSubmissions, history: newHistory});
   },
   handleFetch: function(data) {
     this.setState(data);
@@ -13,7 +24,7 @@ var Queue = React.createClass({
   render: function() {
     var content;
     if (this.state.submissions.length > 0)
-      content = <MediaList submissions={this.state.submissions} onSkip={this.handleSkip} />
+      content = <MediaList submissions={this.state.submissions} onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
     else
       content = null
     return (
@@ -85,7 +96,7 @@ var MediaList = React.createClass({
     });
     return (
       <div className="mediaList">
-        <MediaItem submission={ready} onSkip={this.props.onSkip}/>
+        <MediaItem submission={ready} onSkip={this.props.onSkip} onPrevious={this.props.onPrevious}/>
         {mediaNodes}
       </div>
     );
@@ -121,6 +132,9 @@ var MediaItem = React.createClass({
         <div className="small-1 columns end">
           <div className="button secondary">
             <i className="fa fa-play"></i>
+          </div>
+          <div className="button secondary" onClick={this.props.onPrevious}>
+            <i className="fa fa-backward"></i>
           </div>
           <div className="button secondary" onClick={this.props.onSkip}>
             <i className="fa fa-forward"></i>
