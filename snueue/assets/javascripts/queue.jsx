@@ -116,29 +116,54 @@ var QueuedMediaItem = React.createClass({
 });
 
 var MediaItem = React.createClass({
-  handleStateChange: function(state) {
-    if (state === 'ended')
+  getInitialState: function() {
+    return {playerStatus: 'unstarted'};
+  },
+  handleItemStateChange: function(newPlayerState) {
+    this.setState({playerStatus: newPlayerState});
+    if (this.state.playerStatus === 'ended')
       this.props.onSkip();
   },
   render: function() {
     var submission = this.props.submission;
-    var player = <MediaPlayer onStateChange={this.handleStateChange} type={submission.type} url={submission.url} mediaId={submission.media_id} />;
+    var mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange}
+      type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div className="media-item row">
         <div className="small-10 large-offset-1 columns">
           <MediaTitle submission={submission} />
-          {player}
+          {mediaPlayer}
         </div>
-        <div className="small-1 columns end">
-          <div className="button secondary">
-            <i className="fa fa-play"></i>
-          </div>
-          <div className="button secondary" onClick={this.props.onPrevious}>
-            <i className="fa fa-backward"></i>
-          </div>
-          <div className="button secondary" onClick={this.props.onSkip}>
-            <i className="fa fa-forward"></i>
-          </div>
+        <MediaController status={this.state.playerStatus} onConrollerStateChange={this.handleItemStateChange}
+          onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
+      </div>
+    );
+  }
+});
+
+var MediaController = React.createClass({
+  inverseStatus: function() {
+    return this.props.status === 'playing' ? 'paused' : 'playing';
+  },
+  handleStatusToggle: function() {
+    this.props.onConrollerStateChange(this.inverseStatus());
+  },
+  render: function() {
+    var toggleButtonClasses = React.addons.classSet({
+      'fa': true,
+      'fa-pause': (this.inverseStatus() === 'paused'),
+      'fa-play': (this.inverseStatus() === 'playing')
+    });
+    return (
+      <div className="small-1 columns end">
+        <div className="button secondary" onClick={this.handleStatusToggle}>
+          <i className={toggleButtonClasses}></i>
+        </div>
+        <div className="button secondary" onClick={this.props.onPrevious}>
+          <i className="fa fa-backward"></i>
+        </div>
+        <div className="button secondary" onClick={this.props.onSkip}>
+          <i className="fa fa-forward"></i>
         </div>
       </div>
     );
@@ -159,27 +184,28 @@ var MediaTitle = React.createClass({
 
 var MediaPlayer = React.createClass({
   initializePlayer: function() {
-    settings = {
+    var component = this;
+    var settings = {
       autohide: 1,
       showinfo: 0,
       rel: 0,
       color: "white",
       modestbranding: 1
     }
-    player = new YT.Player('player', {
+    snueue.player = new YT.Player('player', {
       height: '315',
       width: '420',
       videoId: this.props.mediaId,
       playerVars: settings,
       events: {
         'onReady': function(e) {
-          e.target.playVideo();
+          snueue.player.playVideo();
         },
-        'onStateChange': this.stateChange
+        'onStateChange': this.playerStateChange
       }
     });
   },
-  stateChange: function(e) {
+  playerStateChange: function(e) {
     var state;
     switch(e.data) {
       case YT.PlayerState.PLAYING:
@@ -196,12 +222,32 @@ var MediaPlayer = React.createClass({
       default:
         state = 'unstarted'
     }
-    this.props.onStateChange(state);
+    this.props.onPlayerStateChange(state);
+  },
+  toggleStatus: function(nextStatus) {
+    if (nextStatus === 'playing') {
+      snueue.player.playVideo();
+    } else if (nextStatus === 'paused') {
+      snueue.player.pauseVideo();
+    }
+  },
+  shouldComponentUpdate: function(nextProps, nextState) {
+    // If the parent state updates while the current submission is still
+    // playing, don't re-render or else the video will restart.
+    if (this.props.mediaId === nextProps.mediaId) {
+      // If the status has changed, update the player accordingly
+      if (this.props.playerStatus !== nextProps.playerStatus) {
+        this.toggleStatus(nextProps.playerStatus);
+      }
+      return false;
+    }
+    return true;
   },
   componentDidMount: function() {
     this.initializePlayer();
   },
   componentDidUpdate: function() {
+    // Clear out previous player and update.
     $('#player').replaceWith("<div id=\"player\"></div>");
     this.initializePlayer();
   },
