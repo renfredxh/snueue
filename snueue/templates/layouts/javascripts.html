@@ -11,7 +11,7 @@
   <script type="text/jsx" src="{{ url_for('static', filename='javascripts/queue.jsx') }}"></script>
 {% else %}
   {% assets filters="rjsmin", output="build/app.js",
-    "javascripts/application.js"
+    "javascripts/application.js",
     "javascripts/queue.js" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
   {% endassets %}
