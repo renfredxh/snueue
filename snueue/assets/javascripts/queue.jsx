@@ -29,8 +29,10 @@ var Queue = React.createClass({
       content = null
     return (
       <div className="queue">
-        <div className="row">
-          <Search onFetch={this.handleFetch} />
+        <div className="source-bar">
+          <div className="row">
+            <Search onFetch={this.handleFetch} />
+          </div>
         </div>
         {content}
       </div>

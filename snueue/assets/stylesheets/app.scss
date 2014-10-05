@@ -41,7 +41,29 @@
 
 $white: #ffffff;
 $charcoal: #1c1c1f;
+$reddit-blue: #cee3f8;
+
+$footer-height: 4rem;
+$footer-margin: 1.5rem;
 $component-font-size: 1rem;
+
+// For the sticky footer
+html, body{
+  height: 100%
+}
+
+.container {
+  min-height: 100%;
+  position: relative;
+}
+
+#main {
+  padding-bottom: $footer-height + $footer-margin;
+}
+
+body {
+  background: $charcoal;
+}
 
 input[type="text"] {
   box-shadow: none;
@@ -56,24 +78,26 @@ select {
 }
 
 button {
-  background: #ff4500;
+  background: $primary-color;
 }
 
-body {
-  background: $charcoal;
-}
-
-#main {
-  margin-top: 3rem;
+.source-bar {
+  margin-bottom: 1rem;
+  padding: 1rem 0;
+  background: $reddit-blue;
 }
 
 .search-form {
   .search-bar, .results-sorting-select {
     height: 3.3625rem;
   }
+  input, select, button {
+    margin-bottom: 0;
+  }
 }
 
 .media-item {
+  border-bottom: solid $charcoal 1px;
   .media-title {
     color: $white;
   }
@@ -105,9 +129,16 @@ body {
   .slide-toggle {
     padding: 0.25rem 0.5rem;
   }
-
 }
 
-.queued-media-item {
-  margin-bottom: 1.25rem;
+footer {
+  height: $footer-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  margin-top: $footer-margin;
+  text-align: center;
+  background: $primary-color;
+  color: $reddit-blue;
 }
