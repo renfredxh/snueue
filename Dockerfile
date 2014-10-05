@@ -38,4 +38,4 @@ WORKDIR /snueue/snueue
 RUN python script/collectstatic.py
 
 # Use Gunicorn to serve the application
-CMD gunicorn app:app --log-file - --error-logfile - -b 0.0.0.0:80
+CMD gunicorn app:app -b 0.0.0.0:80 --log-file - --access-logfile - --error-logfile -
