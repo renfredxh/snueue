@@ -31,6 +31,12 @@ def submissions():
         'submissions': reddit.get_submissions(source, sorting)
     })
 
+@app.errorhandler(500)
+def internal_error(exception):
+    app.logger.exception(exception)
+    return render_template('error/500.html'), 500
+
 if __name__ == '__main__':
     app.config.from_object('config.Development')
+    app.logger.addHandler(app.config.get('LOGGING_HANDLER'))
     app.run()

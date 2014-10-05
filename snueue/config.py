@@ -23,6 +23,15 @@ class Config(object):
 
 class Production(Config):
     DEBUG = False
+    PROPOGATE_EXCEPTIONS = True
+    # Log exceptions to stderr
+    import logging
+    from logging import StreamHandler
+    stream_handler = StreamHandler()
+    stream_handler.setLevel(logging.WARNING)
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    stream_handler.setFormatter(formatter)
+    LOGGING_HANDLER = stream_handler
 
 class Development(Config):
     DEBUG = True
