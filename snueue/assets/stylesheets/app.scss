@@ -144,12 +144,13 @@ button {
     padding: 0.25rem 0.5rem;
   }
 }
-
+.fixedsticky { top: 0; }
 .media-controller {
   $btn_quant: 3;
   $btn_width: percentage(1/$btn_quant);
   $btn_margin: 2%;
 
+  width: 100%;
   position: sticky;
   top: 0;
   z-index: 10;

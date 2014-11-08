@@ -152,6 +152,9 @@ var MediaController = React.createClass({
   handleStatusToggle: function() {
     this.props.onConrollerStateChange(this.inverseStatus());
   },
+  componentDidMount: function() {
+    $('.media-controller').fixedsticky();
+  },
   render: function() {
     var toggleButtonClasses = React.addons.classSet({
       'fa': true,
@@ -159,7 +162,7 @@ var MediaController = React.createClass({
       'fa-play': (this.inverseStatus() === 'playing')
     });
     return (
-      <div id="media-controller" className="media-controller">
+      <div id="media-controller" className="media-controller sticky">
         <div className="row">
           <div className="small-12 columns end">
             <div className="button primary" onClick={this.props.onPrevious}>
