@@ -149,9 +149,13 @@ button {
   $btn_quant: 3;
   $btn_width: percentage(1/$btn_quant);
   $btn_margin: 2%;
-  background: $reddit-blue;
+
+  position: sticky;
+  top: 0;
+  z-index: 10;
   padding-top: 1rem;
   margin-bottom: 1rem;
+  background: $reddit-blue;
   .button {
     width: ($btn_width + $btn_margin/$btn_quant) - $btn_margin;
     margin-left: $btn_margin;
