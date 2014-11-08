@@ -267,7 +267,7 @@ var MediaPlayer = React.createClass({
 });
 
 function onYouTubeIframeAPIReady() {
-  React.renderComponent(
+  React.render(
     <Queue />,
     document.getElementById('main')
   );
