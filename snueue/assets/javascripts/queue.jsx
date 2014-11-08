@@ -63,7 +63,7 @@ var Search = React.createClass({
   render: function() {
     return (
       <form id="source-form" className="search-form" onSubmit={this.handleSubmit} ref="form">
-        <div className="small-12 large-10 large-offset-1 columns">
+        <div className="small-12 large-10 columns">
           <div className="row collapse">
             <div className="small-10 columns">
               <input className="search-bar" type="text" placeholder="/r/music" ref="source"/>
@@ -77,8 +77,8 @@ var Search = React.createClass({
             </div>
           </div>
         </div>
-        <div role="button" className="small-12 large-1 columns end">
-          <button type="submit" className="button"><i className="fa fa-arrow-right"></i></button>
+        <div role="button" className="small-12 large-2 columns end">
+          <button type="submit" className="button submit-button"><i className="fa fa-arrow-right"></i></button>
         </div>
       </form>
     );
@@ -109,7 +109,7 @@ var QueuedMediaItem = React.createClass({
   render: function() {
     return (
       <div className="media-item queued-media-item row">
-        <div className="small-10 large-offset-1 columns end">
+        <div className="small-12 columns end">
           <MediaTitle submission={this.props.submission} />
         </div>
       </div>
@@ -131,13 +131,15 @@ var MediaItem = React.createClass({
     var mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange}
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
-      <div className="media-item row">
-        <div className="small-10 large-offset-1 columns">
-          <MediaTitle submission={submission} />
-          {mediaPlayer}
-        </div>
+      <div id="media-item">
         <MediaController status={this.state.playerStatus} onConrollerStateChange={this.handleItemStateChange}
           onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
+        <div className="media-item row">
+          <div className="small-12 columns">
+            <MediaTitle submission={submission} />
+            {mediaPlayer}
+          </div>
+        </div>
       </div>
     );
   }
@@ -157,15 +159,19 @@ var MediaController = React.createClass({
       'fa-play': (this.inverseStatus() === 'playing')
     });
     return (
-      <div className="small-1 columns end">
-        <div className="button secondary" onClick={this.handleStatusToggle}>
-          <i className={toggleButtonClasses}></i>
-        </div>
-        <div className="button secondary" onClick={this.props.onPrevious}>
-          <i className="fa fa-backward"></i>
-        </div>
-        <div className="button secondary" onClick={this.props.onSkip}>
-          <i className="fa fa-forward"></i>
+      <div id="media-controller" className="media-controller">
+        <div className="row">
+          <div className="small-12 columns end">
+            <div className="button primary" onClick={this.props.onPrevious}>
+              <i className="fa fa-backward"></i>
+            </div>
+            <div className="button primary" onClick={this.handleStatusToggle}>
+              <i className={toggleButtonClasses}></i>
+            </div>
+            <div className="button primary" onClick={this.props.onSkip}>
+              <i className="fa fa-forward"></i>
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -40,8 +40,12 @@
 //   "foundation/components/visibility";
 
 $white: #ffffff;
+$ghost-grey: #fafafa;
 $charcoal: #1c1c1f;
 $reddit-blue: #cee3f8;
+$navy-blue: #15304a;
+$satsuki-blue: $primary-color;
+$onyx-grey: $secondary-color;
 
 $footer-height: 4rem;
 $footer-margin: 1.5rem;
@@ -73,18 +77,18 @@ input[type="text"] {
 }
 
 select {
+  background-color: $ghost-grey;
   border: none;
   font-size: $component-font-size;
 }
 
 button {
-  background: $primary-color;
+  background: $satsuki-blue;
 }
 
 .source-bar {
-  margin-bottom: 1rem;
   padding: 1rem 0;
-  background: $reddit-blue;
+  background: $satsuki-blue;
 }
 
 .search-form {
@@ -93,6 +97,16 @@ button {
   }
   input, select, button {
     margin-bottom: 0;
+  }
+  .submit-button {
+    background: $navy-blue;
+    width: 100%;
+    &:hover {
+      background: darken($navy-blue, 5%);
+    }
+    &:focus {
+      outline: none;
+    }
   }
 }
 
@@ -112,7 +126,7 @@ button {
 
   .media-title {
     height: 3.3625rem;
-    background: $secondary-color;
+    background: $onyx-grey;
     padding: 0.68rem 0.7rem;
     margin: 0;
     font-weight: 300;
@@ -131,6 +145,26 @@ button {
   }
 }
 
+.media-controller {
+  $btn_quant: 3;
+  $btn_width: percentage(1/$btn_quant);
+  $btn_margin: 2%;
+  background: $reddit-blue;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+  .button {
+    width: ($btn_width + $btn_margin/$btn_quant) - $btn_margin;
+    margin-left: $btn_margin;
+    background: $satsuki-blue;
+    &:hover, &:focus {
+      background: $navy-blue;
+    }
+  }
+  .button:first-child {
+    margin-left: 0;
+  }
+}
+
 footer {
   height: $footer-height;
   bottom: 0;
@@ -139,6 +173,6 @@ footer {
   position: absolute;
   margin-top: $footer-margin;
   text-align: center;
-  background: $primary-color;
+  background: $satsuki-blue;
   color: $reddit-blue;
 }
