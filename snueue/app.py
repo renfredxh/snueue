@@ -32,6 +32,7 @@ def submissions():
     if subreddit:
         source = subreddit.group(1)
     return jsonify({
+        'source': '/r/{}'.format(source),
         'submissions': reddit.get_submissions(source, sorting, excluded)
     })
 

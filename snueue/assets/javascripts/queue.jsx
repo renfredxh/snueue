@@ -8,6 +8,7 @@ var Queue = React.createClass({
       Snueue.showMainLoader();
     }
     $.post("/submissions", params, $.proxy(function(data) {
+      history.pushState(params, '', data.source);
       // Prepend passed in submissions to ones recieved from
       // the sever.
       var newSubmissions = submissions.concat(data.submissions);
@@ -52,6 +53,17 @@ var Queue = React.createClass({
         excluded: []
       })
     });
+  },
+  handlePopstate: function(e) {
+    // When the back button is pressed, load the previous search if there was one.
+    if (e.state === null) {
+      window.location = '/';
+    } else {
+      this.handleSearch(e.state.source, e.state.sorting);
+    }
+  },
+  componentDidMount: function() {
+    window.addEventListener('popstate', this.handlePopstate)
   },
   render: function() {
     var content;
