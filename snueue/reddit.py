@@ -81,7 +81,7 @@ def fetch_submissions(subreddit, sorting, excluded=None):
         subs = [s for s in subs if s.id not in excluded]
         submissions = SubmissionCollection(subs)
         submissions = submissions.filter_self_posts().filter_media_type()
-        limit *= 2
+        limit += 25
     return submissions
 
 def get_submissions(source, sorting, excluded):
