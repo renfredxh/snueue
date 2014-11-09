@@ -110,11 +110,15 @@ button {
   }
 }
 
+.media-title {
+  background: $cgp-grey;
+  font-weight: 300;
+  margin: 0;
+  clear: right;
+}
+
 .media-item {
   border-bottom: solid $charcoal 1px;
-  .media-title {
-    color: $white;
-  }
 
   .media-expand {
     background: #151515;
@@ -126,11 +130,7 @@ button {
 
   .media-title {
     height: 3.3625rem;
-    background: $cgp-grey;
     padding: 0.68rem 0.7rem;
-    margin: 0;
-    font-weight: 300;
-    clear: right;
     .permalink {
       color: $white;
       font-size: 1.25rem;
@@ -144,7 +144,25 @@ button {
     padding: 0.25rem 0.5rem;
   }
 }
-.fixedsticky { top: 0; }
+
+.queued-media-item {
+  $media-title-font-size: 0.95rem;
+  border-bottom: solid $charcoal 1px;
+
+  .media-title {
+    font-size: $media-title-font-size;
+    padding: 0.4rem 0.6rem;
+    overflow: hidden;
+    white-space: nowrap;
+    .permalink {
+      color: $white;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
 .media-controller {
   $btn_quant: 3;
   $btn_width: percentage(1/$btn_quant);

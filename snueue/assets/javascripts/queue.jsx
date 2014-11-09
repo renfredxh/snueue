@@ -129,9 +129,9 @@ var MediaList = React.createClass({
 var QueuedMediaItem = React.createClass({
   render: function() {
     return (
-      <div className="media-item queued-media-item row">
+      <div className="queued-media-item row">
         <div className="small-12 columns end">
-          <MediaTitle submission={this.props.submission} />
+          <MediaTitle submission={this.props.submission} index={this.props.index + 1} />
         </div>
       </div>
     );
@@ -157,7 +157,7 @@ var MediaItem = React.createClass({
           onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
         <div className="media-item row">
           <div className="small-12 columns">
-            <MediaTitle submission={submission} />
+            <MediaTitle submission={submission} index={0} />
             {mediaPlayer}
           </div>
         </div>
@@ -204,12 +204,16 @@ var MediaController = React.createClass({
 
 var MediaTitle = React.createClass({
   render: function() {
+    var index = '';
+    if (this.props.index > 0) {
+      index = '' + this.props.index + '. '
+    }
     // Decode escaped HTML entities from submission title
     var decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
     return (
       <div className="media-title">
         <a className="permalink" href={this.props.submission.permalink} target="_blank">
-          {decodedTitle}
+          {index}{decodedTitle}
         </a>
       </div>
     )
