@@ -89,7 +89,7 @@ var Search = React.createClass({
     if (typeof e !== 'undefined')
       e.preventDefault();
     var source = this.refs.source.getDOMNode().value.trim();
-    var sorting = this.refs.sorting.getDOMNode().value.trim();
+    var sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
     this.props.onSearch(source, sorting);
     return;
   },
@@ -108,11 +108,7 @@ var Search = React.createClass({
               <input className="search-bar" type="text" placeholder="/r/music" ref="source"/>
             </div>
             <div className="small-2 columns">
-              <select className="results-sorting-select" ref="sorting">
-                <option value="hot">Hot</option>
-                <option value="top">Top</option>
-                <option value="new">New</option>
-              </select>
+              <SearchSortingSelect ref="select" />
             </div>
           </div>
         </div>
@@ -121,6 +117,26 @@ var Search = React.createClass({
         </div>
       </form>
     );
+  }
+});
+
+var SearchSortingSelect = React.createClass({
+  render: function() {
+    return (
+      <select className="results-sorting-select" ref="sorting">
+        <option disabled="disabled">Sort By:</option>
+        <option value="hot" defaultValue>Hot</option>
+        <option value="new">New</option>
+        <optgroup label="Top">
+          <option value="hour">Hour</option>
+          <option value="day">Day</option>
+          <option value="week">Week</option>
+          <option value="month">Month</option>
+          <option value="year">Year</option>
+          <option value="all">All</option>
+        </optgroup>
+      </select>
+    )
   }
 });
 

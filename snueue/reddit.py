@@ -67,26 +67,31 @@ def get_fetch_method(subreddit, sorting):
     """
     return {
         'hot': subreddit.get_hot,
-        'top': subreddit.get_top_from_day,
-        'new': subreddit.get_new
+        'new': subreddit.get_new,
+        'hour': subreddit.get_top_from_hour,
+        'day': subreddit.get_top_from_day,
+        'week': subreddit.get_top_from_week,
+        'month': subreddit.get_top_from_month,
+        'year': subreddit.get_top_from_year,
+        'all': subreddit.get_top_from_all
     }[sorting]
 
-def fetch_submissions(subreddit, sorting, excluded=None):
+def get_submissions(source, sorting, excluded):
+    r = praw.Reddit(user_agent=USER_AGENT)
+    subreddit = r.get_subreddit(source)
     fetch_method = get_fetch_method(subreddit, sorting);
     submissions = []
     limit = 25
     while len(submissions) <= 5 and limit <= 100:
         subs = fetch_method(limit=limit)
-        # Filter out excluded submissions
-        subs = [s for s in subs if s.id not in excluded]
+        try:
+            # Filter out excluded submissions
+            subs = [s for s in subs if s.id not in excluded]
+        except praw.errors.RedirectException:
+            submissions = SubmissionCollection([])
+            break
         submissions = SubmissionCollection(subs)
         submissions = submissions.filter_self_posts().filter_media_type()
         limit += 25
-    return submissions
-
-def get_submissions(source, sorting, excluded):
-    r = praw.Reddit(user_agent=USER_AGENT)
-    subreddit = r.get_subreddit(source)
-    submissions = fetch_submissions(subreddit, sorting, excluded=excluded)
     return submissions.to_json()
 
