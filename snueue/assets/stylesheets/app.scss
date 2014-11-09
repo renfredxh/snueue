@@ -38,6 +38,7 @@
 //   "foundation/components/type",
 //   "foundation/components/offcanvas",
 //   "foundation/components/visibility";
+@import "vendor/loader";
 
 $white: #ffffff;
 $ghost-grey: #fafafa;
@@ -59,9 +60,6 @@ html, body{
 .container {
   min-height: 100%;
   position: relative;
-}
-
-#main {
   padding-bottom: $footer-height + $footer-margin;
 }
 
@@ -84,6 +82,18 @@ select {
 
 button {
   background: $satsuki-blue;
+}
+
+.loader {
+  width: 15em;
+  height: 15em;
+  font-size: 15px;
+  border-color: transparentize($ghost-grey, 0.8);
+  border-left: 1.1em solid $ghost-grey;
+  &:after {
+    width: 15em;
+    height: 15em;
+  }
 }
 
 .source-bar {

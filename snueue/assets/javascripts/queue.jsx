@@ -4,12 +4,17 @@ var Queue = React.createClass({
     return {submissions: [], history: []};
   },
   fetch: function(submissions, params) {
+    if (this.state.submissions.length === 0) {
+      Snueue.showMainLoader();
+    }
     $.post("/submissions", params, $.proxy(function(data) {
       // Prepend passed in submissions to ones recieved from
       // the sever.
       var newSubmissions = submissions.concat(data.submissions);
       this.setState({submissions: newSubmissions});
-    }, this));
+    }, this)).always(function() {
+      Snueue.hideMainLoader();
+    });
   },
   handleSkip: function() {
     var newHistory = this.state.history;
@@ -39,13 +44,14 @@ var Queue = React.createClass({
     this.setState({submissions: newSubmissions, history: newHistory});
   },
   handleSearch: function(source, sorting) {
-    this.props.source = source;
-    this.props.sorting = sorting;
-    this.fetch([], {
-      source: source,
-      sorting: sorting,
-      excluded: []
-    })
+    this.setState({submissions: []});
+    this.setProps({source: source, sorting: sorting}, function() {
+      this.fetch([], {
+        source: this.props.source,
+        sorting: this.props.sorting,
+        excluded: []
+      })
+    });
   },
   render: function() {
     var content;
