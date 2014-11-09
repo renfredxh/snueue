@@ -82,8 +82,8 @@ var Search = React.createClass({
     return;
   },
   componentDidMount: function() {
-    if (snueue.sourceFromURL !== undefined) {
-      this.refs.source.getDOMNode().value = snueue.sourceFromURL;
+    if (Snueue.sourceFromURL !== undefined) {
+      this.refs.source.getDOMNode().value = Snueue.sourceFromURL;
       this.handleSubmit();
     }
   },
@@ -236,14 +236,14 @@ var MediaPlayer = React.createClass({
       color: "white",
       modestbranding: 1
     }
-    snueue.player = new YT.Player('player', {
+    Snueue.player = new YT.Player('player', {
       height: '315',
       width: '420',
       videoId: this.props.mediaId,
       playerVars: settings,
       events: {
         'onReady': function(e) {
-          snueue.player.playVideo();
+          Snueue.player.playVideo();
         },
         'onStateChange': this.playerStateChange
       }
@@ -270,9 +270,9 @@ var MediaPlayer = React.createClass({
   },
   toggleStatus: function(nextStatus) {
     if (nextStatus === 'playing') {
-      snueue.player.playVideo();
+      Snueue.player.playVideo();
     } else if (nextStatus === 'paused') {
-      snueue.player.pauseVideo();
+      Snueue.player.pauseVideo();
     }
   },
   shouldComponentUpdate: function(nextProps, nextState) {
