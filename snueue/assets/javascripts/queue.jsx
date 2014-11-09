@@ -3,14 +3,34 @@ var Queue = React.createClass({
   getInitialState: function() {
     return {submissions: [], history: []};
   },
+  fetch: function(submissions, params) {
+    $.post("/submissions", params, $.proxy(function(data) {
+      // Prepend passed in submissions to ones recieved from
+      // the sever.
+      var newSubmissions = submissions.concat(data.submissions);
+      this.setState({submissions: newSubmissions});
+    }, this));
+  },
   handleSkip: function() {
     var newHistory = this.state.history;
     newHistory.push(this.state.submissions[0])
     var newSubmissions = this.state.submissions.slice(1);
     this.setState({submissions: newSubmissions, history: newHistory});
+    // When there are only a few submissions left, fetch more
+    if (newSubmissions.length <= 5) {
+      // Included the ids of all the currently queued and watched videos
+      // to be excluded from the fetch.
+      var excluded = newSubmissions.concat(newHistory);
+      excluded = excluded.map(function(sub) { return sub.id });
+      this.fetch(newSubmissions, {
+        source: this.props.source,
+        sorting: this.props.sorting,
+        excluded: excluded
+      });
+    }
   },
   handlePrevious: function() {
-    // Get up to the last elemt from history and place it back
+    // Get up to the last element from history and place it back
     // in the submission queue.
     var newSubmissions = this.state.submissions;
     newSubmissions.unshift(this.state.history.slice(-1)[0])
@@ -18,8 +38,14 @@ var Queue = React.createClass({
     var newHistory = this.state.history.slice(0,-1);
     this.setState({submissions: newSubmissions, history: newHistory});
   },
-  handleFetch: function(data) {
-    this.setState(data);
+  handleSearch: function(source, sorting) {
+    this.props.source = source;
+    this.props.sorting = sorting;
+    this.fetch([], {
+      source: source,
+      sorting: sorting,
+      excluded: []
+    })
   },
   render: function() {
     var content;
@@ -31,7 +57,7 @@ var Queue = React.createClass({
       <div className="queue">
         <div className="source-bar">
           <div className="row">
-            <Search onFetch={this.handleFetch} />
+            <Search onSearch={this.handleSearch} />
           </div>
         </div>
         {content}
@@ -46,12 +72,7 @@ var Search = React.createClass({
       e.preventDefault();
     var source = this.refs.source.getDOMNode().value.trim();
     var sorting = this.refs.sorting.getDOMNode().value.trim();
-    $.post("/submissions", {
-      source: source,
-      sorting: sorting
-    }, $.proxy(function(data) {
-      this.props.onFetch(data);
-    }, this));
+    this.props.onSearch(source, sorting);
     return;
   },
   componentDidMount: function() {
@@ -183,10 +204,12 @@ var MediaController = React.createClass({
 
 var MediaTitle = React.createClass({
   render: function() {
+    // Decode escaped HTML entities from submission title
+    var decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
     return (
       <div className="media-title">
         <a className="permalink" href={this.props.submission.permalink} target="_blank">
-          {this.props.submission.title}
+          {decodedTitle}
         </a>
       </div>
     )

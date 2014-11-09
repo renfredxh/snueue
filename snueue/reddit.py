@@ -29,6 +29,13 @@ class SubmissionCollection(object):
             }
         for submission in self.submissions]
 
+    def __len__(self):
+        return len(self.submissions)
+
+    def __str__(self):
+        return "SubmissionCollection({})".format(
+                    str([s.id for s in self.submissions]))
+
 def media_type(submission):
     return 'youtube'
 
@@ -43,19 +50,31 @@ def media_id(submission, type):
         return m.group()
 
 def get_fetch_method(subreddit, sorting):
+    """Return the appropriate method for fetching submissions from a
+    subreddit based on the sorting parameter.
+    """
     return {
         'hot': subreddit.get_hot,
         'top': subreddit.get_top_from_day,
         'new': subreddit.get_new
     }[sorting]
 
-def get_submissions(source, sorting):
+def fetch_submissions(subreddit, sorting, excluded=None):
+    fetch_method = get_fetch_method(subreddit, sorting);
+    submissions = []
+    limit = 25
+    while len(submissions) <= 5 and limit <= 100:
+        subs = fetch_method(limit=limit)
+        # Filter out excluded submissions
+        subs = [s for s in subs if s.id not in excluded]
+        submissions = SubmissionCollection(subs)
+        submissions = submissions.filter_self_posts().filter_media_type()
+        limit *= 2
+    return submissions
+
+def get_submissions(source, sorting, excluded):
     r = praw.Reddit(user_agent=USER_AGENT)
     subreddit = r.get_subreddit(source)
-    fetch_submissions = get_fetch_method(subreddit, sorting)
-    submissions = fetch_submissions(limit=25)
-    sc = SubmissionCollection(submissions)
-    sc = sc.filter_self_posts()
-    sc = sc.filter_media_type()
-    return sc.to_json()
+    submissions = fetch_submissions(subreddit, sorting, excluded=excluded)
+    return submissions.to_json()
 

@@ -21,6 +21,10 @@ def index_with_subreddit(subreddit):
 @app.route('/submissions', methods=['POST'])
 def submissions():
     source, sorting = request.form['source'], request.form['sorting']
+    try:
+        excluded = request.form.getlist('excluded[]')
+    except KeyError:
+        excluded = []
     if source == '':
         return jsonify(app.config['MOCK_API'])
     # Searches can be in the form "/r/subreddit_name" or "subreddit_name"
@@ -28,7 +32,7 @@ def submissions():
     if subreddit:
         source = subreddit.group(1)
     return jsonify({
-        'submissions': reddit.get_submissions(source, sorting)
+        'submissions': reddit.get_submissions(source, sorting, excluded)
     })
 
 @app.errorhandler(500)
