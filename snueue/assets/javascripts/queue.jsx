@@ -300,7 +300,8 @@ var MediaPlayer = React.createClass({
         'onReady': function(e) {
           Snueue.player.playVideo();
         },
-        'onStateChange': this.playerStateChange
+        'onStateChange': this.playerStateChange,
+        'onError': this.playerError
       }
     });
   },
@@ -322,6 +323,11 @@ var MediaPlayer = React.createClass({
         state = 'unstarted'
     }
     this.props.onPlayerStateChange(state);
+  },
+  playerError: function(e) {
+    // If the player encounters an error such as the video being deleted,
+    // end it and skip to the next one.
+    this.props.onPlayerStateChange('ended')
   },
   toggleStatus: function(nextStatus) {
     if (nextStatus === 'playing') {
