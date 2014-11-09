@@ -1,0 +1,16 @@
+.flash-enter {
+  opacity: 0.2;
+  transform: translateY(-0.75rem);
+  transition: all 90ms linear;
+}
+.flash-enter.flash-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+}
+.flash-leave {
+  opacity: 1;
+  transition: opacity 80ms ease-out;
+}
+.flash-leave.flash-leave-active {
+  opacity: 0.01;
+}

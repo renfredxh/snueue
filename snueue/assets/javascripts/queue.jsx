@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 var Queue = React.createClass({
   getInitialState: function() {
-    return {submissions: [], history: []};
+    return {submissions: [], history: [], flash: null};
   },
   fetch: function(submissions, params) {
     if (this.state.submissions.length === 0) {
@@ -9,6 +11,10 @@ var Queue = React.createClass({
     }
     $.post("/submissions", params, $.proxy(function(data) {
       history.pushState(params, '', data.source);
+      // If no submissions were found on an inital search, display a
+      // flash response.
+      if (this.state.submissions.length + data.submissions.length === 0)
+        this.setState({flash: "No content found for " + this.props.source});
       // Prepend passed in submissions to ones recieved from
       // the sever.
       var newSubmissions = submissions.concat(data.submissions);
@@ -45,7 +51,7 @@ var Queue = React.createClass({
     this.setState({submissions: newSubmissions, history: newHistory});
   },
   handleSearch: function(source, sorting) {
-    this.setState({submissions: []});
+    this.setState({submissions: [], flash: null});
     this.setProps({source: source, sorting: sorting}, function() {
       this.fetch([], {
         source: this.props.source,
@@ -62,15 +68,18 @@ var Queue = React.createClass({
       this.handleSearch(e.state.source, e.state.sorting);
     }
   },
+  handleFlashClose: function() {
+    this.setState({flash: null});
+  },
   componentDidMount: function() {
     window.addEventListener('popstate', this.handlePopstate)
   },
   render: function() {
-    var content;
+    var flash, content = null;
     if (this.state.submissions.length > 0)
       content = <MediaList submissions={this.state.submissions} onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
-    else
-      content = null
+    if (this.state.flash !== null)
+      flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />
     return (
       <div className="queue">
         <div className="source-bar">
@@ -78,9 +87,27 @@ var Queue = React.createClass({
             <Search onSearch={this.handleSearch} />
           </div>
         </div>
+        <ReactCSSTransitionGroup transitionName="flash">
+          {flash}
+        </ReactCSSTransitionGroup>
         {content}
       </div>
     );
+  }
+});
+
+var FlashMessage = React.createClass({
+  render: function() {
+    return (
+      <div className="row">
+        <div className="small-12 columns">
+          <p className="flash-message">
+            {this.props.message}
+            <i className="fa fa-close" onClick={this.props.onClose}></i>
+          </p>
+        </div>
+      </div>
+    )
   }
 });
 

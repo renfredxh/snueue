@@ -1,6 +1,7 @@
 @import "settings";
 @import "vendor/foundation/foundation";
 @import "vendor/loader";
+@import "transitions";
 
 $white: #ffffff;
 $ghost-grey: #fafafa;
@@ -55,6 +56,26 @@ button {
   &:after {
     width: 15em;
     height: 15em;
+  }
+}
+
+.flash-message {
+  width: 100%;
+  margin-top: 1.2rem;
+  padding: 0.5rem;
+  font-weight: 300;
+  background-color: $cgp-grey;
+  color: $ghost-grey;
+
+  .fa-close {
+     font-size: 1.5rem;
+     padding-right: 0.3rem;
+     float: right;
+     cursor: pointer;
+     color: lighten($cgp-grey, 20);
+     &:hover {
+       color: lighten($cgp-grey, 12);
+     }
   }
 }
 
