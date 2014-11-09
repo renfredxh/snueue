@@ -2,6 +2,7 @@
 @import "vendor/foundation/foundation";
 @import "vendor/loader";
 @import "transitions";
+@import "override";
 
 $white: #ffffff;
 $ghost-grey: #fafafa;
@@ -41,6 +42,7 @@ select {
   background-color: $ghost-grey;
   border: none;
   font-size: $component-font-size;
+  cursor: pointer;
 }
 
 button {
@@ -90,6 +92,7 @@ button {
   }
   input, select, button {
     margin-bottom: 0;
+    border: none;
   }
   .submit-button {
     background: $navy-blue;

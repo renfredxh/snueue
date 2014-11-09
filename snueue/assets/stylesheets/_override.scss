@@ -1,0 +1,9 @@
+input, select, button {
+  outline: none;
+  border: none;
+}
+
+// Make foundation button transitions faster
+button, .button {
+  @include single-transition(background-color, 60ms, linear);
+}
