@@ -75,7 +75,9 @@ var Queue = React.createClass({
     window.addEventListener('popstate', this.handlePopstate)
   },
   render: function() {
-    var flash, content = null;
+    var flash, content;
+    flash = null;
+    content = null;
     if (this.state.submissions.length > 0)
       content = <MediaList submissions={this.state.submissions} onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
     if (this.state.flash !== null)
