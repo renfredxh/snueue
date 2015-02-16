@@ -9,7 +9,7 @@ var Queue = React.createClass({
     if (this.state.submissions.length === 0) {
       Snueue.showMainLoader();
     }
-    $.post("/submissions", params, $.proxy(function(data) {
+    $.get("/submissions", params, $.proxy(function(data) {
       history.pushState(params, '', data.source);
       // If no submissions were found on an inital search, display a
       // flash response.
@@ -134,7 +134,8 @@ var Search = React.createClass({
         <div className="small-12 large-10 columns">
           <div className="row collapse">
             <div className="small-10 columns">
-              <input className="search-bar" type="text" placeholder="/r/music" ref="source"/>
+              {/* name="q" is there so that the field can be saved as a search engine. */}
+              <input className="search-bar" name="q" type="text" placeholder="/r/music" ref="source"/>
             </div>
             <div className="small-2 columns">
               <SearchSortingSelect ref="select" />

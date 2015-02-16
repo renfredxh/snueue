@@ -18,9 +18,10 @@ def index():
 def index_with_subreddit(subreddit):
     return render_template('index.html', source='/r/{}'.format(subreddit))
 
-@app.route('/submissions', methods=['POST'])
+@app.route('/submissions')
 def submissions():
-    source, sorting = request.form['source'], request.form['sorting']
+    source = request.args.get('q') or request.args['source']
+    sorting = request.args['sorting']
     try:
         excluded = request.form.getlist('excluded[]')
     except KeyError:
