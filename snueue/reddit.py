@@ -1,7 +1,11 @@
 import praw
 import re
+from models import User, get_db
+from uuid import uuid4
+from config import Reddit as config
 
-USER_AGENT = "Snueue test by /u/SeaCowVengeance"
+class AuthenticationFailure(Exception):
+    pass
 
 class SubmissionCollection(object):
 
@@ -77,7 +81,7 @@ def get_fetch_method(subreddit, sorting):
     }[sorting]
 
 def get_submissions(source, sorting, excluded):
-    r = praw.Reddit(user_agent=USER_AGENT)
+    r = praw.Reddit(user_agent=config.USER_AGENT)
     subreddit = r.get_subreddit(source)
     fetch_method = get_fetch_method(subreddit, sorting);
     submissions = []
@@ -94,4 +98,33 @@ def get_submissions(source, sorting, excluded):
         submissions = submissions.filter_self_posts().filter_media_type()
         limit += 25
     return submissions.to_json()
+
+def authorize():
+    r = praw.Reddit(user_agent=config.USER_AGENT)
+    r.set_oauth_app_info(
+        client_id=config.CLIENT_ID,
+        client_secret=config.CLIENT_SECRET,
+        redirect_uri=config.CALLBACK_URL
+    )
+    scope = ['identity', 'history', 'vote']
+    state = str(uuid4())
+    url = r.get_authorize_url(state, scope, True)
+    redis = get_db()
+    redis.sadd('authentication_states', state)
+    return url
+
+def authenticate(code):
+    r = praw.Reddit(user_agent=config.USER_AGENT)
+    r.set_oauth_app_info(
+        client_id=config.CLIENT_ID,
+        client_secret=config.CLIENT_SECRET,
+        redirect_uri=config.CALLBACK_URL
+    )
+    access_information = r.get_access_information(code)
+    authenticated_user = r.get_me()
+    username = authenticated_user.name
+    access_information.update({'username': username})
+    user = User(username)
+    user.set(access_information)
+    return user
 

@@ -23,6 +23,9 @@ var Queue = React.createClass({
       Snueue.hideMainLoader();
     });
   },
+  login: function() {
+    window.location.replace('/authorize/reddit')
+  },
   handleSkip: function() {
     var newHistory = this.state.history;
     newHistory.push(this.state.submissions[0])
@@ -87,7 +90,7 @@ var Queue = React.createClass({
         <div className="source-bar">
           <div className="row">
             <Search onSearch={this.handleSearch} />
-            <Login />
+            <Login onLogin={this.login}/>
           </div>
         </div>
         <ReactCSSTransitionGroup transitionName="flash">
@@ -115,6 +118,11 @@ var FlashMessage = React.createClass({
 });
 
 var Login = React.createClass({
+  handleSubmit: function(e) {
+    if (typeof e !== 'undefined')
+      e.preventDefault();
+      this.props.onLogin();
+  },
   render: function() {
     return (
       <form id="login-form" className="login-form" onSubmit={this.handleSubmit} ref="form">
