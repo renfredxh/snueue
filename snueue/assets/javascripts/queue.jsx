@@ -332,22 +332,42 @@ var MediaController = React.createClass({
       'fa-pause': (this.inverseStatus() === 'paused'),
       'fa-play': (this.inverseStatus() === 'playing')
     });
+    // We have to set this upfront in order to apply styles to the control componenets
+    // below, because components are immuatble. So you can't just count them up after
+    // creating them and dynamically assign controlCount.
+    var controlCount = 3;
+    if (Snueue.user !== null)
+      controlCount = 5;
+    var buttonMargin = 2;
+    var buttonStyle = {
+      width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
+    }
+    var controls = [
+      <div className="button primary" onClick={this.props.onPrevious} style={buttonStyle}>
+        <i className="fa fa-backward"></i>
+      </div>,
+      <div className="button primary" onClick={this.handleStatusToggle} style={buttonStyle}>
+        <i className={toggleButtonClasses}></i>
+      </div>,
+      <div className="button primary" onClick={this.props.onSkip} style={buttonStyle}>
+        <i className="fa fa-forward"></i>
+      </div>
+    ]
+    if (Snueue.user !== null) {
+      controls = controls.concat([
+        <div className="button primary" onClick={this.props.onUpvote} style={buttonStyle}>
+          <i className="fa fa-arrow-up"></i>
+        </div>,
+        <div className="button primary" onClick={this.props.onDownvote} style={buttonStyle}>
+          <i className="fa fa-arrow-down"></i>
+        </div>
+      ])
+    }
     return (
       <div id="media-controller" className="media-controller sticky">
         <div className="row">
           <div className="small-12 columns end">
-            <div className="button primary" onClick={this.props.onPrevious}>
-              <i className="fa fa-backward"></i>
-            </div>
-            <div className="button primary" onClick={this.handleStatusToggle}>
-              <i className={toggleButtonClasses}></i>
-            </div>
-            <div className="button primary" onClick={this.props.onSkip}>
-              <i className="fa fa-forward"></i>
-            </div>
-            <div className="button primary" onClick={this.props.onSkip}>
-              <i className="fa fa-forward"></i>
-            </div>
+            {controls}
           </div>
         </div>
       </div>

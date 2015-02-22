@@ -207,8 +207,6 @@ button {
 }
 
 .media-controller {
-  $btn_quant: 3;
-  $btn_width: percentage(1/$btn_quant);
   $btn_margin: 2%;
 
   width: 100%;
@@ -219,7 +217,7 @@ button {
   margin-bottom: 1rem;
   background: $reddit-blue;
   .button {
-    width: ($btn_width + $btn_margin/$btn_quant) - $btn_margin;
+    display: inline-block;
     margin-left: $btn_margin;
     background: $satsuki-blue;
     &:hover, &:focus {
