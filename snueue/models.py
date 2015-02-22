@@ -24,10 +24,29 @@ class RedisModel(object):
             pipe.sadd('{}:{}'.format(self.get_id(), set_name), item)
         return pipe.execute()
 
+    def get(self, field):
+        db = get_db()
+        result = db.hmget(self.get_id(), field)
+        if result is None:
+            return None
+        else:
+            return result[0]
+
+    def get_all(self, field):
+        db = get_db()
+        result = db.smembers("{}:{}".format(self.get_id(), field))
+        return result
+
     def empty(set_name):
         db = get_db()
         s.delete('{}:{}'.format(self.get_id(), set_name))
 
+    def access_information(self):
+        return {
+            'access_token': self.get('access_token'),
+            'refresh_token': self.get('refresh_token'),
+            'scope': self.get_all('scope')
+        }
 
 class User(UserMixin, RedisModel):
 

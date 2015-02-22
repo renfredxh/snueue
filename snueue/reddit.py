@@ -1,8 +1,12 @@
 import praw
 import re
+from datetime import datetime
 from models import User, get_db
 from uuid import uuid4
 from config import Reddit as config
+
+TIMESTAMP_FORMAT = "%d %b %Y %H:%M:%S"
+AUTH_EXPIRE_TIME = 55*60 # 55 minutes in seconds
 
 class AuthenticationFailure(Exception):
     pass
@@ -80,6 +84,36 @@ def get_fetch_method(subreddit, sorting):
         'all': subreddit.get_top_from_all
     }[sorting]
 
+def get_timestamp():
+    now = datetime.now()
+    return now.strftime(TIMESTAMP_FORMAT)
+
+def get_reddit_oauth_session():
+    r = praw.Reddit(user_agent=config.USER_AGENT)
+    r.set_oauth_app_info(
+        client_id=config.CLIENT_ID,
+        client_secret=config.CLIENT_SECRET,
+        redirect_uri=config.CALLBACK_URL
+    )
+    return r
+
+def get_reddit_user_session(username):
+    r = get_reddit_oauth_session()
+    user = User(username)
+    refresh_timestamp = user.get('last_refresh')
+    last_refresh = datetime.strptime(refresh_timestamp, TIMESTAMP_FORMAT)
+    now = datetime.now()
+    if (now - last_refresh).seconds > AUTH_EXPIRE_TIME:
+        refresh_token = user.get('refresh_token')
+        access_information = r.refresh_access_information(refresh_token)
+        access_information.update({
+            'last_refresh': get_timestamp()
+        })
+        user.set(access_information)
+    access_information = user.access_information()
+    r.set_access_credentials(**access_information)
+    return r
+
 def get_submissions(source, sorting, excluded):
     r = praw.Reddit(user_agent=config.USER_AGENT)
     subreddit = r.get_subreddit(source)
@@ -100,37 +134,39 @@ def get_submissions(source, sorting, excluded):
     return submissions.to_json()
 
 def authorize():
-    r = praw.Reddit(user_agent=config.USER_AGENT)
-    r.set_oauth_app_info(
-        client_id=config.CLIENT_ID,
-        client_secret=config.CLIENT_SECRET,
-        redirect_uri=config.CALLBACK_URL
-    )
+    r = get_reddit_oauth_session()
     scope = ['identity', 'history', 'vote']
     state = str(uuid4())
     url = r.get_authorize_url(state, scope, True)
-    redis = get_db()
+    db = get_db()
     state_key = 'authentication_state:{}'.format(state)
-    redis.setex(state_key, config.AUTH_EXPIRE, 1)
+    db.setex(state_key, config.AUTH_EXPIRE, 1)
     return url
 
 def authenticate(state, code):
-    r = praw.Reddit(user_agent=config.USER_AGENT)
-    r.set_oauth_app_info(
-        client_id=config.CLIENT_ID,
-        client_secret=config.CLIENT_SECRET,
-        redirect_uri=config.CALLBACK_URL
-    )
+    r = get_reddit_oauth_session()
     state_key = 'authentication_state:{}'.format(state)
-    redis = get_db()
-    if redis.get(state_key) is None:
+    db = get_db()
+    if db.get(state_key) is None:
         raise AuthenticationFailure("Invalid state token")
-    redis.delete(state_key)
+    db.delete(state_key)
     access_information = r.get_access_information(code)
     authenticated_user = r.get_me()
     username = authenticated_user.name
-    access_information.update({'username': username})
+    access_information.update({
+        'username': username,
+        'last_refresh': get_timestamp()
+    })
     user = User(username)
     user.set(access_information)
     return user
 
+def vote(username, submission_id, direction):
+    r = get_reddit_user_session(username)
+    submission = r.get_submission(submission_id=submission_id)
+    vote_action = {
+        1: submission.upvote,
+        0: submission.clear_vote,
+        -1: submission.downvote
+    }[int(direction)]
+    return vote_action()

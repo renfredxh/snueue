@@ -83,7 +83,8 @@ var Queue = React.createClass({
     flash = null;
     content = null;
     if (this.state.submissions.length > 0)
-      content = <MediaList submissions={this.state.submissions} onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
+      content = <MediaList submissions={this.state.submissions}
+                           onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
     if (this.state.flash !== null)
       flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />
     if (this.state.user !== null)
@@ -303,8 +304,8 @@ var MediaItem = React.createClass({
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div id="media-item">
-        <MediaController status={this.state.playerStatus} onConrollerStateChange={this.handleItemStateChange}
-          onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
+        <MediaController submission={submission} status={this.state.playerStatus}
+          onConrollerStateChange={this.handleItemStateChange} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
         <div className="media-item row">
           <div className="small-12 columns">
             <MediaTitle submission={submission} index={0} />
@@ -327,6 +328,8 @@ var MediaController = React.createClass({
     $('.media-controller').fixedsticky();
   },
   render: function() {
+    var controls = null;
+    var redditControls = null;
     var toggleButtonClasses = React.addons.classSet({
       'fa': true,
       'fa-pause': (this.inverseStatus() === 'paused'),
@@ -336,13 +339,13 @@ var MediaController = React.createClass({
     // below, because components are immuatble. So you can't just count them up after
     // creating them and dynamically assign controlCount.
     var controlCount = 3;
-    if (Snueue.user !== null)
+    if (this.props.user !== null)
       controlCount = 5;
     var buttonMargin = 2;
     var buttonStyle = {
       width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
     }
-    var controls = [
+    controls = [
       <div className="button primary" onClick={this.props.onPrevious} style={buttonStyle}>
         <i className="fa fa-backward"></i>
       </div>,
@@ -353,20 +356,14 @@ var MediaController = React.createClass({
         <i className="fa fa-forward"></i>
       </div>
     ]
-    if (Snueue.user !== null) {
-      controls = controls.concat([
-        <div className="button primary" onClick={this.props.onUpvote} style={buttonStyle}>
-          <i className="fa fa-arrow-up"></i>
-        </div>,
-        <div className="button primary" onClick={this.props.onDownvote} style={buttonStyle}>
-          <i className="fa fa-arrow-down"></i>
-        </div>
-      ])
+    if (this.props.user !== null) {
+      redditControls = <RedditAPIController submission={this.props.submission} buttonStyle={buttonStyle} />
     }
     return (
       <div id="media-controller" className="media-controller sticky">
         <div className="row">
           <div className="small-12 columns end">
+            {redditControls}
             {controls}
           </div>
         </div>
@@ -374,6 +371,38 @@ var MediaController = React.createClass({
     );
   }
 });
+
+var RedditAPIController = React.createClass({
+  handleUpvote: function () {
+    this.submitVote(1);
+  },
+  handleDownvote: function () {
+    this.submitVote(-1);
+  },
+  submitVote: function(direction) {
+    $.ajax({
+      url: "/user/vote",
+      type: 'PUT',
+      data: {submission: this.props.submission.id, direction: direction},
+      success: function(data) {
+        console.log("Voted")
+      }
+    });
+  },
+  render: function() {
+    var buttonStyle = this.props.buttonStyle;
+    return (
+      <span id="reddit-media-controller">
+        <div className="button primary" onClick={this.handleUpvote} style={buttonStyle}>
+          <i className="fa fa-arrow-up"></i>
+        </div>
+        <div className="button primary" onClick={this.handleDownvote} style={buttonStyle}>
+          <i className="fa fa-arrow-down"></i>
+        </div>
+      </span>
+    )
+  }
+})
 
 var MediaTitle = React.createClass({
   render: function() {

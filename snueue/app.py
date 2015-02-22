@@ -69,7 +69,15 @@ def oauth_callback():
     login_user(user, True)
     return redirect(url_for('index'))
 
-@app.route("/logout")
+@app.route('/user/vote', methods=['PUT'])
+@login_required
+def vote():
+    direction = request.form.get('direction', None)
+    submission = request.form.get('submission', None)
+    response = reddit.vote(current_user.username, submission, direction)
+    return str(response), 200
+
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
