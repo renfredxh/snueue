@@ -92,7 +92,7 @@ var Queue = React.createClass({
     else
       oauth = <Login onLogin={this.login}/>
     return (
-      <div className="queue">
+      <div id="queue" className="queue">
         <div className="source-bar">
           <div className="row">
             <Search onSearch={this.handleSearch} />
@@ -510,9 +510,18 @@ var MediaPlayer = React.createClass({
   }
 });
 
-function onYouTubeIframeAPIReady() {
+function renderQueue() {
   React.render(
     <Queue />,
     document.getElementById('main')
   );
 }
+function onYouTubeIframeAPIReady() {
+  renderQueue();
+}
+
+setTimeout(function() {
+  if ($('#queue').length === 0) {
+    renderQueue();
+  }
+}, 500);
