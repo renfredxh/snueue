@@ -3,7 +3,8 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Queue = React.createClass({
   getInitialState: function() {
-    return {submissions: [], history: [], flash: null};
+    var user = Snueue.user === undefined ? null : Snueue.user;
+    return {user: user, submissions: [], history: [], flash: null};
   },
   fetch: function(submissions, params) {
     if (this.state.submissions.length === 0) {
@@ -78,19 +79,23 @@ var Queue = React.createClass({
     window.addEventListener('popstate', this.handlePopstate)
   },
   render: function() {
-    var flash, content;
+    var flash, content, oauth;
     flash = null;
     content = null;
     if (this.state.submissions.length > 0)
       content = <MediaList submissions={this.state.submissions} onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
     if (this.state.flash !== null)
       flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />
+    if (this.state.user !== null)
+      oauth = <UserMenu user={this.state.user}/>
+    else
+      oauth = <Login onLogin={this.login}/>
     return (
       <div className="queue">
         <div className="source-bar">
           <div className="row">
             <Search onSearch={this.handleSearch} />
-            <Login onLogin={this.login}/>
+            {oauth}
           </div>
         </div>
         <ReactCSSTransitionGroup transitionName="flash">
@@ -112,6 +117,66 @@ var FlashMessage = React.createClass({
             <i className="fa fa-close" onClick={this.props.onClose}></i>
           </p>
         </div>
+      </div>
+    )
+  }
+});
+
+var Dropdown = React.createClass({
+  getInitialState: function() {
+    return {open: false};
+  },
+  toggleDropdown: function(event) {
+    this.setState({open: !this.state.open});
+  },
+  render: function() {
+    var contentNodes = null;
+    var dropdown = null
+    if (this.state.open) {
+      contentNodes = this.props.contents.map(function(item, index) {
+        return (
+          <a key={item.text} href={item.href}>{item.text}</a>
+        );
+      });
+      dropdown = (
+        <div className="dropdown-content">
+          {contentNodes}
+        </div>
+      )
+    }
+    return (
+      <div className = "snueue-dropdown">
+        <button onClick={this.toggleDropdown} className={"button "+this.props.classes}
+                style={this.props.style}>
+          {this.props.text} <i className="fa fa-caret-down"></i>
+          {dropdown}
+        </button>
+      </div>
+    )
+  }
+});
+
+var UserMenu = React.createClass({
+  render: function() {
+    // Dynamically set the font-size of the username based on string length
+    var username = this.props.user.substring(0, 24);
+    var buttonHeight = 3;
+    var fontHeight = Math.min(11.20 / username.length, 1);
+    var paddingHeight = (buttonHeight - fontHeight) / 2;
+    // Add some extra padding to compensate for a minor difference in rendering height
+    // between this and the other buttons.
+    paddingHeight += fontHeight < 1 ? 0.054 : 0;
+    var dropdownStyle = {
+      fontSize: fontHeight + "rem",
+      padding: paddingHeight + "rem 0"
+    }
+    dropdownContent = [
+      {text: "Logout", href: "/logout"},
+      {text: "Login", href: "/logout"}
+    ]
+    return (
+      <div role="button" className="small-12 large-2 columns end">
+        <Dropdown text={username} contents={dropdownContent} classes="navy-button" style={dropdownStyle} />
       </div>
     )
   }
@@ -276,6 +341,9 @@ var MediaController = React.createClass({
             </div>
             <div className="button primary" onClick={this.handleStatusToggle}>
               <i className={toggleButtonClasses}></i>
+            </div>
+            <div className="button primary" onClick={this.props.onSkip}>
+              <i className="fa fa-forward"></i>
             </div>
             <div className="button primary" onClick={this.props.onSkip}>
               <i className="fa fa-forward"></i>

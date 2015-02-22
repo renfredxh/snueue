@@ -110,16 +110,22 @@ def authorize():
     state = str(uuid4())
     url = r.get_authorize_url(state, scope, True)
     redis = get_db()
-    redis.sadd('authentication_states', state)
+    state_key = 'authentication_state:{}'.format(state)
+    redis.setex(state_key, config.AUTH_EXPIRE, 1)
     return url
 
-def authenticate(code):
+def authenticate(state, code):
     r = praw.Reddit(user_agent=config.USER_AGENT)
     r.set_oauth_app_info(
         client_id=config.CLIENT_ID,
         client_secret=config.CLIENT_SECRET,
         redirect_uri=config.CALLBACK_URL
     )
+    state_key = 'authentication_state:{}'.format(state)
+    redis = get_db()
+    if redis.get(state_key) is None:
+        raise AuthenticationFailure("Invalid state token")
+    redis.delete(state_key)
     access_information = r.get_access_information(code)
     authenticated_user = r.get_me()
     username = authenticated_user.name

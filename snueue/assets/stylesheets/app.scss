@@ -9,6 +9,7 @@ $ghost-grey: #fafafa;
 $charcoal: #1c1c1f;
 $reddit-blue: #b8d6f5;
 $navy-blue: #15304a;
+$border-grey: rgba(0,0,0,0.2);
 $satsuki-blue: $primary-color;
 $cgp-grey: $secondary-color;
 
@@ -49,6 +50,32 @@ button {
   background: $satsuki-blue;
 }
 
+.snueue-dropdown {
+  width: 100%;
+  .dropdown-content {
+    width: 115%;
+    padding: 10px 0;
+    background-color: $white;
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    border: solid 1px $border-grey;
+    margin-top: 1.2rem;
+    text-align: left;
+    a {
+      display: block;
+      background-color: $white;
+      padding: 5px 20px;
+      color: $black;
+      cursor: pointer;
+      &:hover {
+        color: white;
+        background-color: $satsuki-blue;
+      }
+    }
+  }
+}
+
 .snueue-button {
   width: 100%;
   &:focus {
@@ -62,10 +89,13 @@ button {
   &:hover {
     background: darken($navy-blue, 5%);
   }
+  &:focus {
+    background: $navy-blue;
+  }
 }
 
 .logo-container {
-  weidth: 100%;
+  width: 100%;
   text-align: center;
   margin: 3rem 0;
 }
@@ -211,4 +241,9 @@ footer {
   text-align: center;
   background: $satsuki-blue;
   color: $reddit-blue;
+}
+
+.button, button {
+  padding-left: 0.2;
+  padding-right: 0.2;
 }

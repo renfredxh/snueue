@@ -60,9 +60,10 @@ def oauth_authorize():
 def oauth_callback():
     if not current_user.is_anonymous():
         return redirect(url_for('index'))
-    code = request.args.get('code')
+    code = request.args.get('code', '')
+    state = request.args.get('state', '')
     try:
-        user = reddit.authenticate(code)
+        user = reddit.authenticate(state, code)
     except AuthenticationFailure:
         abort(403)
     login_user(user, True)
