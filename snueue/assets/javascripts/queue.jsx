@@ -87,6 +87,7 @@ var Queue = React.createClass({
         <div className="source-bar">
           <div className="row">
             <Search onSearch={this.handleSearch} />
+            <Login />
           </div>
         </div>
         <ReactCSSTransitionGroup transitionName="flash">
@@ -113,6 +114,18 @@ var FlashMessage = React.createClass({
   }
 });
 
+var Login = React.createClass({
+  render: function() {
+    return (
+      <form id="login-form" className="login-form" onSubmit={this.handleSubmit} ref="form">
+        <div role="button" className="small-12 large-2 columns end">
+          <button type="submit" className="button login-button"><i className="fa fa-reddit"> Login</i></button>
+        </div>
+      </form>
+    )
+  }
+});
+
 var Search = React.createClass({
   handleSubmit: function(e) {
     if (typeof e !== 'undefined')
@@ -131,7 +144,7 @@ var Search = React.createClass({
   render: function() {
     return (
       <form id="source-form" className="search-form" onSubmit={this.handleSubmit} ref="form">
-        <div className="small-12 large-10 columns">
+        <div className="small-12 large-8 columns">
           <div className="row collapse">
             <div className="small-10 columns">
               {/* name="q" is there so that the field can be saved as a search engine. */}

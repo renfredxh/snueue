@@ -7,7 +7,7 @@
 $white: #ffffff;
 $ghost-grey: #fafafa;
 $charcoal: #1c1c1f;
-$reddit-blue: #cee3f8;
+$reddit-blue: #b8d6f5;
 $navy-blue: #15304a;
 $satsuki-blue: $primary-color;
 $cgp-grey: $secondary-color;
@@ -49,8 +49,23 @@ button {
   background: $satsuki-blue;
 }
 
-.logo-container {
+.snueue-button {
   width: 100%;
+  &:focus {
+    outline: none;
+  }
+}
+
+.navy-button {
+  @extend .snueue-button;
+  background: $navy-blue;
+  &:hover {
+    background: darken($navy-blue, 5%);
+  }
+}
+
+.logo-container {
+  weidth: 100%;
   text-align: center;
   margin: 3rem 0;
 }
@@ -90,25 +105,21 @@ button {
 .source-bar {
   padding: 1rem 0;
   background: $satsuki-blue;
+  input, select, button {
+    border: none;
+    margin-bottom: 0;
+  }
+}
+.login-button {
+  @extend .navy-button;
 }
 
 .search-form {
   .search-bar, .results-sorting-select {
     height: 3.3625rem;
   }
-  input, select, button {
-    margin-bottom: 0;
-    border: none;
-  }
   .submit-button {
-    background: $navy-blue;
-    width: 100%;
-    &:hover {
-      background: darken($navy-blue, 5%);
-    }
-    &:focus {
-      outline: none;
-    }
+    @extend .navy-button;
   }
 }
 

@@ -92,7 +92,7 @@ $button-disabled-cursor: $cursor-default-value !default;
 // $padding - Used to build padding for buttons Default: $button-med ||= rem-calc(12)
 // $full-width - We can set $full-width:true to remove side padding extend width - Default: false
 
-@mixin button-size($padding:$button-med, $full-width:false) {
+@mixin button-size($padding:$button-med, $full-width:true) {
 
   // We control which padding styles come through,
   // these can be turned off by setting $padding:false
