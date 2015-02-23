@@ -3,7 +3,7 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Queue = React.createClass({
   getInitialState: function() {
-    var user = Snueue.user === undefined ? null : Snueue.user;
+    var user = Snueue.user;
     return {user: user, submissions: [], history: [], flash: null};
   },
   fetch: function(submissions, params) {
@@ -83,7 +83,7 @@ var Queue = React.createClass({
     flash = null;
     content = null;
     if (this.state.submissions.length > 0)
-      content = <MediaList submissions={this.state.submissions}
+      content = <MediaList submissions={this.state.submissions} user={this.state.user}
                            onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
     if (this.state.flash !== null)
       flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />
@@ -210,7 +210,7 @@ var Search = React.createClass({
     return;
   },
   componentDidMount: function() {
-    if (Snueue.sourceFromURL !== undefined) {
+    if (Snueue.sourceFromURL !== null) {
       this.refs.source.getDOMNode().value = Snueue.sourceFromURL;
       this.handleSubmit();
     }
@@ -270,7 +270,8 @@ var MediaList = React.createClass({
     });
     return (
       <div className="mediaList">
-        <MediaItem submission={ready} onSkip={this.props.onSkip} onPrevious={this.props.onPrevious}/>
+        <MediaItem submission={ready} user={this.props.user}
+                   onSkip={this.props.onSkip} onPrevious={this.props.onPrevious}/>
         {mediaNodes}
       </div>
     );
@@ -304,7 +305,7 @@ var MediaItem = React.createClass({
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div id="media-item">
-        <MediaController submission={submission} status={this.state.playerStatus}
+        <MediaController submission={submission} user={this.props.user} status={this.state.playerStatus}
           onConrollerStateChange={this.handleItemStateChange} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
         <div className="media-item row">
           <div className="small-12 columns">
@@ -339,8 +340,9 @@ var MediaController = React.createClass({
     // below, because components are immuatble. So you can't just count them up after
     // creating them and dynamically assign controlCount.
     var controlCount = 3;
-    if (this.props.user !== null)
+    if (this.props.user !== null) {
       controlCount = 5;
+    }
     var buttonMargin = 2;
     var buttonStyle = {
       width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
