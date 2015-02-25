@@ -1,26 +1,13 @@
 import re
 import reddit
 import config
-from flask import Flask, request, session, g, redirect, url_for, \
+from snueue import app, login_manager
+from flask import request, session, g, redirect, url_for, \
      abort, render_template, jsonify, flash
-from flask.ext.login import LoginManager, current_user, login_user, \
+from flask.ext.login import current_user, login_user, \
      logout_user, login_required
-from flaskext.compass import Compass
-from flask.ext.assets import Environment, Bundle
 from reddit import AuthenticationFailure
 from models import User
-
-app = Flask(__name__, static_folder='assets')
-app.config.from_object('config.Production')
-app.secret_key = app.config['SECRET_KEY']
-assets = Environment(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-@login_manager.user_loader
-def load_user(id):
-    return User.get_user(id)
 
 @app.route('/')
 def index():
@@ -83,12 +70,11 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@login_manager.user_loader
+def load_user(id):
+    return User.get_user(id)
+
 @app.errorhandler(500)
 def internal_error(exception):
     app.logger.exception(exception)
     return render_template('error/500.html'), 500
-
-if __name__ == '__main__':
-    app.config.from_object('config.Development')
-    app.logger.addHandler(app.config.get('LOGGING_HANDLER'))
-    app.run()
