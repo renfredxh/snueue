@@ -67,12 +67,9 @@ def vote():
 @app.route('/logout')
 @login_required
 def logout():
+    current_user.clear_remember_token()
     logout_user()
     return redirect(url_for('index'))
-
-@login_manager.user_loader
-def load_user(id):
-    return User.get_user(id)
 
 @app.errorhandler(500)
 def internal_error(exception):

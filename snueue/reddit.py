@@ -1,7 +1,8 @@
 import praw
 import re
+from snueue import db
 from datetime import datetime
-from models import User, get_db
+from models import User
 from uuid import uuid4
 from config import Reddit as config
 
@@ -138,7 +139,6 @@ def authorize():
     scope = ['identity', 'history', 'vote']
     state = str(uuid4())
     url = r.get_authorize_url(state, scope, True)
-    db = get_db()
     state_key = 'authentication_state:{}'.format(state)
     db.setex(state_key, config.AUTH_EXPIRE, 1)
     return url
@@ -146,7 +146,6 @@ def authorize():
 def authenticate(state, code):
     r = get_reddit_oauth_session()
     state_key = 'authentication_state:{}'.format(state)
-    db = get_db()
     if db.get(state_key) is None:
         raise AuthenticationFailure("Invalid state token")
     db.delete(state_key)
@@ -159,6 +158,7 @@ def authenticate(state, code):
     })
     user = User(username)
     user.set(access_information)
+    user.set_remember_token()
     return user
 
 def vote(username, submission_id, direction):
