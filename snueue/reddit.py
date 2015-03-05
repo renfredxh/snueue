@@ -1,10 +1,10 @@
 import praw
 import re
 from snueue import db
+from snueue import app
 from datetime import datetime
 from models import User
 from uuid import uuid4
-from config import Reddit as config
 
 TIMESTAMP_FORMAT = "%d %b %Y %H:%M:%S"
 AUTH_EXPIRE_TIME = 55*60 # 55 minutes in seconds
@@ -89,12 +89,15 @@ def get_timestamp():
     now = datetime.now()
     return now.strftime(TIMESTAMP_FORMAT)
 
+def get_reddit_session():
+    return praw.Reddit(user_agent=app.config['REDDIT_USER_AGENT'])
+
 def get_reddit_oauth_session():
-    r = praw.Reddit(user_agent=config.USER_AGENT)
+    r = get_reddit_session()
     r.set_oauth_app_info(
-        client_id=config.CLIENT_ID,
-        client_secret=config.CLIENT_SECRET,
-        redirect_uri=config.CALLBACK_URL
+        client_id=app.config['REDDIT_CLIENT_ID'],
+        client_secret=app.config['REDDIT_CLIENT_SECRET'],
+        redirect_uri=app.config['REDDIT_CALLBACK_URL']
     )
     return r
 
@@ -116,7 +119,7 @@ def get_reddit_user_session(username):
     return r
 
 def get_submissions(source, sorting, excluded):
-    r = praw.Reddit(user_agent=config.USER_AGENT)
+    r = get_reddit_session()
     subreddit = r.get_subreddit(source)
     fetch_method = get_fetch_method(subreddit, sorting);
     submissions = []
@@ -140,7 +143,7 @@ def authorize():
     state = str(uuid4())
     url = r.get_authorize_url(state, scope, True)
     state_key = 'authentication_state:{}'.format(state)
-    db.setex(state_key, config.AUTH_EXPIRE, 1)
+    db.setex(state_key, app.config['REDDIT_AUTH_EXPIRE'], 1)
     return url
 
 def authenticate(state, code):

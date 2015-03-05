@@ -6,8 +6,8 @@ from flaskext.compass import Compass
 
 app = Flask(__name__, static_folder='assets')
 
-app.config.from_object('snueue.config.Production')
-app.secret_key = app.config['SECRET_KEY']
+app.config.from_object('snueue.config.base')
+
 assets = Environment(app)
 
 login_manager = LoginManager()

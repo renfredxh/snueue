@@ -1,5 +1,4 @@
 from snueue import db
-from config import Config as config
 from flask.ext.login import UserMixin, LoginManager, make_secure_token
 
 class RedisModel(object):
