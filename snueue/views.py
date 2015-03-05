@@ -17,12 +17,12 @@ def index():
 def index_with_subreddit(subreddit):
     return render_template('index.html', source='/r/{}'.format(subreddit))
 
-@app.route('/submissions')
+@app.route('/submissions', methods=['GET'])
 def submissions():
     source = request.args.get('q') or request.args['source']
     sorting = request.args['sorting']
     try:
-        excluded = request.form.getlist('excluded[]')
+        excluded = request.args.getlist('excluded[]')
     except KeyError:
         excluded = []
     if source == '':
