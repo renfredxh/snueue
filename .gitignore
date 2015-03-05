@@ -1,2 +1,3 @@
 *.scssc
 *.pyc
+secrets.yml
