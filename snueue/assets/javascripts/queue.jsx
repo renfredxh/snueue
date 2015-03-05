@@ -3,7 +3,8 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Queue = React.createClass({
   getInitialState: function() {
-    return {submissions: [], history: [], flash: null};
+    var user = Snueue.user;
+    return {user: user, submissions: [], history: [], flash: null};
   },
   fetch: function(submissions, params) {
     if (this.state.submissions.length === 0) {
@@ -22,6 +23,9 @@ var Queue = React.createClass({
     }, this)).always(function() {
       Snueue.hideMainLoader();
     });
+  },
+  login: function() {
+    window.location.replace('/authorize/reddit')
   },
   handleSkip: function() {
     var newHistory = this.state.history;
@@ -75,18 +79,24 @@ var Queue = React.createClass({
     window.addEventListener('popstate', this.handlePopstate)
   },
   render: function() {
-    var flash, content;
+    var flash, content, oauth;
     flash = null;
     content = null;
     if (this.state.submissions.length > 0)
-      content = <MediaList submissions={this.state.submissions} onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
+      content = <MediaList submissions={this.state.submissions} user={this.state.user}
+                           onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
     if (this.state.flash !== null)
       flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />
+    if (this.state.user !== null)
+      oauth = <UserMenu user={this.state.user}/>
+    else
+      oauth = <Login onLogin={this.login}/>
     return (
-      <div className="queue">
+      <div id="queue" className="queue">
         <div className="source-bar">
           <div className="row">
             <Search onSearch={this.handleSearch} />
+            {oauth}
           </div>
         </div>
         <ReactCSSTransitionGroup transitionName="flash">
@@ -113,6 +123,83 @@ var FlashMessage = React.createClass({
   }
 });
 
+var Dropdown = React.createClass({
+  getInitialState: function() {
+    return {open: false};
+  },
+  toggleDropdown: function(event) {
+    this.setState({open: !this.state.open});
+  },
+  render: function() {
+    var contentNodes = null;
+    var dropdown = null
+    if (this.state.open) {
+      contentNodes = this.props.contents.map(function(item, index) {
+        return (
+          <a key={item.text} href={item.href}>{item.text}</a>
+        );
+      });
+      dropdown = (
+        <div className="dropdown-content">
+          {contentNodes}
+        </div>
+      )
+    }
+    return (
+      <div className = "snueue-dropdown">
+        <button onClick={this.toggleDropdown} className={"button "+this.props.classes}
+                style={this.props.style}>
+          {this.props.text} <i className="fa fa-caret-down"></i>
+          {dropdown}
+        </button>
+      </div>
+    )
+  }
+});
+
+var UserMenu = React.createClass({
+  render: function() {
+    // Dynamically set the font-size of the username based on string length
+    var username = this.props.user.substring(0, 24);
+    var buttonHeight = 3;
+    var fontHeight = Math.min(11.20 / username.length, 1);
+    var paddingHeight = (buttonHeight - fontHeight) / 2;
+    // Add some extra padding to compensate for a minor difference in rendering height
+    // between this and the other buttons.
+    paddingHeight += fontHeight < 1 ? 0.054 : 0;
+    var dropdownStyle = {
+      fontSize: fontHeight + "rem",
+      padding: paddingHeight + "rem 0"
+    }
+    dropdownContent = [
+      {text: "Logout", href: "/logout"},
+      {text: "Login", href: "/logout"}
+    ]
+    return (
+      <div role="button" className="small-12 large-2 columns end">
+        <Dropdown text={username} contents={dropdownContent} classes="navy-button" style={dropdownStyle} />
+      </div>
+    )
+  }
+});
+
+var Login = React.createClass({
+  handleSubmit: function(e) {
+    if (typeof e !== 'undefined')
+      e.preventDefault();
+      this.props.onLogin();
+  },
+  render: function() {
+    return (
+      <form id="login-form" className="login-form" onSubmit={this.handleSubmit} ref="form">
+        <div role="button" className="small-12 large-2 columns end">
+          <button type="submit" className="button login-button"><i className="fa fa-reddit"> Login</i></button>
+        </div>
+      </form>
+    )
+  }
+});
+
 var Search = React.createClass({
   handleSubmit: function(e) {
     if (typeof e !== 'undefined')
@@ -123,7 +210,7 @@ var Search = React.createClass({
     return;
   },
   componentDidMount: function() {
-    if (Snueue.sourceFromURL !== undefined) {
+    if (Snueue.sourceFromURL !== null) {
       this.refs.source.getDOMNode().value = Snueue.sourceFromURL;
       this.handleSubmit();
     }
@@ -131,7 +218,7 @@ var Search = React.createClass({
   render: function() {
     return (
       <form id="source-form" className="search-form" onSubmit={this.handleSubmit} ref="form">
-        <div className="small-12 large-10 columns">
+        <div className="small-12 large-8 columns">
           <div className="row collapse">
             <div className="small-10 columns">
               {/* name="q" is there so that the field can be saved as a search engine. */}
@@ -183,7 +270,8 @@ var MediaList = React.createClass({
     });
     return (
       <div className="mediaList">
-        <MediaItem submission={ready} onSkip={this.props.onSkip} onPrevious={this.props.onPrevious}/>
+        <MediaItem submission={ready} user={this.props.user}
+                   onSkip={this.props.onSkip} onPrevious={this.props.onPrevious}/>
         {mediaNodes}
       </div>
     );
@@ -217,8 +305,8 @@ var MediaItem = React.createClass({
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div id="media-item">
-        <MediaController status={this.state.playerStatus} onConrollerStateChange={this.handleItemStateChange}
-          onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
+        <MediaController submission={submission} user={this.props.user} status={this.state.playerStatus}
+          onConrollerStateChange={this.handleItemStateChange} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
         <div className="media-item row">
           <div className="small-12 columns">
             <MediaTitle submission={submission} index={0} />
@@ -241,30 +329,82 @@ var MediaController = React.createClass({
     $('.media-controller').fixedsticky();
   },
   render: function() {
+    var controls = null;
+    var redditControls = null;
     var toggleButtonClasses = React.addons.classSet({
       'fa': true,
       'fa-pause': (this.inverseStatus() === 'paused'),
       'fa-play': (this.inverseStatus() === 'playing')
     });
+    // We have to set this upfront in order to apply styles to the control componenets
+    // below, because components are immuatble. So you can't just count them up after
+    // creating them and dynamically assign controlCount.
+    var controlCount = 3;
+    if (this.props.user !== null) {
+      controlCount = 5;
+    }
+    var buttonMargin = 2;
+    var buttonStyle = {
+      width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
+    }
+    controls = [
+      <div className="button primary" onClick={this.props.onPrevious} style={buttonStyle}>
+        <i className="fa fa-backward"></i>
+      </div>,
+      <div className="button primary" onClick={this.handleStatusToggle} style={buttonStyle}>
+        <i className={toggleButtonClasses}></i>
+      </div>,
+      <div className="button primary" onClick={this.props.onSkip} style={buttonStyle}>
+        <i className="fa fa-forward"></i>
+      </div>
+    ]
+    if (this.props.user !== null) {
+      redditControls = <RedditAPIController submission={this.props.submission} buttonStyle={buttonStyle} />
+    }
     return (
       <div id="media-controller" className="media-controller sticky">
         <div className="row">
           <div className="small-12 columns end">
-            <div className="button primary" onClick={this.props.onPrevious}>
-              <i className="fa fa-backward"></i>
-            </div>
-            <div className="button primary" onClick={this.handleStatusToggle}>
-              <i className={toggleButtonClasses}></i>
-            </div>
-            <div className="button primary" onClick={this.props.onSkip}>
-              <i className="fa fa-forward"></i>
-            </div>
+            {redditControls}
+            {controls}
           </div>
         </div>
       </div>
     );
   }
 });
+
+var RedditAPIController = React.createClass({
+  handleUpvote: function () {
+    this.submitVote(1);
+  },
+  handleDownvote: function () {
+    this.submitVote(-1);
+  },
+  submitVote: function(direction) {
+    $.ajax({
+      url: "/user/vote",
+      type: 'PUT',
+      data: {submission: this.props.submission.id, direction: direction},
+      success: function(data) {
+        console.log("Voted")
+      }
+    });
+  },
+  render: function() {
+    var buttonStyle = this.props.buttonStyle;
+    return (
+      <span id="reddit-media-controller">
+        <div className="button primary" onClick={this.handleUpvote} style={buttonStyle}>
+          <i className="fa fa-arrow-up"></i>
+        </div>
+        <div className="button primary" onClick={this.handleDownvote} style={buttonStyle}>
+          <i className="fa fa-arrow-down"></i>
+        </div>
+      </span>
+    )
+  }
+})
 
 var MediaTitle = React.createClass({
   render: function() {
@@ -372,9 +512,18 @@ var MediaPlayer = React.createClass({
   }
 });
 
-function onYouTubeIframeAPIReady() {
+function renderQueue() {
   React.render(
     <Queue />,
     document.getElementById('main')
   );
 }
+function onYouTubeIframeAPIReady() {
+  renderQueue();
+}
+
+setTimeout(function() {
+  if ($('#queue').length === 0) {
+    renderQueue();
+  }
+}, 500);

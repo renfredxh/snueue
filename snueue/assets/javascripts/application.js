@@ -1,6 +1,10 @@
 // Global application object
-if (typeof Snueue === 'undefined')
+if (typeof Snueue === 'undefined') {
   Snueue = {}
+}
+
+Snueue.sourceFromURL = null;
+Snueue.user = null;
 
 Snueue.showMainLoader = function() {
   $('.initial-content').hide();

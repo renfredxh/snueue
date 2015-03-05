@@ -7,8 +7,9 @@
 $white: #ffffff;
 $ghost-grey: #fafafa;
 $charcoal: #1c1c1f;
-$reddit-blue: #cee3f8;
+$reddit-blue: #b8d6f5;
 $navy-blue: #15304a;
+$border-grey: rgba(0,0,0,0.2);
 $satsuki-blue: $primary-color;
 $cgp-grey: $secondary-color;
 
@@ -29,6 +30,7 @@ html, body{
 
 body {
   background: $charcoal;
+  font-family: $font-family-sans-serif;
 }
 
 input[type="text"] {
@@ -47,6 +49,50 @@ select {
 
 button {
   background: $satsuki-blue;
+}
+
+.snueue-dropdown {
+  width: 100%;
+  .dropdown-content {
+    width: 115%;
+    padding: 10px 0;
+    background-color: $white;
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    border: solid 1px $border-grey;
+    margin-top: 1.2rem;
+    text-align: left;
+    a {
+      display: block;
+      background-color: $white;
+      padding: 5px 20px;
+      color: $black;
+      cursor: pointer;
+      &:hover {
+        color: white;
+        background-color: $satsuki-blue;
+      }
+    }
+  }
+}
+
+.snueue-button {
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+}
+
+.navy-button {
+  @extend .snueue-button;
+  background: $navy-blue;
+  &:hover {
+    background: darken($navy-blue, 5%);
+  }
+  &:focus {
+    background: $navy-blue;
+  }
 }
 
 .logo-container {
@@ -90,25 +136,21 @@ button {
 .source-bar {
   padding: 1rem 0;
   background: $satsuki-blue;
+  input, select, button {
+    border: none;
+    margin-bottom: 0;
+  }
+}
+.login-button {
+  @extend .navy-button;
 }
 
 .search-form {
   .search-bar, .results-sorting-select {
     height: 3.3625rem;
   }
-  input, select, button {
-    margin-bottom: 0;
-    border: none;
-  }
   .submit-button {
-    background: $navy-blue;
-    width: 100%;
-    &:hover {
-      background: darken($navy-blue, 5%);
-    }
-    &:focus {
-      outline: none;
-    }
+    @extend .navy-button;
   }
 }
 
@@ -166,8 +208,6 @@ button {
 }
 
 .media-controller {
-  $btn_quant: 3;
-  $btn_width: percentage(1/$btn_quant);
   $btn_margin: 2%;
 
   width: 100%;
@@ -178,7 +218,7 @@ button {
   margin-bottom: 1rem;
   background: $reddit-blue;
   .button {
-    width: ($btn_width + $btn_margin/$btn_quant) - $btn_margin;
+    display: inline-block;
     margin-left: $btn_margin;
     background: $satsuki-blue;
     &:hover, &:focus {
@@ -200,4 +240,9 @@ footer {
   text-align: center;
   background: $satsuki-blue;
   color: $reddit-blue;
+}
+
+.button, button {
+  padding-left: 0.2;
+  padding-right: 0.2;
 }
