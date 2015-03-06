@@ -1,12 +1,15 @@
 import os
+from socket import gethostname
 
 BASE_URL = "http://localhost:5000"
+HOSTNAME = gethostname()
 
 REDIS_URL = os.environ.get('REDIS_SNUEUE_PORT_6379_TCP_ADDR') or "localhost"
 REDIS_PORT = 6379
 REDIS_DB = 0
 
 REDDIT_AUTH_EXPIRE = 120
+# This needs to match the redirect uri on reddit.com/prefs/apps exactly
 REDDIT_CALLBACK_ENDPOINT = "{}/callback/reddit"
 REDDIT_CALLBACK_URL = REDDIT_CALLBACK_ENDPOINT.format(BASE_URL)
 

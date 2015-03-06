@@ -9,6 +9,11 @@ from flask.ext.login import current_user, login_user, \
 from reddit import AuthenticationFailure
 from models import User
 
+@app.after_request
+def add_hostname(response):
+    response.headers['X-Hostname'] = app.config['HOSTNAME']
+    return response
+
 @app.route('/')
 def index():
     return render_template('index.html')
