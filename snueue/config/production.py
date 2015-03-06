@@ -13,6 +13,9 @@ BASE_URL = get_secret('SNUEUE_BASE_URL')
 
 SECRET_KEY = get_secret('SNUEUE_SECRET_KEY')
 
+# Redis settings
+REDIS_URL = get_secret('REDIS_SNUEUE_PORT_6379_TCP_ADDR')
+
 # Reddit API settings
 REDDIT_AUTH_EXPIRE = 120
 REDDIT_USER_AGENT = get_secret('SNUEUE_REDDIT_USER_AGENT')
