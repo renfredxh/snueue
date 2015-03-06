@@ -2,7 +2,7 @@ import os
 
 BASE_URL = "http://localhost:5000"
 
-REDIS_URL = "localhost"
+REDIS_URL = os.environ.get('REDIS_SNUEUE_PORT_6379_TCP_ADDR') or "localhost"
 REDIS_PORT = 6379
 REDIS_DB = 0
 
