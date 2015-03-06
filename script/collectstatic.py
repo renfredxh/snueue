@@ -1,7 +1,7 @@
 from react import jsx
 
 def compile_jsx():
-    paths = [('assets/javascripts/queue.jsx', 'assets/javascripts/queue.js')]
+    paths = [('snueue/assets/javascripts/queue.jsx', 'snueue/assets/javascripts/queue.js')]
 
     transformer = jsx.JSXTransformer()
     for jsx_path, js_path in paths:
