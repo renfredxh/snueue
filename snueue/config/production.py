@@ -1,4 +1,5 @@
 import os
+from snueue.config.base import *
 
 def get_secret(key):
     secret = os.environ.get(key)
