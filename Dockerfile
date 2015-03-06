@@ -33,7 +33,7 @@ RUN pip install -r /snueue/requirements.txt
 
 EXPOSE 80
 
-WORKDIR /snueue/snueue
+WORKDIR /snueue
 
 RUN python script/collectstatic.py
 
