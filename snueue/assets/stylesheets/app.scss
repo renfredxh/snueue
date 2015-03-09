@@ -56,22 +56,19 @@ button {
   .dropdown-content {
     width: 115%;
     padding: 10px 0;
-    background-color: $white;
+    background-color: transparentize($cgp-grey, 0.20);
     position: absolute;
     z-index: 10;
     right: 0;
-    border: solid 1px $border-grey;
     margin-top: 1.2rem;
     text-align: left;
     a {
       display: block;
-      background-color: $white;
       padding: 5px 20px;
-      color: $black;
+      color: $white;
       cursor: pointer;
       &:hover {
-        color: white;
-        background-color: $satsuki-blue;
+        background-color: transparentize($satsuki-blue, 0.10);
       }
     }
   }
