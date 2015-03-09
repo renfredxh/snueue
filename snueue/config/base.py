@@ -13,8 +13,9 @@ REDIS_DB = 0
 
 REDDIT_AUTH_EXPIRE = 120
 # This needs to match the redirect uri on reddit.com/prefs/apps exactly
-REDDIT_CALLBACK_ENDPOINT = "{}/callback/reddit"
-REDDIT_CALLBACK_URL = REDDIT_CALLBACK_ENDPOINT.format(BASE_URL)
+REDDIT_CALLBACK_ENDPOINT = "{protocol}://{base_url}/callback/reddit"
+REDDIT_CALLBACK_URL = REDDIT_CALLBACK_ENDPOINT.format(protocol=PROTOCOL,
+                                                      base_url=BASE_URL)
 # Logging
 LOGGING_FORMAT = "%(name)s - %(levelname)s - %(message)s"
 LOGGING_LEVEL = logging.INFO
