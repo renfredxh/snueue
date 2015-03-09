@@ -193,7 +193,7 @@ var Login = React.createClass({
     return (
       <form id="login-form" className="login-form" onSubmit={this.handleSubmit} ref="form">
         <div role="button" className="small-12 large-2 columns end">
-          <button type="submit" className="button login-button"><i className="fa fa-reddit"> Login</i></button>
+          <button type="submit" className="button login-button"><i className="fa fa-reddit"></i> Login</button>
         </div>
       </form>
     )
