@@ -56,6 +56,13 @@ var Queue = React.createClass({
   },
   handleSearch: function(source, sorting) {
     this.setState({submissions: [], flash: null});
+    // Default to showing /r/music
+    if (source === '') {
+      source = "/r/music";
+      // It's ok to mutate the value field of this input just to serve as
+      // an example.
+      $('#search-bar').val(source);
+    }
     this.setProps({source: source, sorting: sorting}, function() {
       this.fetch([], {
         source: this.props.source,
@@ -222,7 +229,7 @@ var Search = React.createClass({
           <div className="row collapse">
             <div className="small-10 columns">
               {/* name="q" is there so that the field can be saved as a search engine. */}
-              <input className="search-bar" name="q" type="text" placeholder="/r/music" ref="source"/>
+              <input id="search-bar" className="search-bar" name="q" type="text" placeholder="/r/music" ref="source"/>
             </div>
             <div className="small-2 columns">
               <SearchSortingSelect ref="select" />
