@@ -355,13 +355,13 @@ var MediaController = React.createClass({
       width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
     }
     controls = [
-      <div className="button primary" onClick={this.props.onPrevious} style={buttonStyle}>
+      <div className="button primary" key="back" onClick={this.props.onPrevious} style={buttonStyle}>
         <i className="fa fa-backward"></i>
       </div>,
-      <div className="button primary" onClick={this.handleStatusToggle} style={buttonStyle}>
+      <div className="button primary" key="play-pause" onClick={this.handleStatusToggle} style={buttonStyle}>
         <i className={toggleButtonClasses}></i>
       </div>,
-      <div className="button primary" onClick={this.props.onSkip} style={buttonStyle}>
+      <div className="button primary" key="skip" onClick={this.props.onSkip} style={buttonStyle}>
         <i className="fa fa-forward"></i>
       </div>
     ]
@@ -402,10 +402,10 @@ var RedditAPIController = React.createClass({
     var buttonStyle = this.props.buttonStyle;
     return (
       <span id="reddit-media-controller">
-        <div className="button primary" onClick={this.handleUpvote} style={buttonStyle}>
+        <div className="button primary" key="upvote" onClick={this.handleUpvote} style={buttonStyle}>
           <i className="fa fa-arrow-up"></i>
         </div>
-        <div className="button primary" onClick={this.handleDownvote} style={buttonStyle}>
+        <div className="button primary" key="downvote" onClick={this.handleDownvote} style={buttonStyle}>
           <i className="fa fa-arrow-down"></i>
         </div>
       </span>
