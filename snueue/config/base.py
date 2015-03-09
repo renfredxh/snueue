@@ -26,6 +26,7 @@ stream_handler.setFormatter(formatter)
 LOGGING_HANDLER = stream_handler
 
 MOCK_API = {
+    'source': '/s/test',
     'submissions': [
         {
             'id': '1',

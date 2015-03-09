@@ -24,21 +24,27 @@ def index_with_subreddit(subreddit):
 
 @app.route('/submissions', methods=['GET'])
 def submissions():
-    source = request.args.get('q') or request.args['source']
-    sorting = request.args['sorting']
+    try:
+        source = request.args.get('q') or request.args['source']
+        sorting = request.args['sorting']
+    except KeyError:
+        abort(422)
     try:
         excluded = request.args.getlist('excluded[]')
     except KeyError:
         excluded = []
-    if source == '':
+    if source == '/s/test':
         return jsonify(app.config['MOCK_API'])
     # Searches can be in the form "/r/subreddit_name" or "subreddit_name"
     subreddit = re.search(r'(?:/r/)([^/]*)', source)
     if subreddit:
         source = subreddit.group(1)
+        submissions = reddit.get_submissions(source, sorting, excluded)
+    else:
+        abort(422)
     return jsonify({
         'source': '/r/{}'.format(source),
-        'submissions': reddit.get_submissions(source, sorting, excluded)
+        'submissions': submissions
     })
 
 @app.route('/authorize/reddit')
