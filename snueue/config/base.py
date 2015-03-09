@@ -1,7 +1,10 @@
 import os
+import logging
+from logging import StreamHandler
 from socket import gethostname
 
-BASE_URL = "http://localhost:5000"
+BASE_URL = "localhost:5000"
+PROTOCOL = "http"
 HOSTNAME = gethostname()
 
 REDIS_URL = os.environ.get('REDIS_SNUEUE_PORT_6379_TCP_ADDR') or "localhost"
@@ -12,6 +15,14 @@ REDDIT_AUTH_EXPIRE = 120
 # This needs to match the redirect uri on reddit.com/prefs/apps exactly
 REDDIT_CALLBACK_ENDPOINT = "{}/callback/reddit"
 REDDIT_CALLBACK_URL = REDDIT_CALLBACK_ENDPOINT.format(BASE_URL)
+# Logging
+LOGGING_FORMAT = "%(name)s - %(levelname)s - %(message)s"
+LOGGING_LEVEL = logging.INFO
+stream_handler = StreamHandler()
+stream_handler.setLevel(LOGGING_LEVEL)
+formatter = logging.Formatter(LOGGING_FORMAT)
+stream_handler.setFormatter(formatter)
+LOGGING_HANDLER = stream_handler
 
 MOCK_API = {
     'submissions': [

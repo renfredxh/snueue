@@ -23,8 +23,9 @@ REDDIT_CALLBACK_URL = REDDIT_CALLBACK_ENDPOINT.format(BASE_URL)
 # Log exceptions to stderr
 import logging
 from logging import StreamHandler
+LOGGING_FORMAT = "%(name)s - %(levelname)s - %(message)s"
 stream_handler = StreamHandler()
-stream_handler.setLevel(logging.WARNING)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+stream_handler.setLevel(LOGGING_LEVEL)
+formatter = logging.Formatter(LOGGING_FORMAT)
 stream_handler.setFormatter(formatter)
 LOGGING_HANDLER = stream_handler
