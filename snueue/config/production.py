@@ -16,7 +16,7 @@ BASE_URL = get_secret('SNUEUE_BASE_URL')
 #
 # Option to turn off SSL by setting this to "0". Useful for testing
 # production config locally. Otherwise SSL should always be on.
-USE_SSL = False if get_secret('SNUEUE_USE_SSL') == '0' else True
+USE_SSL = False if os.environ.get('SNUEUE_USE_SSL') == '0' else True
 SECRET_KEY = get_secret('SNUEUE_SECRET_KEY')
 SESSION_COOKIE_SECURE = True if USE_SSL else False
 PROTOCOL = "https" if USE_SSL else "http"
