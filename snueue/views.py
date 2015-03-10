@@ -84,5 +84,4 @@ def logout():
 
 @app.errorhandler(500)
 def internal_error(exception):
-    app.logger.exception(exception)
     return render_template('error/500.html'), 500
