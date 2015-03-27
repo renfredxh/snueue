@@ -63,7 +63,6 @@ class User(UserMixin, RedisModel):
         db.delete('remember_token:{}'.format(token))
 
     def get_auth_token(self):
-        print "Getting your auth"
         return self.get('remember_token')
 
     def access_information(self):
