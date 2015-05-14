@@ -2,7 +2,6 @@ import redis
 from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.assets import Environment, Bundle
-from flaskext.compass import Compass
 
 app = Flask(__name__, static_folder='assets')
 

@@ -1,6 +1,5 @@
 Flask>=0.10.1,<=0.11
 Flask-Assets==0.10
-Flask-Compass==0.2
 Flask-Login>=0.2.11
 PyExecJS==1.1.0
 PyReact==0.5.2
