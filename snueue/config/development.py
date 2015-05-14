@@ -3,21 +3,6 @@ import logging
 from logging import NullHandler
 from snueue.config.base import *
 
-SECRETS_FILE = "snueue/config/secrets.yml"
-SECRETS = None
-
-try:
-    with open(SECRETS_FILE, 'r') as f:
-        SECRETS = yaml.load(f)
-except (OSError, IOError) as e:
-    print("Warning: missing secrets file {}".format(SECRETS_FILE))
-
-def get_secret(key):
-    secret = SECRETS.get(key, None)
-    if secret is None:
-        print("Warning: missing secret {}".format(key))
-    return secret
-
 DEBUG = True
 ASSETS_DEBUG = True
 

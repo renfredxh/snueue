@@ -3,6 +3,12 @@ import logging
 from logging import StreamHandler
 from socket import gethostname
 
+def get_secret(key, required=True):
+    secret = os.environ.get(key)
+    if secret is None and required:
+        raise KeyError("Missing secret {}".format(key))
+    return secret
+
 BASE_URL = "localhost:5000"
 PROTOCOL = "http"
 HOSTNAME = gethostname()

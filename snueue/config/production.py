@@ -1,12 +1,6 @@
 import os
 from snueue.config.base import *
 
-def get_secret(key):
-    secret = os.environ.get(key)
-    if secret is None:
-        raise KeyError("Missing secret {}".format(key))
-    return secret
-
 DEBUG = False
 PROPOGATE_EXCEPTIONS = True
 TRAP_HTTP_EXCEPTIONS = False
