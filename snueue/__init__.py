@@ -14,7 +14,8 @@ login_manager.init_app(app)
 
 db = redis.StrictRedis(host=app.config['REDIS_URL'],
                        port=app.config['REDIS_PORT'],
-                       db=app.config['REDIS_DB'])
+                       db=app.config['REDIS_DB'],
+                       decode_responses=True)
 
 from snueue.models import User
 

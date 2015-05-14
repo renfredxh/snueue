@@ -3,8 +3,8 @@ import re
 from snueue import db
 from snueue import app
 from datetime import datetime
-from models import User
 from uuid import uuid4
+from snueue.models import User
 
 TIMESTAMP_FORMAT = "%d %b %Y %H:%M:%S"
 AUTH_EXPIRE_TIME = 55*60 # 55 minutes in seconds
@@ -24,7 +24,7 @@ class SubmissionCollection(object):
         types = {
             'youtube': [r'youtube\.', 'youtu\.be']
         }
-        for t, patterns in types.iteritems():
+        for t, patterns in types.items():
             if any([re.search(p, url) for p in patterns]):
                 return t
         return None
