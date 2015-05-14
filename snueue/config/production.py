@@ -47,7 +47,6 @@ if ADMIN_EMAIL is not None:
     mail_server = get_secret('SNUEUE_LOGGING_MAIL_SERVER')
     mail_user = get_secret('SNUEUE_LOGGING_MAIL_USER')
     mail_pass = get_secret('SNUEUE_LOGGING_MAIL_PASS')
-    print mail_user, mail_pass
     mail_handler = SMTPHandler((mail_server, 587), 'errors@snueue.audio',
                                [ADMIN_EMAIL], 'Snueue Server Error',
                                (mail_user, mail_pass))
