@@ -1,3 +1,3 @@
 *.scssc
 *.pyc
-secrets.yml
+snueue/config/secrets.env

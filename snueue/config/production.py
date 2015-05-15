@@ -5,12 +5,13 @@ DEBUG = False
 PROPOGATE_EXCEPTIONS = True
 TRAP_HTTP_EXCEPTIONS = False
 BASE_URL = get_secret('SNUEUE_BASE_URL')
+REDIS_HOST = get_secret('SNUEUE_PORT_6379_TCP_ADDR', False) or "localhost"
 
 # Security Settings
 #
 # Option to turn off SSL by setting this to "0". Useful for testing
 # production config locally. Otherwise SSL should always be on.
-USE_SSL = False if os.environ.get('SNUEUE_USE_SSL') == '0' else True
+USE_SSL = False if get_secret('SNUEUE_USE_SSL', False) == '0' else True
 SECRET_KEY = get_secret('SNUEUE_SECRET_KEY')
 SESSION_COOKIE_SECURE = True if USE_SSL else False
 PROTOCOL = "https" if USE_SSL else "http"
@@ -36,7 +37,7 @@ LOGGING_HANDLER = stream_handler
 
 # Option to log errors via email
 LOGGING_MAIL_HANDLER = None
-ADMIN_EMAIL = os.environ.get('SNUEUE_ADMIN_EMAIL')
+ADMIN_EMAIL = get_secret('SNUEUE_ADMIN_EMAIL', False)
 if ADMIN_EMAIL is not None:
     mail_server = get_secret('SNUEUE_LOGGING_MAIL_SERVER')
     mail_user = get_secret('SNUEUE_LOGGING_MAIL_USER')

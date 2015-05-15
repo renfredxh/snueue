@@ -1,0 +1,19 @@
+web:
+  build: .
+  command: python3 app.py
+  expose:
+    - "5000"
+  ports:
+    - "5000:5000"
+  volumes:
+    - .:/snueue
+  environment:
+    - SNUEUE_HOST=0.0.0.0
+    - SNUEUE_DATABASE_HOST=database
+  env_file: ./snueue/config/secrets.env
+  links:
+    - database
+database:
+  image: redis
+  volumes:
+    - /data
