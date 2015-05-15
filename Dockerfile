@@ -34,11 +34,7 @@ EXPOSE 80
 
 WORKDIR /snueue
 
-# Create a directory for log files
-# Can optionally be shared on the host via volume
-RUN mkdir log
-
 RUN python3 script/collectstatic.py
 
 # Use Gunicorn to serve the application
-CMD gunicorn app:app -b 0.0.0.0:80 --log-file - --error-logfile - --access-logfile log/access.log
+CMD gunicorn app:app -b 0.0.0.0:80 --log-file - --error-logfile - --access-logfile -

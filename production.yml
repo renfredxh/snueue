@@ -2,15 +2,8 @@ web:
   extends:
     file: common.yml
     service: web
-  command: python3 app.py
-  expose:
-    - "5000"
   ports:
-    - "5000:5000"
-  volumes:
-    - .:/snueue
-  environment:
-    - SNUEUE_HOST=0.0.0.0
+    - "5000:80"
   links:
     - database
 database:
