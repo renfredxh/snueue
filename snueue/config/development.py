@@ -1,4 +1,3 @@
-import yaml
 import logging
 from logging import NullHandler
 from snueue.config.base import *
