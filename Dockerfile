@@ -1,6 +1,3 @@
-# Build: sudo docker build -t snueue .
-# Run: sudo docker run -p 8000:80 -i -t -d srctweb
-
 # Set the base image to Ubuntu
 FROM ubuntu:14.04
 
