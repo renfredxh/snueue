@@ -21,9 +21,7 @@ RUN apt-add-repository ppa:chris-lea/node.js
 RUN apt-get update && apt-get install -y nodejs
 
 # Ruby and Compass
-RUN apt-get install -y -qq ruby-dev
-RUN apt-get install make
-
+RUN apt-get install -y -qq ruby1.9.1-dev make
 RUN gem install --no-rdoc --no-ri compass
 
 RUN git clone https://github.com/renfredxh/snueue.git snueue
