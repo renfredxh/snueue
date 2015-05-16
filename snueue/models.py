@@ -1,7 +1,7 @@
 from snueue import db
 from flask.ext.login import UserMixin, LoginManager, make_secure_token
 
-class RedisModel(object):
+class RedisModel:
 
     def get_id(self):
         pass

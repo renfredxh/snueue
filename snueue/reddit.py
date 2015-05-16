@@ -12,7 +12,7 @@ AUTH_EXPIRE_TIME = 55*60 # 55 minutes in seconds
 class AuthenticationFailure(Exception):
     pass
 
-class SubmissionCollection(object):
+class SubmissionCollection:
 
     def __init__(self, submissions):
         self.submissions = [s for s in submissions]
