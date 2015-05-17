@@ -2,11 +2,3 @@ input, select, button {
   outline: none;
   border: none;
 }
-
-button, .button {
-  // Make foundation button transitions faster
-  @include single-transition(background-color, 60ms, linear);
-  // Remove extraneous button padding
-  padding-left: 0;
-  padding-right: 0;
-}
