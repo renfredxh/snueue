@@ -1,0 +1,157 @@
+.snueue-dropdown {
+  width: 100%;
+  .dropdown-content {
+    width: 115%;
+    padding: 10px 0;
+    background-color: transparentize($cgp-grey, 0.20);
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    margin-top: 1.2rem;
+    text-align: left;
+    a {
+      display: block;
+      padding: 5px 20px;
+      color: $white;
+      cursor: pointer;
+      &:hover {
+        background-color: transparentize($satsuki-blue, 0.10);
+      }
+    }
+  }
+}
+
+.snueue-button {
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+}
+
+.navy-button {
+  @extend .snueue-button;
+  background: $navy-blue;
+  &:hover {
+    background: darken($navy-blue, 5%);
+  }
+  &:focus {
+    background: $navy-blue;
+  }
+}
+
+.flash-message {
+  width: 100%;
+  margin-top: 1.2rem;
+  padding: 0.5rem;
+  font-weight: 300;
+  background-color: $cgp-grey;
+  color: $ghost-grey;
+
+  .fa-close {
+     font-size: 1.5rem;
+     padding-right: 0.3rem;
+     float: right;
+     cursor: pointer;
+     color: lighten($cgp-grey, 20);
+     &:hover {
+       color: lighten($cgp-grey, 12);
+     }
+  }
+}
+
+.source-bar {
+  padding: 1rem 0;
+  background: $satsuki-blue;
+  input, select, button {
+    border: none;
+    margin-bottom: 0;
+  }
+}
+.login-button {
+  @extend .navy-button;
+}
+
+.search-form {
+  .search-bar, .results-sorting-select {
+    height: 3.3625rem;
+  }
+  .submit-button {
+    @extend .navy-button;
+  }
+}
+
+.media-title {
+  background: $cgp-grey;
+  font-weight: 300;
+  margin: 0;
+  clear: right;
+}
+
+.media-item {
+  border-bottom: solid $charcoal 1px;
+
+  .media-expand {
+    background: #151515;
+  }
+
+  .fa {
+    color: $white;
+  }
+
+  .media-title {
+    height: 3.3625rem;
+    padding: 0.68rem 0.7rem;
+    .permalink {
+      color: $white;
+      font-size: 1.25rem;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .slide-toggle {
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+.queued-media-item {
+  $media-title-font-size: 0.95rem;
+  border-bottom: solid $charcoal 1px;
+
+  .media-title {
+    font-size: $media-title-font-size;
+    padding: 0.4rem 0.6rem;
+    overflow: hidden;
+    white-space: nowrap;
+    .permalink {
+      color: $white;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.media-controller {
+  $btn_margin: 2%;
+
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+  background: $reddit-blue;
+  .button {
+    display: inline-block;
+    margin-left: $btn_margin;
+    background: $satsuki-blue;
+    &:hover, &:focus {
+      background: $navy-blue;
+    }
+  }
+  .button:first-child {
+    margin-left: 0;
+  }
+}
