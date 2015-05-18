@@ -120,14 +120,10 @@ var Queue = React.createClass({
 var FlashMessage = React.createClass({
   render: function() {
     return (
-      <div className="row">
-        <div className="small-12 columns">
-          <p className="flash-message">
-            {this.props.message}
-            <i className="fa fa-close" onClick={this.props.onClose}></i>
-          </p>
-        </div>
-      </div>
+      <p className="flash-message">
+        {this.props.message}
+        <i className="fa fa-close" onClick={this.props.onClose}></i>
+      </p>
     )
   }
 });
@@ -278,10 +274,8 @@ var MediaList = React.createClass({
 var QueuedMediaItem = React.createClass({
   render: function() {
     return (
-      <div className="queued-media-item row">
-        <div className="small-12 columns end">
-          <MediaTitle submission={this.props.submission} index={this.props.index + 1} />
-        </div>
+      <div className="queued-media-item ">
+        <MediaTitle submission={this.props.submission} index={this.props.index + 1} />
       </div>
     );
   }
@@ -304,11 +298,9 @@ var MediaItem = React.createClass({
       <div id="media-item">
         <MediaController submission={submission} user={this.props.user} status={this.state.playerStatus}
           onConrollerStateChange={this.handleItemStateChange} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
-        <div className="media-item row">
-          <div className="small-12 columns">
-            <MediaTitle submission={submission} index={0} />
-            {mediaPlayer}
-          </div>
+        <div className="media-item">
+          <MediaTitle submission={submission} index={0} />
+          {mediaPlayer}
         </div>
       </div>
     );
@@ -496,12 +488,8 @@ var MediaPlayer = React.createClass({
   },
   render: function() {
     return (
-      <div className="media-player row">
-        <div className="small-12 columns">
-          <div className="flex-video">
-            <div id="player"></div>
-          </div>
-        </div>
+      <div className="media-player">
+        <div id="player"></div>
       </div>
     );
   }
