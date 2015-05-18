@@ -1,9 +1,13 @@
+
+$visual-grid: true !default;
+$visual-grid-color: #eee !default;
 @import "vendor/normalize";
 @import "vendor/bourbon/bourbon";
 @import "vendor/neat/neat";
 @import "vendor/loader";
 @import "globals";
 @import "transitions";
+@import "ui";
 @import "components/queue";
 @import "override";
 
@@ -12,50 +16,21 @@ html, body{
   height: 100%
 }
 
+body {
+  background: $charcoal;
+  font-family: $font-family-sans-serif;
+}
+
 .container {
   min-height: 100%;
   position: relative;
   padding-bottom: $footer-height + $footer-margin;
 }
 
-body {
-  background: $charcoal;
-  font-family: $font-family-sans-serif;
-}
-
-input[type="text"] {
-  box-shadow: none;
-  height: 3.0625rem;
-  border: solid 1px #fefefe;
-  font-size: $component-font-size;
-}
-
-select {
-  background-color: $ghost-grey;
-  border: none;
-  font-size: $component-font-size;
-  cursor: pointer;
-}
-
-button {
-  background: $satsuki-blue;
-}
 .logo-container {
   width: 100%;
   text-align: center;
   margin: 3rem 0;
-}
-
-.loader {
-  width: 15em;
-  height: 15em;
-  font-size: 15px;
-  border-color: transparentize($ghost-grey, 0.8);
-  border-left: 1.1em solid $ghost-grey;
-  &:after {
-    width: 15em;
-    height: 15em;
-  }
 }
 
 footer {
@@ -68,11 +43,6 @@ footer {
   text-align: center;
   background: $satsuki-blue;
   color: $reddit-blue;
-}
-
-.button, button {
-  padding-left: 0.2;
-  padding-right: 0.2;
 }
 
 /* Browser Specific Styles */

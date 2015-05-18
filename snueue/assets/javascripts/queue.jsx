@@ -100,10 +100,12 @@ var Queue = React.createClass({
       oauth = <Login onLogin={this.login}/>
     return (
       <div id="queue" className="queue">
-        <div className="source-bar">
-          <div className="row">
+        <div className="source-bar-container">
+          <div className="source-bar">
             <Search onSearch={this.handleSearch} />
-            {oauth}
+            <div className="user-button">
+              {oauth}
+            </div>
           </div>
         </div>
         <ReactCSSTransitionGroup transitionName="flash">
@@ -183,9 +185,7 @@ var UserMenu = React.createClass({
       {text: "Login", href: "/logout"}
     ]
     return (
-      <div role="button" className="small-12 large-2 columns end">
-        <Dropdown text={username} contents={dropdownContent} classes="navy-button" style={dropdownStyle} />
-      </div>
+      <Dropdown text={username} contents={dropdownContent} classes="navy-button" style={dropdownStyle} />
     )
   }
 });
@@ -199,9 +199,7 @@ var Login = React.createClass({
   render: function() {
     return (
       <form id="login-form" className="login-form" onSubmit={this.handleSubmit} ref="form">
-        <div role="button" className="small-12 large-2 columns end">
-          <button type="submit" className="button login-button"><i className="fa fa-reddit"></i> Login</button>
-        </div>
+        <button type="submit" className="button login-button"><i className="fa fa-reddit"></i> Login</button>
       </form>
     )
   }
@@ -225,20 +223,12 @@ var Search = React.createClass({
   render: function() {
     return (
       <form id="source-form" className="search-form" onSubmit={this.handleSubmit} ref="form">
-        <div className="small-12 large-8 columns">
-          <div className="row collapse">
-            <div className="small-10 columns">
-              {/* name="q" is there so that the field can be saved as a search engine. */}
-              <input id="search-bar" className="search-bar" name="q" type="text" placeholder="/r/music" ref="source"/>
-            </div>
-            <div className="small-2 columns">
-              <SearchSortingSelect ref="select" />
-            </div>
-          </div>
+        {/* name="q" is there so that the field can be saved as a search engine. */}
+        <div className="search-bar-container">
+          <input id="search-bar" className="search-bar" name="q" type="text" placeholder="/r/music" ref="source"/>
+          <SearchSortingSelect ref="select" />
         </div>
-        <div role="button" className="small-12 large-2 columns end">
-          <button type="submit" className="button submit-button"><i className="fa fa-arrow-right"></i></button>
-        </div>
+        <button type="submit" className="button submit-button"><i className="fa fa-arrow-right"></i></button>
       </form>
     );
   }

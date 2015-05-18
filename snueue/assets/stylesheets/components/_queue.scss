@@ -59,25 +59,46 @@
   }
 }
 
+.source-bar-container {
+  background-color: $satsuki-blue;
+}
+
 .source-bar {
+  @include outer-container();
   padding: 1rem 0;
-  background: $satsuki-blue;
   input, select, button {
     border: none;
     margin-bottom: 0;
   }
 }
+
 .login-button {
   @extend .navy-button;
 }
 
 .search-form {
+  @include span-columns(10);
   .search-bar, .results-sorting-select {
     height: 3.3625rem;
   }
+  .search-bar-container {
+    @include span-columns(8 of 10);
+    .search-bar {
+      width: 85%;
+    }
+    .results-sorting-select {
+      width: 15%;
+    }
+  }
   .submit-button {
+    @include span-columns(2 of 10);
     @extend .navy-button;
   }
+}
+
+.user-button {
+  @include span-columns(2);
+  @include omega();
 }
 
 .media-title {
