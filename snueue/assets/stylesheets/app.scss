@@ -1,7 +1,6 @@
-
-$visual-grid: true !default;
-$visual-grid-color: #eee !default;
+@import "vendor/settings";
 @import "vendor/normalize";
+@import "vendor/fixedsticky";
 @import "vendor/bourbon/bourbon";
 @import "vendor/neat/neat";
 @import "vendor/loader";
@@ -9,7 +8,6 @@ $visual-grid-color: #eee !default;
 @import "transitions";
 @import "ui";
 @import "components/queue";
-@import "override";
 
 // For the sticky footer
 html, body{

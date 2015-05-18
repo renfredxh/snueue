@@ -16,9 +16,9 @@ def add_hostname(response):
 def index():
     return render_template('index.html')
 
-@app.route('/r/<subreddit>')
-def index_with_subreddit(subreddit):
-    return render_template('index.html', source='/r/{}'.format(subreddit))
+@app.route('/<type>/<subreddit>')
+def index_with_subreddit(type, subreddit):
+    return render_template('index.html', source='/{}/{}'.format(type, subreddit))
 
 @app.route('/submissions', methods=['GET'])
 def submissions():

@@ -64,7 +64,7 @@
 }
 
 .source-bar {
-  @include outer-container();
+  @include outer-container;
   padding: 1rem 0;
   input, select, button {
     border: none;
@@ -109,16 +109,16 @@
 }
 
 .media-item {
+  @include outer-container;
+
   border-bottom: solid $charcoal 1px;
 
   .media-expand {
     background: #151515;
   }
-
   .fa {
     color: $white;
   }
-
   .media-title {
     height: 3.3625rem;
     padding: 0.68rem 0.7rem;
@@ -137,6 +137,7 @@
 }
 
 .queued-media-item {
+  @include outer-container;
   $media-title-font-size: 0.95rem;
   border-bottom: solid $charcoal 1px;
 
@@ -154,16 +155,21 @@
   }
 }
 
-.media-controller {
-  $btn_margin: 2%;
-
+.media-controller-container {
   width: 100%;
   position: sticky;
   top: 0;
+  background: $reddit-blue;
+  margin-bottom: 1rem;
+}
+
+.media-controller {
+  @include outer-container;
+  $btn_margin: 2%;
+
   z-index: 10;
   padding-top: 1rem;
-  margin-bottom: 1rem;
-  background: $reddit-blue;
+  padding-bottom: 1rem;
   .button {
     display: inline-block;
     margin-left: $btn_margin;

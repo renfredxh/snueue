@@ -22,6 +22,16 @@
   padding: 0.5rem;
 }
 
+a {
+  color: #336699;
+  text-decoration: none;
+}
+
+input, select, button {
+  outline: none;
+  border: none;
+}
+
 input[type="text"] {
   box-shadow: none;
   height: 3.0625rem;
@@ -45,6 +55,7 @@ button {
   padding: 1.025rem 0.2rem;
   color: white;
   cursor: pointer;
+  text-align: center;
 }
 
 .loader {

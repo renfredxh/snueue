@@ -266,7 +266,7 @@ var MediaList = React.createClass({
       );
     });
     return (
-      <div className="mediaList">
+      <div className="media-list">
         <MediaItem submission={ready} user={this.props.user}
                    onSkip={this.props.onSkip} onPrevious={this.props.onPrevious}/>
         {mediaNodes}
@@ -323,7 +323,7 @@ var MediaController = React.createClass({
     this.props.onConrollerStateChange(this.inverseStatus());
   },
   componentDidMount: function() {
-    $('.media-controller').fixedsticky();
+    $('.media-controller-container').fixedsticky();
   },
   render: function() {
     var controls = null;
@@ -359,12 +359,10 @@ var MediaController = React.createClass({
       redditControls = <RedditAPIController submission={this.props.submission} buttonStyle={buttonStyle} />
     }
     return (
-      <div id="media-controller" className="media-controller sticky">
-        <div className="row">
-          <div className="small-12 columns end">
-            {redditControls}
-            {controls}
-          </div>
+      <div className="media-controller-container">
+        <div id="media-controller" className="media-controller">
+          {redditControls}
+          {controls}
         </div>
       </div>
     );
