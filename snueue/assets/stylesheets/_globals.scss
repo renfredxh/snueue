@@ -11,6 +11,14 @@ $faint-grey: #454545;
 
 $font-family-sans-serif: Verdana, "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+$ui-radius: 3px;
+@mixin ui-shadow {
+  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2)
+}
+@mixin cliff-shadow {
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
+}
+
 $footer-height: 4rem;
 $footer-margin: 1.5rem;
 $component-font-size: 1rem;

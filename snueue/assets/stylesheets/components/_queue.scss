@@ -7,9 +7,12 @@
     padding: 10px 0;
     background-color: $white;
     position: absolute;
-    z-index: 10;
+    z-index: 20;
     margin-top: 1.2rem;
+    border-top: $ghost-grey;
     text-align: left;
+    @include ui-shadow;
+    @include border-bottom-radius($ui-radius);
     a {
       height: 35px;
       @include padding(null 20px null 20px);
@@ -88,9 +91,11 @@
   .search-bar-container {
     @include span-columns(8 of 10);
     .search-bar {
+      @include border-left-radius($ui-radius);
       width: 85%;
     }
     .results-sorting-select {
+      @include border-right-radius($ui-radius);
       width: 15%;
     }
   }
@@ -158,15 +163,15 @@
   width: 100%;
   position: sticky;
   top: 0;
+  z-index: 10;
   background: $reddit-blue;
   margin-bottom: 1rem;
+  @include cliff-shadow;
 }
 
 .media-controller {
   @include outer-container;
   $btn_margin: 2%;
-
-  z-index: 10;
   padding-top: 1rem;
   padding-bottom: 1rem;
   .button {
