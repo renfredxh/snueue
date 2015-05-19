@@ -47,12 +47,15 @@
 }
 
 .flash-message {
+  @include outer-container;
   width: 100%;
   margin-top: 1.2rem;
   padding: 0.5rem;
   font-weight: 300;
   background-color: $cgp-grey;
   color: $ghost-grey;
+  border-radius: $ui-radius;
+  @include ui-shadow;
 
   .fa-close {
      font-size: 1.5rem;
