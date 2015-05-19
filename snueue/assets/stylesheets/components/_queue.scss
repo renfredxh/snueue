@@ -1,21 +1,25 @@
 .snueue-dropdown {
   width: 100%;
+  position: relative;
   .dropdown-content {
-    width: 115%;
+    width: 180px;
+    right: 0;
     padding: 10px 0;
-    background-color: transparentize($cgp-grey, 0.20);
+    background-color: $white;
     position: absolute;
     z-index: 10;
-    right: 0;
     margin-top: 1.2rem;
     text-align: left;
     a {
+      height: 35px;
+      @include padding(null 20px null 20px);
+      line-height: 34px;
       display: block;
-      padding: 5px 20px;
-      color: $white;
+      color: $charcoal;
       cursor: pointer;
       &:hover {
-        background-color: transparentize($satsuki-blue, 0.10);
+        background-color: $satsuki-blue;
+        color: $white;
       }
     }
   }
@@ -110,14 +114,15 @@
     background: #151515;
   }
   .fa {
-    color: $white;
+    color: $bright-text;
   }
   .media-title {
+    @include padding(0.25rem 0 1rem 0);
+    margin-bottom: 0.5rem;
+    border-bottom: solid $faint-grey 1px;
     font-weight: 300;
-    padding: 0;
-    margin-bottom: 1rem;
     .permalink {
-      color: $white;
+      color: $bright-text;
       font-size: 1.25rem;
       &:hover {
         text-decoration: underline;
@@ -133,7 +138,7 @@
 .queued-media-item {
   @include outer-container;
   $media-title-font-size: 0.95rem;
-  border-bottom: solid #262626 1px;
+  border-bottom: solid $faint-grey 1px;
   padding: 0.9rem 0;
 
   .media-title {
@@ -141,7 +146,7 @@
     overflow: hidden;
     white-space: nowrap;
     .permalink {
-      color: $white;
+      color: $bright-text;
       &:hover {
         text-decoration: underline;
       }
