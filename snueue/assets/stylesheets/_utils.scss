@@ -1,0 +1,79 @@
+@mixin form-select  {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-color: $ghost-grey;
+  border-radius: 0;
+
+  // Hide the dropdown arrow shown in newer IE versions
+  &::-ms-expand {
+    display: none;
+  }
+
+  // The custom arrow has some fake horizontal padding so we can align it
+  // from the right side of the element without relying on CSS3
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
+
+  // We can safely use leftmost and rightmost now
+  background-position: 100% center;
+
+  background-repeat: no-repeat;
+  border: 0;
+  line-height: normal;
+  padding: 0.5rem;
+}
+
+@mixin flex-video {
+  // We use these to control video container padding and margins
+  $flex-video-padding-top: rem-calc(25) !default;
+  $flex-video-padding-bottom: 67.5% !default;
+  $flex-video-margin-bottom: rem-calc(16) !default;
+
+  // We use this to control widescreen bottom padding
+  $flex-video-widescreen-padding-bottom: 56.34% !default;
+
+  height: 0;
+  margin-bottom: $flex-video-margin-bottom;
+  overflow: hidden;
+  padding-bottom: $flex-video-padding-bottom;
+  padding-top: $flex-video-padding-top;
+  position: relative;
+
+  &.widescreen { padding-bottom: $flex-video-widescreen-padding-bottom; }
+  &.vimeo { padding-top: 0; }
+
+  iframe,
+  object,
+  embed,
+  video {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    float: left;
+  }
+}
+
+// From ZURB Foundation
+$rem-base: 16px !default;
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@function convert-to-rem($value, $base-value: $rem-base)  {
+  $value: strip-unit($value) / strip-unit($base-value) * 1rem;
+  @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+@function rem-calc($values, $base-value: $rem-base) {
+  $max: length($values);
+
+  @if $max == 1 { @return convert-to-rem(nth($values, 1), $base-value); }
+
+  $remValues: ();
+  @for $i from 1 through $max {
+    $remValues: append($remValues, convert-to-rem(nth($values, $i), $base-value));
+  }
+  @return $remValues;
+}

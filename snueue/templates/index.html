@@ -1,19 +1,21 @@
 {% extends 'layouts/base.html' %}
 {% block body %}
   <div class="container">
-    <div id="main" class="main">
-    </div>
+    <div id="main" class="main"></div>
     {% if not source %}
       {% include 'layouts/initial.html' %}
     {% endif %}
     {% include 'layouts/footer.html' %}
   </div>
+  <div id="fullscreen-button" class="fullscreen-button">
+    <i class="fa fa-expand"></i>
+  </div>
   <script>
     {% if source %}
-      Snueue.sourceFromURL = '{{ source }}'
+      Snueue.sourceFromURL = '{{ source }}';
     {% endif %}
     {% if current_user.is_authenticated() %}
-      Snueue.user = '{{ current_user.username }}'
+      Snueue.user = '{{ current_user.username }}';
     {% endif %}
   </script>
 {% endblock %}

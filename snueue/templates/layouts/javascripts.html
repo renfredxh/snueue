@@ -8,11 +8,13 @@
 <script src="//www.youtube.com/player_api"></script>
 {% if config.DEBUG %}
   <script src="{{ url_for('static', filename='javascripts/application.js') }}"></script>
+  <script src="{{ url_for('static', filename='javascripts/fullscreen.js') }}"></script>
   <script src="{{ url_for('static', filename='javascripts/vendor/react/JSXTransformer.js') }}"></script>
   <script type="text/jsx" src="{{ url_for('static', filename='javascripts/queue.jsx') }}"></script>
 {% else %}
   {% assets filters="rjsmin", output="build/app.js",
     "javascripts/application.js",
+    "javascripts/fullscreen.js",
     "javascripts/queue.js" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
   {% endassets %}

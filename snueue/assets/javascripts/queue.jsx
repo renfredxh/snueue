@@ -295,7 +295,7 @@ var MediaItem = React.createClass({
     var mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange}
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
-      <div id="media-item">
+      <div id="current-media-item">
         <MediaController submission={submission} user={this.props.user} status={this.state.playerStatus}
           onConrollerStateChange={this.handleItemStateChange} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
         <div className="media-item">
