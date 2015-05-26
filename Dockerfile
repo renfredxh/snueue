@@ -22,8 +22,10 @@ RUN apt-get install -y -qq ruby1.9.1-dev make
 RUN gem install --no-rdoc --no-ri compass
 
 RUN git clone https://github.com/renfredxh/snueue.git snueue
+# Install the latest version of pip
+RUN easy_install3 -U pip
 # Get pip to download and install requirements:
-RUN pip3 install -r /snueue/requirements.txt
+RUN pip install -r /snueue/requirements.txt
 
 EXPOSE 80
 
