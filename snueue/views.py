@@ -1,5 +1,5 @@
 import re
-from snueue import app, login_manager, reddit, config
+from snueue import app, reddit, config, login
 from flask import request, session, g, redirect, url_for, \
      abort, render_template, jsonify, flash
 from flask.ext.login import current_user, login_user, \
@@ -76,7 +76,7 @@ def vote():
 @app.route('/logout')
 @login_required
 def logout():
-    current_user.clear_remember_token()
+    login.clear_remember_token(current_user)
     logout_user()
     return redirect(url_for('index'))
 

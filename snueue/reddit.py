@@ -1,10 +1,9 @@
 import praw
 import re
-from snueue import db
-from snueue import app
+from snueue import app, login
 from datetime import datetime
 from uuid import uuid4
-from snueue.models import User
+from snueue.models import User, RedisAdapter
 
 TIMESTAMP_FORMAT = "%d %b %Y %H:%M:%S"
 AUTH_EXPIRE_TIME = 55*60 # 55 minutes in seconds
@@ -101,19 +100,23 @@ def get_reddit_oauth_session():
     )
     return r
 
+def update_access_information(user, access_info):
+    user.last_refresh = get_timestamp()
+    user.access_token, user.refresh_token, user.scope = (
+        access_info['access_token'], access_info['refresh_token'],
+        access_info['scope']
+    )
+    pass
+
 def get_reddit_user_session(username):
     r = get_reddit_oauth_session()
-    user = User(username)
-    refresh_timestamp = user.get('last_refresh')
-    last_refresh = datetime.strptime(refresh_timestamp, TIMESTAMP_FORMAT)
+    user = RedisAdapter.get(User, username)
+    last_refresh = datetime.strptime(user.last_refresh, TIMESTAMP_FORMAT)
     now = datetime.now()
     if (now - last_refresh).seconds > AUTH_EXPIRE_TIME:
-        refresh_token = user.get('refresh_token')
+        refresh_token = user.refresh_token
         access_information = r.refresh_access_information(refresh_token)
-        access_information.update({
-            'last_refresh': get_timestamp()
-        })
-        user.set(access_information)
+        update_access_information(user, access_information)
     access_information = user.access_information()
     r.set_access_credentials(**access_information)
     return r
@@ -142,26 +145,23 @@ def authorize():
     scope = ['identity', 'history', 'vote']
     state = str(uuid4())
     url = r.get_authorize_url(state, scope, True)
-    state_key = 'authentication_state:{}'.format(state)
-    db.setex(state_key, app.config['REDDIT_AUTH_EXPIRE'], 1)
+    RedisAdapter.set('authentication_state', state, 1,
+                     expiration=app.config['REDDIT_AUTH_EXPIRE'])
     return url
 
 def authenticate(state, code):
     r = get_reddit_oauth_session()
-    state_key = 'authentication_state:{}'.format(state)
-    if db.get(state_key) is None:
+    if RedisAdapter.get('authentication_state', state) is None:
         raise AuthenticationFailure("Invalid state token")
-    db.delete(state_key)
+    RedisAdapter.delete('authentication_state', state)
     access_information = r.get_access_information(code)
     authenticated_user = r.get_me()
     username = authenticated_user.name
-    access_information.update({
-        'username': username,
-        'last_refresh': get_timestamp()
-    })
     user = User(username)
-    user.set(access_information)
-    user.set_remember_token()
+    user.username = username
+    update_access_information(user, access_information)
+    RedisAdapter.save(user)
+    login.set_remember_token(user)
     return user
 
 def vote(username, submission_id, direction):

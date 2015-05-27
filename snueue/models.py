@@ -1,73 +1,91 @@
 from snueue import db
-from flask.ext.login import UserMixin, LoginManager, make_secure_token
+from flask.ext.login import UserMixin
 
-class RedisModel:
+class RedisAdapter:
+    database = db
 
-    def get_id(self):
+    def get_db(self):
         pass
 
-    def set(self, items):
-        atoms = {k: v for k, v in items.items() if not isinstance(v, (list, set))}
-        iterables = {k: v for k, v in items.items() if isinstance(v, (list, set))}
-        db.hmset(self.get_id(), atoms)
-        for key, iterable in iterables.items():
-            self.add(key, iterable)
-
-    def add(self, set_name, items):
-        if not isinstance(items, (list, set)):
-            items = [items]
-        pipe = db.pipeline()
-        for item in items:
-            pipe.sadd('{}:{}'.format(self.get_id(), set_name), item)
-        return pipe.execute()
-
-    def get(self, field):
-        result = db.hmget(self.get_id(), field)
-        if result is None:
-            return None
-        else:
-            return result[0]
-
-    def get_all(self, field):
-        result = db.smembers("{}:{}".format(self.get_id(), field))
-        return result
-
-    def empty(set_name):
-        db.delete('{}:{}'.format(self.get_id(), set_name))
-
-class User(UserMixin, RedisModel):
+    @classmethod
+    def format_key(self, type, id):
+        return '{}:{}'.format(type, id)
 
     @classmethod
-    def get_user(self, id):
-        username = db.hget(id, 'username')
-        return User(username)
+    def get(self, key_type, id):
+        if isinstance(key_type, str):
+            key = self.format_key(key_type, id)
+            return db.get(key)
+        elif issubclass(key_type, RedisModel):
+            key = self.format_key(key_type.name, id)
+            data = db.hgetall(key)
+            if data is None: return None
+            for set_name in key_type.sets:
+                data[set_name] = db.smembers(self.format_key(key, set_name))
+            return key_type(id, data)
+        else:
+            raise TypeError("Key type must be a string or RedisModel")
 
-    def __init__(self, username):
-        self.username = username
+    @classmethod
+    def set(self, key_type, id, value, expiration=None):
+        key = self.format_key(key_type, id)
+        if expiration is not None:
+            db.setex(key, expiration, value)
+        db.set(key, value)
+
+    @classmethod
+    def save(self, model):
+        pipe = db.pipeline()
+        key = self.format_key(model.name, model.id)
+        pipe.hmset(key, model.modified)
+        for set_field in model.sets:
+            set_key = self.format_key(key, set_field)
+            old_set = db.smembers(set_key)
+            new_set = model.__dict__[set_field]
+            add = new_set.difference(old_set)
+            remove = old_set.difference(new_set)
+            for item in add:
+                pipe.sadd(set_key, item)
+            for item in remove:
+                pipe.srem(set_key, item)
+
+    @classmethod
+    def delete(self, model, id):
+        db.delete(self.format_key(model, id))
+
+class RedisModel:
+    name = None
+    fields = ()
+    sets = ()
+
+    def __init__(self, id, data=None):
+        self.modified = {}
+        if data is not None:
+            self.__dict__ = data
+        self.id = id
+
+    def __setattr__(self, name, value):
+        super().__setattr__(name, value)
+        if name in self.fields:
+            self.modified[name] = value
+        self.__dict__[name] = value
+
+class User(UserMixin, RedisModel):
+    name = 'user'
+    fields = (
+        'username', 'access_token', 'refresh_token', 'remember_token', 'last_refresh'
+    )
+    sets = ('scope',)
 
     def get_id(self):
-        return 'user:{}'.format(self.username)
-
-    """Create and save a new remember token for an authentiated user.
-
-    Session tokens are created using the username encrypted with the
-    app's secret key via HMAC.
-    """
-    def set_remember_token(self):
-        token = make_secure_token(self.username)
-        self.set({'remember_token': token})
-        db.set('remember_token:{}'.format(token), self.get_id())
-
-    def clear_remember_token(self):
-        token = self.get('remember_token')
-        db.delete('remember_token:{}'.format(token))
+        return self.username
 
     def get_auth_token(self):
-        return self.get('remember_token')
+        return self.remember_token
 
     def access_information(self):
         return {
-            'access_token': self.get('access_token'),
-            'refresh_token': self.get('refresh_token'),
-            'scope': self.get_all('scope')
+            'access_token': self.access_token,
+            'refresh_token': self.refresh_token,
+            'scope': self.scope
         }
