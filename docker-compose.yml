@@ -1,6 +1,6 @@
 web:
   extends:
-    file: common.yml
+    file: compose/common.yml
     service: web
   command: python3 app.py
   expose:
