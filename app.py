@@ -2,12 +2,17 @@ import re
 import logging
 from snueue import app
 
+DEBUG_LOG_FORMAT = (
+    '%(message)s'
+)
+
 if __name__ == '__main__':
     config_object = 'snueue.config.development'
     app.config.from_object(config_object)
 
     app.logger.addHandler(app.config.get('LOGGING_HANDLER'))
-    app.logger.info("App initialized in with config {}".format(config_object))
+    app.logger.handlers[0].setFormatter(logging.Formatter(DEBUG_LOG_FORMAT))
+    app.logger.info(" * App initialized in with config {}".format(config_object))
     app.run(host=app.config.get('HOST'))
 else:
     config_object = 'snueue.config.production'

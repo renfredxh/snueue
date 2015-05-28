@@ -1,4 +1,4 @@
-from snueue import db
+from snueue import app, db
 from flask.ext.login import UserMixin
 
 class RedisAdapter:
@@ -32,12 +32,15 @@ class RedisAdapter:
         if expiration is not None:
             db.setex(key, expiration, value)
         db.set(key, value)
+        app.logger.debug("[SET] {} {}".format(key, value))
 
     @classmethod
     def save(self, model):
-        pipe = db.pipeline()
+        log = "[SAVE] "
         key = self.format_key(model.name, model.id)
+        pipe = db.pipeline()
         pipe.hmset(key, model.modified)
+        log += "{} {}".format(key, model.modified)
         for set_field in model.sets:
             set_key = self.format_key(key, set_field)
             old_set = db.smembers(set_key)
@@ -48,10 +51,16 @@ class RedisAdapter:
                 pipe.sadd(set_key, item)
             for item in remove:
                 pipe.srem(set_key, item)
+            if add: log += "\n  {} += {}".format(set_key, add)
+            if remove: log += "\n  {} -= {}".format(set_key, remove)
+        app.logger.debug(pipe.execute())
+        app.logger.debug(log)
 
     @classmethod
     def delete(self, model, id):
-        db.delete(self.format_key(model, id))
+        key = self.format_key(model, id)
+        db.delete(key)
+        app.logger.debug("[DELETE] {}".format(key))
 
 class RedisModel:
     name = None
@@ -69,6 +78,9 @@ class RedisModel:
         if name in self.fields:
             self.modified[name] = value
         self.__dict__[name] = value
+
+    def __str__(self):
+        return "{}:{} {}".format(self.name, self.id, self.__dict__)
 
 class User(UserMixin, RedisModel):
     name = 'user'
