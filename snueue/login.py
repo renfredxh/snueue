@@ -12,9 +12,9 @@ Session tokens are created using the username encrypted with the
 app's secret key via HMAC.
 """
 def set_remember_token(user):
-    token = make_secure_token(user.username)
+    token = make_secure_token(user.id)
     user.remember_token = token
-    RedisAdapter.save(user)
+    RedisAdapter.set('remember_token', token, user.id)
 
 def clear_remember_token(user):
     print(user.__dict__)

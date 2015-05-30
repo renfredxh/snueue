@@ -53,6 +53,7 @@ class RedisAdapter:
                 pipe.srem(set_key, item)
             if add: log += "\n  {} += {}".format(set_key, add)
             if remove: log += "\n  {} -= {}".format(set_key, remove)
+        pipe.execute()
         console("save", log)
 
     @classmethod

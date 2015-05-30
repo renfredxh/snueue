@@ -106,7 +106,6 @@ def update_access_information(user, access_info):
         access_info['access_token'], access_info['refresh_token'],
         access_info['scope']
     )
-    pass
 
 def get_reddit_user_session(username):
     r = get_reddit_oauth_session()
