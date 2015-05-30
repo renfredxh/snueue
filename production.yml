@@ -6,6 +6,7 @@ web:
     - "5000:80"
   links:
     - database
+  command: /bin/sh -c "gunicorn app:app -b 0.0.0.0:80 --log-file - --error-logfile - --access-logfile - --access-logformat \"snueue - ACCESS - '%(r)s' %(s)s - %(h)s '%(f)s' '%(a)s'\""
 database:
   image: redis
   volumes:
