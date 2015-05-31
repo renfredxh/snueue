@@ -7,5 +7,4 @@ app.config.from_object('snueue.config.base')
 
 assets = Environment(app)
 
-import snueue.services.login
 import snueue.views
