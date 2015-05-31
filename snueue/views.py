@@ -8,7 +8,7 @@ from flask.ext.login import current_user, login_user, \
 from snueue import app, config
 from snueue.services import reddit, login
 from snueue.models import User
-from snueue.services.reddit import AuthenticationFailure
+from snueue.services.reddit.oauth import AuthenticationFailure
 
 @app.after_request
 def add_hostname(response):
@@ -40,7 +40,7 @@ def submissions():
     subreddit = re.search(r'(?:/r/)([^/]*)', source)
     if subreddit:
         source = subreddit.group(1)
-        submissions = reddit.get_submissions(source, sorting, excluded)
+        submissions = reddit.submissions.get_submissions(source, sorting, excluded)
     else:
         abort(422)
     return jsonify({
@@ -52,7 +52,7 @@ def submissions():
 def oauth_authorize():
     if not current_user.is_anonymous():
         return redirect(url_for('index'))
-    redirect_url = reddit.authorize()
+    redirect_url = reddit.oauth.authorize()
     return redirect(redirect_url)
 
 @app.route('/callback/reddit')
@@ -62,7 +62,7 @@ def oauth_callback():
     code = request.args.get('code', '')
     state = request.args.get('state', '')
     try:
-        user = reddit.authenticate(state, code)
+        user = reddit.oauth.authenticate(state, code)
     except AuthenticationFailure:
         abort(403)
     login_user(user, True)
@@ -73,7 +73,7 @@ def oauth_callback():
 def vote():
     direction = request.form.get('direction', None)
     submission = request.form.get('submission', None)
-    response = reddit.vote(current_user.username, submission, direction)
+    response = reddit.submissions.vote(current_user.username, submission, direction)
     return str(response), 200
 
 @app.route('/logout')
