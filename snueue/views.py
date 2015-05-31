@@ -1,11 +1,14 @@
 import re
-from snueue import app, reddit, config, login
+
 from flask import request, session, g, redirect, url_for, \
      abort, render_template, jsonify, flash
 from flask.ext.login import current_user, login_user, \
      logout_user, login_required
-from .reddit import AuthenticationFailure
-from .models import User
+
+from snueue import app, config
+from snueue.services import reddit, login
+from snueue.models import User
+from snueue.services.reddit import AuthenticationFailure
 
 @app.after_request
 def add_hostname(response):
