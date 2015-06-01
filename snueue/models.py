@@ -43,8 +43,3 @@ class User(UserMixin, RedisModel):
             'refresh_token': self.refresh_token,
             'scope': self.scope
         }
-
-class Artist(RedisModel):
-    model_name = 'artist'
-    model_fields = ('genre', 'location')
-    model_sets = ('members', 'albums')
