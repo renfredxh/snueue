@@ -24,10 +24,10 @@ def get(key_type, id):
         key = format_key(key_type, id)
         return db.get(key)
     elif issubclass(key_type, RedisModel):
-        key = format_key(key_type.name, id)
+        key = format_key(key_type.model_name, id)
         data = db.hgetall(key)
         if data is None: return None
-        for set_name in key_type.sets:
+        for set_name in key_type.model_sets:
             data[set_name] = db.smembers(format_key(key, set_name))
         return key_type(id, data)
     else:
@@ -43,11 +43,11 @@ def set(key_type, id, value, expiration=None):
 
 def save(model):
     db = get_db()
-    key = format_key(model.name, model.id)
+    key = format_key(model.model_name, model.id)
     pipe = db.pipeline()
-    pipe.hmset(key, model.modified)
-    log = "{} {}".format(key, model.modified)
-    for set_field in model.sets:
+    pipe.hmset(key, model._modified)
+    log = "{} {}".format(key, model._modified)
+    for set_field in model.model_sets:
         set_key = format_key(key, set_field)
         old_set = db.smembers(set_key)
         new_set = model.__dict__[set_field]
