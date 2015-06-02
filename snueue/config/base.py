@@ -13,8 +13,6 @@ BASE_URL = "localhost:5000"
 PROTOCOL = "http"
 HOSTNAME = gethostname()
 
-REDIS_HOST = (get_secret('SNUEUE_DATABASE_HOST', False) or
-              get_secret('REDIS_SNUEUE_PORT_6379_TCP_ADDR', False) or "localhost")
 REDIS_PORT = 6379
 REDIS_DB = 0
 

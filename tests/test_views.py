@@ -4,8 +4,7 @@ import unittest
 class TestViews(unittest.TestCase):
 
     def setUp(self):
-        snueue.app.config.from_object('snueue.config.development')
-        snueue.app.config['TESTING'] = True
+        snueue.app.config.from_object('snueue.config.test')
         self.app = snueue.app.test_client()
 
     def test_index(self):

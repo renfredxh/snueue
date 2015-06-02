@@ -14,7 +14,7 @@ from snueue.services import database
 class TestDatabase(unittest.TestCase):
 
     def setUp(self):
-        snueue.app.config['TESTING'] = True
+        snueue.app.config.from_object('snueue.config.test')
 
     def test_format_key(self, get_mock_db):
         key = database.format_key('genre', 'jazz')

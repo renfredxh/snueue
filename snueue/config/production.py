@@ -5,7 +5,8 @@ DEBUG = False
 PROPOGATE_EXCEPTIONS = True
 TRAP_HTTP_EXCEPTIONS = False
 BASE_URL = get_secret('SNUEUE_BASE_URL')
-REDIS_HOST = get_secret('REDIS_SNUEUE_PORT_6379_TCP_ADDR', False) or "localhost"
+REDIS_HOST = (get_secret('SNUEUE_DATABASE_HOST', False) or
+              get_secret('REDIS_SNUEUE_PORT_6379_TCP_ADDR', False))
 
 # Security Settings
 #
