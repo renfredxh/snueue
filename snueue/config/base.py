@@ -13,6 +13,7 @@ BASE_URL = "localhost:5000"
 PROTOCOL = "http"
 HOSTNAME = gethostname()
 
+REDIS_HOST = "database"
 REDIS_PORT = 6379
 REDIS_DB = 0
 
