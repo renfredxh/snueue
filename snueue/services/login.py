@@ -29,7 +29,6 @@ def set_remember_token(user):
     database.set('remember_token', token, user.id)
 
 def clear_remember_token(user):
-    print(user.__dict__)
     database.delete('remember_token', user.remember_token)
 
 def get_auth_token(id):
