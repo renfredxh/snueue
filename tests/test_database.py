@@ -44,6 +44,15 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(val.members, sets[0])
         self.assertEqual(val.albums, sets[1])
 
+    def test_get_nonexistent_model(self, get_mock_db):
+        class Artist(RedisModel):
+            pass
+        mock_db = get_mock_db()
+        mock_db.hlen.return_value = 0
+        mock_db.hgetall.return_value = {}
+        val = database.get(Artist, "You'veProbabyNeverHeardOfThem")
+        self.assertIsNone(val)
+
     def test_set(self, get_mock_db):
         mock_db = get_mock_db()
         database.set('guitar', 'Eastwood-Airline', '$799')

@@ -25,8 +25,9 @@ def get(key_type, id):
         return db.get(key)
     elif issubclass(key_type, RedisModel):
         key = format_key(key_type.model_name, id)
+        if db.hlen(key) == 0:
+            return None
         data = db.hgetall(key)
-        if data is None: return None
         for set_name in key_type.model_sets:
             data[set_name] = db.smembers(format_key(key, set_name))
         return key_type(id, data)
