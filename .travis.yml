@@ -1,7 +1,10 @@
 language: python
 python:
   - "3.4"
+before_install:
+  - gem install compass
 install:
   - pip install -r requirements.txt
+  - python script/collectstatic.py
 script:
-  - script/tests
+  - script/test
