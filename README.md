@@ -10,4 +10,13 @@ Just follow the [instructions](https://docs.docker.com/compose/install/) to inst
 
 The automated build for Snueue is [available on DockerHub](https://registry.hub.docker.com/u/renfredxh/snueue/)
 
+## Testing
+[![Build Status](https://travis-ci.org/renfredxh/snueue.svg)](https://travis-ci.org/renfredxh/snueue)
+
+To run the tests with docker-compose:
+
+```
+docker-compose run web script/test
+```
+
 🐰
