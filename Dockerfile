@@ -13,9 +13,10 @@ RUN apt-get install -y tar git curl nano wget dialog net-tools build-essential s
 # Install Python and Basic Python Tools
 RUN apt-get install -y python3 python3-pip
 
-# Node for React Compiler
+# Node for Babel and React Compiler
 RUN apt-add-repository ppa:chris-lea/node.js
 RUN apt-get update && apt-get install -y nodejs
+RUN npm install -g babel
 
 # Ruby and Compass
 RUN apt-get install -y -qq ruby1.9.1-dev make

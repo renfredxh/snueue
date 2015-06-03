@@ -1,7 +1,4 @@
-// Global application object
-if (typeof Snueue === 'undefined') {
-  Snueue = {}
-}
+window.Snueue = {};
 
 Snueue.sourceFromURL = null;
 Snueue.user = null;

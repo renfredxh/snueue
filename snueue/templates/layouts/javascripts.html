@@ -1,21 +1,4 @@
-{% assets filters="rjsmin", output="build/vendor.js",
-  "javascripts/vendor/modernizr.js",
-  "javascripts/vendor/jquery.js",
-  "javascripts/vendor/fixedsticky.js",
-  "javascripts/vendor/react/react-with-addons.js" %}
+<script src="//www.youtube.com/player_api"></script>
+{% assets 'javascripts' %}
   <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
-<script src="//www.youtube.com/player_api"></script>
-{% if config.DEBUG %}
-  <script src="{{ url_for('static', filename='javascripts/application.js') }}"></script>
-  <script src="{{ url_for('static', filename='javascripts/fullscreen.js') }}"></script>
-  <script src="{{ url_for('static', filename='javascripts/vendor/react/JSXTransformer.js') }}"></script>
-  <script type="text/jsx" src="{{ url_for('static', filename='javascripts/queue.jsx') }}"></script>
-{% else %}
-  {% assets filters="rjsmin", output="build/app.js",
-    "javascripts/application.js",
-    "javascripts/fullscreen.js",
-    "javascripts/queue.js" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-  {% endassets %}
-{% endif %}

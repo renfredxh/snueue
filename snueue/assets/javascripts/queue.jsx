@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Queue = React.createClass({
@@ -176,7 +175,7 @@ var UserMenu = React.createClass({
       fontSize: fontHeight + "rem",
       padding: paddingHeight + "rem 0"
     }
-    dropdownContent = [
+    var dropdownContent = [
       {text: "Logout", href: "/logout"},
       {text: "Login", href: "/logout"}
     ]
