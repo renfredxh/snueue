@@ -1,4 +1,5 @@
 import { renderQueue } from './queue.jsx'
+import * as fullscreen from './fullscreen.js'
 
 window.Snueue = {};
 
