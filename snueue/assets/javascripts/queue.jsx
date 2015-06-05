@@ -494,18 +494,9 @@ var MediaPlayer = React.createClass({
   }
 });
 
-function renderQueue() {
+export function renderQueue() {
   React.render(
     <Queue />,
     document.getElementById('main')
   );
 }
-function onYouTubeIframeAPIReady() {
-  renderQueue();
-}
-
-setTimeout(function() {
-  if ($('#queue').length === 0) {
-    renderQueue();
-  }
-}, 500);

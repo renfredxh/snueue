@@ -1,3 +1,5 @@
+import { renderQueue } from './queue.jsx'
+
 window.Snueue = {};
 
 Snueue.sourceFromURL = null;
@@ -17,3 +19,7 @@ Snueue.showMainLoader = function() {
 Snueue.hideMainLoader = function() {
   $('.main-loader').remove();
 }
+
+$(document).ready(() => {
+  renderQueue()
+})
