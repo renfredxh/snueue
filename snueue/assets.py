@@ -22,7 +22,10 @@ class BrowserifyFilter(ExternalTool):
         if app.config['DEBUG']:
             args.append('--debug')
 
-        self.subprocess(args, outfile, infile)
+        try:
+            self.subprocess(args, outfile, infile)
+        except FilterError as e:
+            raise FilterError(str(e).replace('\\n', '\n'))
 
 def bundle_stylesheets():
     css = Bundle(
