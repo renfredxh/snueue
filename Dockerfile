@@ -32,7 +32,5 @@ EXPOSE 80
 
 WORKDIR /snueue
 
-RUN python3 script/collectstatic.py
-
 # Use Gunicorn to serve the application
 CMD gunicorn app:app -b 0.0.0.0:80 --log-file - --error-logfile - --access-logfile -
