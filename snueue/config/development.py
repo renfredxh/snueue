@@ -5,6 +5,8 @@ from snueue.config.base import *
 DEBUG = True
 ASSETS_DEBUG = True
 
+COMPASS_CONFIG = {'sourcemap': 'true'}
+
 SECRET_KEY = get_secret('SNUEUE_SECRET_KEY')
 
 # Optional host to be passed into app.run. Useful for running in docker 
