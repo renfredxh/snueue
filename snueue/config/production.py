@@ -24,6 +24,8 @@ REDDIT_CLIENT_ID = get_secret('SNUEUE_REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = get_secret('SNUEUE_REDDIT_CLIENT_SECRET')
 REDDIT_CALLBACK_URL = REDDIT_CALLBACK_ENDPOINT.format(protocol=PROTOCOL,
                                                       base_url=BASE_URL)
+# Assets settings
+COMPASS_CONFIG = {'output_style': ':compressed'}
 
 # Logging settings
 import logging

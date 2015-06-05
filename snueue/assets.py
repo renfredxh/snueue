@@ -52,6 +52,7 @@ def bundle_javascripts():
     js = Bundle(
         vendor,
         application,
+        filters='rjsmin',
         output='build/app.js'
     )
     return js
