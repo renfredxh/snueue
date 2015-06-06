@@ -1,5 +1,5 @@
-$(function() {
-  $('#fullscreen-button').click(function() {
+$(() => {
+  $('#fullscreen-button').click(() => {
     var currentMediaItem = $('#current-media-item .media-item');
     currentMediaItem.addClass('fullscreen');
     var elem = currentMediaItem[0];
@@ -12,8 +12,8 @@ $(function() {
     } else if (elem.webkitRequestFullscreen) {
       elem.webkitRequestFullscreen();
     }
-  })
-  $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function(e) {
+  });
+  $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', e => {
     if (!(document.fullscreen || document.mozFullScreen || document.webkitIsFullScreen)) {
       var currentMediaItem = $('#current-media-item .media-item');
       currentMediaItem.removeClass('fullscreen');

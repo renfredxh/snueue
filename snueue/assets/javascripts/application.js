@@ -1,5 +1,5 @@
-import { renderQueue } from './queue.jsx'
-import * as fullscreen from './fullscreen.js'
+import { renderQueue } from './queue.jsx';
+import * as fullscreen from './fullscreen.js';
 
 window.Snueue = {};
 
@@ -14,13 +14,13 @@ Snueue.showMainLoader = function() {
   // requests.
   window.setTimeout(function() {
     $('.loader').show();
-  }, 100)
-}
+  }, 100);
+};
 
 Snueue.hideMainLoader = function() {
   $('.main-loader').remove();
-}
+};
 
 $(document).ready(() => {
-  renderQueue()
-})
+  renderQueue();
+});
