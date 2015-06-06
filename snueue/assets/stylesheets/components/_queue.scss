@@ -141,6 +141,14 @@
   .slide-toggle {
     padding: 0.25rem 0.5rem;
   }
+
+  &.fullscreen {
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    background-color: $charcoal;
+    @include flex-video;
+  }
 }
 
 .queued-media-item {

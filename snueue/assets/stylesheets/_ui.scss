@@ -72,11 +72,3 @@ select {
     border: solid 2px $bright-text;
   }
 }
-
-.media-item.fullscreen {
-  max-width: 100%;
-  width: 100%;
-  margin: 0;
-  background-color: $charcoal;
-  @include flex-video;
-}
