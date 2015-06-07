@@ -1,4 +1,4 @@
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Queue = React.createClass({
   getInitialState: function() {
@@ -24,11 +24,11 @@ var Queue = React.createClass({
     });
   },
   login: function() {
-    window.location.replace('/authorize/reddit')
   },
   handleSkip: function() {
+    window.location.replace('/authorize/reddit');
     var newHistory = this.state.history;
-    newHistory.push(this.state.submissions[0])
+    newHistory.push(this.state.submissions[0]);
     var newSubmissions = this.state.submissions.slice(1);
     this.setState({submissions: newSubmissions, history: newHistory});
     // When there are only a few submissions left, fetch more
@@ -36,24 +36,24 @@ var Queue = React.createClass({
       // Included the ids of all the currently queued and watched videos
       // to be excluded from the fetch.
       var excluded = newSubmissions.concat(newHistory);
-      excluded = excluded.map(function(sub) { return sub.id });
+      excluded = excluded.map(function(sub) { return sub.id; });
       this.fetch(newSubmissions, {
         source: this.props.source,
         sorting: this.props.sorting,
         excluded: excluded
       });
     }
-  },
-  handlePrevious: function() {
+  }
+  handlePrevious() {
     // Get up to the last element from history and place it back
     // in the submission queue.
     var newSubmissions = this.state.submissions;
-    newSubmissions.unshift(this.state.history.slice(-1)[0])
+    newSubmissions.unshift(this.state.history.slice(-1)[0]);
     // Remove the last item from the history.
     var newHistory = this.state.history.slice(0,-1);
     this.setState({submissions: newSubmissions, history: newHistory});
-  },
-  handleSearch: function(source, sorting) {
+  }
+  handleSearch(source, sorting) {
     this.setState({submissions: [], flash: null});
     // Default to showing /r/music
     if (source === '') {
@@ -67,36 +67,36 @@ var Queue = React.createClass({
         source: this.props.source,
         sorting: this.props.sorting,
         excluded: []
-      })
+      });
     });
-  },
-  handlePopstate: function(e) {
+  }
+  handlePopstate(e) {
     // When the back button is pressed, load the previous search if there was one.
     if (e.state === null) {
       window.location = '/';
     } else {
       this.handleSearch(e.state.source, e.state.sorting);
     }
-  },
-  handleFlashClose: function() {
+  }
+  handleFlashClose() {
     this.setState({flash: null});
-  },
-  componentDidMount: function() {
-    window.addEventListener('popstate', this.handlePopstate)
-  },
-  render: function() {
+  }
+  componentDidMount() {
+    window.addEventListener('popstate', this.handlePopstate);
+  }
+  render() {
     var flash, content, oauth;
     flash = null;
     content = null;
     if (this.state.submissions.length > 0)
       content = <MediaList submissions={this.state.submissions} user={this.state.user}
-                           onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>
+                           onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>;
     if (this.state.flash !== null)
-      flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />
+      flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />;
     if (this.state.user !== null)
-      oauth = <UserMenu user={this.state.user}/>
+      oauth = <UserMenu user={this.state.user}/>;
     else
-      oauth = <Login onLogin={this.login}/>
+      oauth = <Login onLogin={this.login}/>;
     return (
       <div id="queue" className="queue">
         <div className="source-bar-container">
@@ -114,7 +114,7 @@ var Queue = React.createClass({
       </div>
     );
   }
-});
+}
 
 var FlashMessage = React.createClass({
   render: function() {
@@ -123,7 +123,7 @@ var FlashMessage = React.createClass({
         {this.props.message}
         <i className="fa fa-close" onClick={this.props.onClose}></i>
       </p>
-    )
+    );
   }
 });
 
@@ -136,7 +136,7 @@ var Dropdown = React.createClass({
   },
   render: function() {
     var contentNodes = null;
-    var dropdown = null
+    var dropdown = null;
     if (this.state.open) {
       contentNodes = this.props.contents.map(function(item, index) {
         return (
@@ -147,7 +147,7 @@ var Dropdown = React.createClass({
         <div className="dropdown-content">
           {contentNodes}
         </div>
-      )
+      );
     }
     return (
       <div className = "snueue-dropdown">
@@ -157,7 +157,7 @@ var Dropdown = React.createClass({
           {dropdown}
         </div>
       </div>
-    )
+    );
   }
 });
 
@@ -174,14 +174,14 @@ var UserMenu = React.createClass({
     var dropdownStyle = {
       fontSize: fontHeight + "rem",
       padding: paddingHeight + "rem 0"
-    }
+    };
     var dropdownContent = [
       {text: "Logout", href: "/logout"},
       {text: "Login", href: "/logout"}
-    ]
+    ];
     return (
       <Dropdown text={username} contents={dropdownContent} classes="navy-button" style={dropdownStyle} />
-    )
+    );
   }
 });
 
@@ -196,7 +196,7 @@ var Login = React.createClass({
       <form id="login-form" className="login-form" onSubmit={this.handleSubmit} ref="form">
         <button type="submit" className="button login-button"><i className="fa fa-reddit"></i> Login</button>
       </form>
-    )
+    );
   }
 });
 
@@ -245,7 +245,7 @@ var SearchSortingSelect = React.createClass({
           <option value="all">All</option>
         </optgroup>
       </select>
-    )
+    );
   }
 });
 
@@ -334,7 +334,7 @@ var MediaController = React.createClass({
     var buttonMargin = 2;
     var buttonStyle = {
       width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
-    }
+    };
     controls = [
       <div className="button primary" key="back" onClick={this.props.onPrevious} style={buttonStyle}>
         <i className="fa fa-backward"></i>
@@ -345,9 +345,9 @@ var MediaController = React.createClass({
       <div className="button primary" key="skip" onClick={this.props.onSkip} style={buttonStyle}>
         <i className="fa fa-forward"></i>
       </div>
-    ]
+    ];
     if (this.props.user !== null) {
-      redditControls = <RedditAPIController submission={this.props.submission} buttonStyle={buttonStyle} />
+      redditControls = <RedditAPIController submission={this.props.submission} buttonStyle={buttonStyle} />;
     }
     return (
       <div className="media-controller-container">
@@ -373,7 +373,7 @@ var RedditAPIController = React.createClass({
       type: 'PUT',
       data: {submission: this.props.submission.id, direction: direction},
       success: function(data) {
-        console.log("Voted")
+        console.log("Voted");
       }
     });
   },
@@ -388,15 +388,15 @@ var RedditAPIController = React.createClass({
           <i className="fa fa-arrow-down"></i>
         </div>
       </span>
-    )
+    );
   }
-})
+});
 
 var MediaTitle = React.createClass({
   render: function() {
     var index = '';
     if (this.props.index > 0) {
-      index = '' + this.props.index + '. '
+      index = '' + this.props.index + '. ';
     }
     // Decode escaped HTML entities from submission title
     var decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
@@ -406,7 +406,7 @@ var MediaTitle = React.createClass({
           {index}{decodedTitle}
         </a>
       </div>
-    )
+    );
   }
 });
 
@@ -419,7 +419,7 @@ var MediaPlayer = React.createClass({
       rel: 0,
       color: "white",
       modestbranding: 1
-    }
+    };
     Snueue.player = new YT.Player('player', {
       height: '315',
       width: '420',
@@ -441,22 +441,23 @@ var MediaPlayer = React.createClass({
         state = 'playing';
         break;
       case YT.PlayerState.PAUSED:
-        state = 'paused'
+        state = 'paused';
         break;
       case YT.PlayerState.ENDED:
         state = 'ended';
         break;
       case YT.PlayerState.BUFFERING:
-        state = 'buffering'
+        state = 'buffering';
+        break;
       default:
-        state = 'unstarted'
+        state = 'unstarted';
     }
     this.props.onPlayerStateChange(state);
   },
   playerError: function(e) {
     // If the player encounters an error such as the video being deleted,
     // end it and skip to the next one.
-    this.props.onPlayerStateChange('ended')
+    this.props.onPlayerStateChange('ended');
   },
   toggleStatus: function(nextStatus) {
     if (nextStatus === 'playing') {
