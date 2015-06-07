@@ -1,11 +1,12 @@
 const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-var Queue = React.createClass({
-  getInitialState: function() {
+class Queue extends React.Component {
+  constructor(props) {
+    super(props);
     var user = Snueue.user;
-    return {user: user, submissions: [], history: [], flash: null};
-  },
-  fetch: function(submissions, params) {
+    this.state = {user: user, submissions: [], history: [], flash: null};
+  }
+  fetch(submissions, params) {
     if (this.state.submissions.length === 0) {
       Snueue.showMainLoader();
     }
@@ -14,7 +15,7 @@ var Queue = React.createClass({
       // If no submissions were found on an inital search, display a
       // flash response.
       if (this.state.submissions.length + data.submissions.length === 0)
-        this.setState({flash: "No content found for " + this.props.source});
+        this.setState({flash: "No content found for " + this.state.source});
       // Prepend passed in submissions to ones recieved from
       // the sever.
       var newSubmissions = submissions.concat(data.submissions);
@@ -22,11 +23,11 @@ var Queue = React.createClass({
     }, this)).always(function() {
       Snueue.hideMainLoader();
     });
-  },
-  login: function() {
-  },
-  handleSkip: function() {
+  }
+  login() {
     window.location.replace('/authorize/reddit');
+  }
+  handleSkip() {
     var newHistory = this.state.history;
     newHistory.push(this.state.submissions[0]);
     var newSubmissions = this.state.submissions.slice(1);
@@ -38,8 +39,8 @@ var Queue = React.createClass({
       var excluded = newSubmissions.concat(newHistory);
       excluded = excluded.map(function(sub) { return sub.id; });
       this.fetch(newSubmissions, {
-        source: this.props.source,
-        sorting: this.props.sorting,
+        source: this.state.source,
+        sorting: this.state.sorting,
         excluded: excluded
       });
     }
@@ -62,10 +63,10 @@ var Queue = React.createClass({
       // an example.
       $('#search-bar').val(source);
     }
-    this.setProps({source: source, sorting: sorting}, function() {
+    this.setState({source: source, sorting: sorting}, function() {
       this.fetch([], {
-        source: this.props.source,
-        sorting: this.props.sorting,
+        source: this.state.source,
+        sorting: this.state.sorting,
         excluded: []
       });
     });
@@ -90,18 +91,18 @@ var Queue = React.createClass({
     content = null;
     if (this.state.submissions.length > 0)
       content = <MediaList submissions={this.state.submissions} user={this.state.user}
-                           onSkip={this.handleSkip} onPrevious={this.handlePrevious}/>;
+                           onSkip={this.handleSkip.bind(this)} onPrevious={this.handlePrevious.bind(this)}/>;
     if (this.state.flash !== null)
-      flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose} />;
+      flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose.bind(this)} />;
     if (this.state.user !== null)
       oauth = <UserMenu user={this.state.user}/>;
     else
-      oauth = <Login onLogin={this.login}/>;
+      oauth = <Login onLogin={this.login.bind(this)}/>;
     return (
       <div id="queue" className="queue">
         <div className="source-bar-container">
           <div className="source-bar">
-            <Search onSearch={this.handleSearch} />
+            <Search onSearch={this.handleSearch.bind(this)} />
             <div className="user-button">
               {oauth}
             </div>
@@ -116,8 +117,8 @@ var Queue = React.createClass({
   }
 }
 
-var FlashMessage = React.createClass({
-  render: function() {
+class FlashMessage extends React.Component {
+  render() {
     return (
       <p className="flash-message">
         {this.props.message}
@@ -125,16 +126,17 @@ var FlashMessage = React.createClass({
       </p>
     );
   }
-});
+}
 
-var Dropdown = React.createClass({
-  getInitialState: function() {
-    return {open: false};
-  },
-  toggleDropdown: function(event) {
+class Dropdown extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {open: false};
+  }
+  toggleDropdown(event) {
     this.setState({open: !this.state.open});
-  },
-  render: function() {
+  }
+  render() {
     var contentNodes = null;
     var dropdown = null;
     if (this.state.open) {
@@ -151,7 +153,7 @@ var Dropdown = React.createClass({
     }
     return (
       <div className = "snueue-dropdown">
-        <div onClick={this.toggleDropdown} className={"button "+this.props.classes}
+        <div onClick={this.toggleDropdown.bind(this)} className={"button "+this.props.classes}
                 style={this.props.style}>
           {this.props.text} <i className="fa fa-caret-down"></i>
           {dropdown}
@@ -159,10 +161,10 @@ var Dropdown = React.createClass({
       </div>
     );
   }
-});
+}
 
-var UserMenu = React.createClass({
-  render: function() {
+class UserMenu extends React.Component {
+  render() {
     // Dynamically set the font-size of the username based on string length
     var username = this.props.user.substring(0, 24);
     var buttonHeight = 3;
@@ -183,41 +185,41 @@ var UserMenu = React.createClass({
       <Dropdown text={username} contents={dropdownContent} classes="navy-button" style={dropdownStyle} />
     );
   }
-});
+}
 
-var Login = React.createClass({
-  handleSubmit: function(e) {
+class Login extends React.Component {
+  handleSubmit(e) {
     if (typeof e !== 'undefined')
       e.preventDefault();
       this.props.onLogin();
-  },
-  render: function() {
+  }
+  render() {
     return (
-      <form id="login-form" className="login-form" onSubmit={this.handleSubmit} ref="form">
+      <form id="login-form" className="login-form" onSubmit={this.handleSubmit.bind(this)} ref="form">
         <button type="submit" className="button login-button"><i className="fa fa-reddit"></i> Login</button>
       </form>
     );
   }
-});
+}
 
-var Search = React.createClass({
-  handleSubmit: function(e) {
+class Search extends React.Component {
+  handleSubmit(e) {
     if (typeof e !== 'undefined')
       e.preventDefault();
     var source = this.refs.source.getDOMNode().value.trim();
     var sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
     this.props.onSearch(source, sorting);
     return;
-  },
-  componentDidMount: function() {
+  }
+  componentDidMount() {
     if (Snueue.sourceFromURL !== null) {
       this.refs.source.getDOMNode().value = Snueue.sourceFromURL;
       this.handleSubmit();
     }
-  },
-  render: function() {
+  }
+  render() {
     return (
-      <form id="source-form" className="search-form" onSubmit={this.handleSubmit} ref="form">
+      <form id="source-form" className="search-form" onSubmit={this.handleSubmit.bind(this)} ref="form">
         {/* name="q" is there so that the field can be saved as a search engine. */}
         <div className="search-bar-container">
           <input id="search-bar" className="search-bar" name="q" type="text" placeholder="/r/music" ref="source"/>
@@ -227,10 +229,10 @@ var Search = React.createClass({
       </form>
     );
   }
-});
+}
 
-var SearchSortingSelect = React.createClass({
-  render: function() {
+class SearchSortingSelect extends React.Component {
+  render() {
     return (
       <select className="results-sorting-select" ref="sorting">
         <option disabled="disabled">Sort By:</option>
@@ -247,10 +249,10 @@ var SearchSortingSelect = React.createClass({
       </select>
     );
   }
-});
+}
 
-var MediaList = React.createClass({
-  render: function() {
+class MediaList extends React.Component {
+  render() {
     var queued = this.props.submissions.slice(1);
     var ready = this.props.submissions[0];
     var mediaNodes = queued.map(function(submission, index) {
@@ -268,35 +270,36 @@ var MediaList = React.createClass({
       </div>
     );
   }
-});
+}
 
-var QueuedMediaItem = React.createClass({
-  render: function() {
+class QueuedMediaItem extends React.Component {
+  render() {
     return (
       <div className="queued-media-item ">
         <MediaTitle submission={this.props.submission} index={this.props.index + 1} />
       </div>
     );
   }
-});
+}
 
-var MediaItem = React.createClass({
-  getInitialState: function() {
-    return {playerStatus: 'unstarted'};
-  },
-  handleItemStateChange: function(newPlayerState) {
+class MediaItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {playerStatus: 'unstarted'};
+  }
+  handleItemStateChange(newPlayerState) {
     this.setState({playerStatus: newPlayerState});
     if (this.state.playerStatus === 'ended')
       this.props.onSkip();
-  },
-  render: function() {
+  }
+  render() {
     var submission = this.props.submission;
-    var mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange}
+    var mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange.bind(this)}
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div id="current-media-item">
         <MediaController submission={submission} user={this.props.user} status={this.state.playerStatus}
-          onConrollerStateChange={this.handleItemStateChange} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
+          onConrollerStateChange={this.handleItemStateChange.bind(this)} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
         <div className="media-item">
           <MediaTitle submission={submission} index={0} />
           {mediaPlayer}
@@ -304,19 +307,19 @@ var MediaItem = React.createClass({
       </div>
     );
   }
-});
+}
 
-var MediaController = React.createClass({
-  inverseStatus: function() {
+class MediaController extends React.Component {
+  inverseStatus() {
     return this.props.status === 'playing' ? 'paused' : 'playing';
-  },
-  handleStatusToggle: function() {
+  }
+  handleStatusToggle() {
     this.props.onConrollerStateChange(this.inverseStatus());
-  },
-  componentDidMount: function() {
+  }
+  componentDidMount() {
     $('.media-controller-container').fixedsticky();
-  },
-  render: function() {
+  }
+  render() {
     var controls = null;
     var redditControls = null;
     var toggleButtonClasses = React.addons.classSet({
@@ -339,7 +342,7 @@ var MediaController = React.createClass({
       <div className="button primary" key="back" onClick={this.props.onPrevious} style={buttonStyle}>
         <i className="fa fa-backward"></i>
       </div>,
-      <div className="button primary" key="play-pause" onClick={this.handleStatusToggle} style={buttonStyle}>
+      <div className="button primary" key="play-pause" onClick={this.handleStatusToggle.bind(this)} style={buttonStyle}>
         <i className={toggleButtonClasses}></i>
       </div>,
       <div className="button primary" key="skip" onClick={this.props.onSkip} style={buttonStyle}>
@@ -358,16 +361,16 @@ var MediaController = React.createClass({
       </div>
     );
   }
-});
+}
 
-var RedditAPIController = React.createClass({
-  handleUpvote: function () {
+class RedditAPIController extends React.Component {
+  handleUpvote() {
     this.submitVote(1);
-  },
-  handleDownvote: function () {
+  }
+  handleDownvote() {
     this.submitVote(-1);
-  },
-  submitVote: function(direction) {
+  }
+  submitVote(direction) {
     $.ajax({
       url: "/user/vote",
       type: 'PUT',
@@ -376,24 +379,24 @@ var RedditAPIController = React.createClass({
         console.log("Voted");
       }
     });
-  },
-  render: function() {
+  }
+  render() {
     var buttonStyle = this.props.buttonStyle;
     return (
       <span id="reddit-media-controller">
-        <div className="button primary" key="upvote" onClick={this.handleUpvote} style={buttonStyle}>
+        <div className="button primary" key="upvote" onClick={this.handleUpvote.bind(this)} style={buttonStyle}>
           <i className="fa fa-arrow-up"></i>
         </div>
-        <div className="button primary" key="downvote" onClick={this.handleDownvote} style={buttonStyle}>
+        <div className="button primary" key="downvote" onClick={this.handleDownvote.bind(this)} style={buttonStyle}>
           <i className="fa fa-arrow-down"></i>
         </div>
       </span>
     );
   }
-});
+}
 
-var MediaTitle = React.createClass({
-  render: function() {
+class MediaTitle extends React.Component {
+  render() {
     var index = '';
     if (this.props.index > 0) {
       index = '' + this.props.index + '. ';
@@ -408,10 +411,10 @@ var MediaTitle = React.createClass({
       </div>
     );
   }
-});
+}
 
-var MediaPlayer = React.createClass({
-  initializePlayer: function() {
+class MediaPlayer extends React.Component {
+  initializePlayer() {
     var component = this;
     var settings = {
       autohide: 1,
@@ -429,12 +432,12 @@ var MediaPlayer = React.createClass({
         'onReady': function(e) {
           Snueue.player.playVideo();
         },
-        'onStateChange': this.playerStateChange,
-        'onError': this.playerError
+        'onStateChange': this.playerStateChange.bind(this),
+        'onError': this.playerError.bind(this)
       }
     });
-  },
-  playerStateChange: function(e) {
+  }
+  playerStateChange(e) {
     var state;
     switch(e.data) {
       case YT.PlayerState.PLAYING:
@@ -453,20 +456,20 @@ var MediaPlayer = React.createClass({
         state = 'unstarted';
     }
     this.props.onPlayerStateChange(state);
-  },
-  playerError: function(e) {
+  }
+  playerError(e) {
     // If the player encounters an error such as the video being deleted,
     // end it and skip to the next one.
     this.props.onPlayerStateChange('ended');
-  },
-  toggleStatus: function(nextStatus) {
+  }
+  toggleStatus(nextStatus) {
     if (nextStatus === 'playing') {
       Snueue.player.playVideo();
     } else if (nextStatus === 'paused') {
       Snueue.player.pauseVideo();
     }
-  },
-  shouldComponentUpdate: function(nextProps, nextState) {
+  }
+  shouldComponentUpdate(nextProps, nextState) {
     // If the parent state updates while the current submission is still
     // playing, don't re-render or else the video will restart.
     if (this.props.mediaId === nextProps.mediaId) {
@@ -477,23 +480,23 @@ var MediaPlayer = React.createClass({
       return false;
     }
     return true;
-  },
-  componentDidMount: function() {
+  }
+  componentDidMount() {
     this.initializePlayer();
-  },
-  componentDidUpdate: function() {
+  }
+  componentDidUpdate() {
     // Clear out previous player and update.
     $('#player').replaceWith("<div id=\"player\"></div>");
     this.initializePlayer();
-  },
-  render: function() {
+  }
+  render() {
     return (
       <div className="media-player">
         <div id="player"></div>
       </div>
     );
   }
-});
+}
 
 export function renderQueue() {
   React.render(
