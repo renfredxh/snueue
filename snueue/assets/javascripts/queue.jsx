@@ -3,7 +3,7 @@ const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 class Queue extends React.Component {
   constructor(props) {
     super(props);
-    var user = Snueue.user;
+    let user = Snueue.user;
     this.state = {user: user, submissions: [], history: [], flash: null};
   }
   fetch(submissions, params) {
@@ -18,7 +18,7 @@ class Queue extends React.Component {
         this.setState({flash: "No content found for " + this.state.source});
       // Prepend passed in submissions to ones recieved from
       // the sever.
-      var newSubmissions = submissions.concat(data.submissions);
+      let newSubmissions = submissions.concat(data.submissions);
       this.setState({submissions: newSubmissions});
     }, this)).always(function() {
       Snueue.hideMainLoader();
@@ -28,15 +28,15 @@ class Queue extends React.Component {
     window.location.replace('/authorize/reddit');
   }
   handleSkip() {
-    var newHistory = this.state.history;
+    let newHistory = this.state.history;
     newHistory.push(this.state.submissions[0]);
-    var newSubmissions = this.state.submissions.slice(1);
+    let newSubmissions = this.state.submissions.slice(1);
     this.setState({submissions: newSubmissions, history: newHistory});
     // When there are only a few submissions left, fetch more
     if (newSubmissions.length <= 5) {
       // Included the ids of all the currently queued and watched videos
       // to be excluded from the fetch.
-      var excluded = newSubmissions.concat(newHistory);
+      let excluded = newSubmissions.concat(newHistory);
       excluded = excluded.map(function(sub) { return sub.id; });
       this.fetch(newSubmissions, {
         source: this.state.source,
@@ -48,10 +48,10 @@ class Queue extends React.Component {
   handlePrevious() {
     // Get up to the last element from history and place it back
     // in the submission queue.
-    var newSubmissions = this.state.submissions;
+    let newSubmissions = this.state.submissions;
     newSubmissions.unshift(this.state.history.slice(-1)[0]);
     // Remove the last item from the history.
-    var newHistory = this.state.history.slice(0,-1);
+    let newHistory = this.state.history.slice(0,-1);
     this.setState({submissions: newSubmissions, history: newHistory});
   }
   handleSearch(source, sorting) {
@@ -86,9 +86,8 @@ class Queue extends React.Component {
     window.addEventListener('popstate', this.handlePopstate);
   }
   render() {
-    var flash, content, oauth;
-    flash = null;
-    content = null;
+    let oauth;
+    let flash, content = [null, null];
     if (this.state.submissions.length > 0)
       content = <MediaList submissions={this.state.submissions} user={this.state.user}
                            onSkip={this.handleSkip.bind(this)} onPrevious={this.handlePrevious.bind(this)}/>;
@@ -137,8 +136,7 @@ class Dropdown extends React.Component {
     this.setState({open: !this.state.open});
   }
   render() {
-    var contentNodes = null;
-    var dropdown = null;
+    let contentNodes, dropdown = [null, null];
     if (this.state.open) {
       contentNodes = this.props.contents.map(function(item, index) {
         return (
@@ -166,18 +164,18 @@ class Dropdown extends React.Component {
 class UserMenu extends React.Component {
   render() {
     // Dynamically set the font-size of the username based on string length
-    var username = this.props.user.substring(0, 24);
-    var buttonHeight = 3;
-    var fontHeight = Math.min(11.20 / username.length, 1);
-    var paddingHeight = (buttonHeight - fontHeight) / 2;
+    let username = this.props.user.substring(0, 24);
+    let buttonHeight = 3;
+    let fontHeight = Math.min(11.20 / username.length, 1);
+    let paddingHeight = (buttonHeight - fontHeight) / 2;
     // Add some extra padding to compensate for a minor difference in rendering height
     // between this and the other buttons.
     paddingHeight += fontHeight < 1 ? 0.054 : 0;
-    var dropdownStyle = {
+    let dropdownStyle = {
       fontSize: fontHeight + "rem",
       padding: paddingHeight + "rem 0"
     };
-    var dropdownContent = [
+    let dropdownContent = [
       {text: "Logout", href: "/logout"},
       {text: "Login", href: "/logout"}
     ];
@@ -206,8 +204,8 @@ class Search extends React.Component {
   handleSubmit(e) {
     if (typeof e !== 'undefined')
       e.preventDefault();
-    var source = this.refs.source.getDOMNode().value.trim();
-    var sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
+    let source = this.refs.source.getDOMNode().value.trim();
+    let sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
     this.props.onSearch(source, sorting);
     return;
   }
@@ -253,9 +251,9 @@ class SearchSortingSelect extends React.Component {
 
 class MediaList extends React.Component {
   render() {
-    var queued = this.props.submissions.slice(1);
-    var ready = this.props.submissions[0];
-    var mediaNodes = queued.map(function(submission, index) {
+    let queued = this.props.submissions.slice(1);
+    let ready = this.props.submissions[0];
+    let mediaNodes = queued.map(function(submission, index) {
       return (
         <div key={submission.id}>
           <QueuedMediaItem submission={submission} index={index} />
@@ -293,8 +291,8 @@ class MediaItem extends React.Component {
       this.props.onSkip();
   }
   render() {
-    var submission = this.props.submission;
-    var mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange.bind(this)}
+    let submission = this.props.submission;
+    let mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange.bind(this)}
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div id="current-media-item">
@@ -320,9 +318,8 @@ class MediaController extends React.Component {
     $('.media-controller-container').fixedsticky();
   }
   render() {
-    var controls = null;
-    var redditControls = null;
-    var toggleButtonClasses = React.addons.classSet({
+    let controls, redditControls  = [null, null];
+    let toggleButtonClasses = React.addons.classSet({
       'fa': true,
       'fa-pause': (this.inverseStatus() === 'paused'),
       'fa-play': (this.inverseStatus() === 'playing')
@@ -330,12 +327,12 @@ class MediaController extends React.Component {
     // We have to set this upfront in order to apply styles to the control componenets
     // below, because components are immuatble. So you can't just count them up after
     // creating them and dynamically assign controlCount.
-    var controlCount = 3;
+    let controlCount = 3;
     if (this.props.user !== null) {
       controlCount = 5;
     }
-    var buttonMargin = 2;
-    var buttonStyle = {
+    let buttonMargin = 2;
+    let buttonStyle = {
       width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
     };
     controls = [
@@ -381,7 +378,7 @@ class RedditAPIController extends React.Component {
     });
   }
   render() {
-    var buttonStyle = this.props.buttonStyle;
+    let buttonStyle = this.props.buttonStyle;
     return (
       <span id="reddit-media-controller">
         <div className="button primary" key="upvote" onClick={this.handleUpvote.bind(this)} style={buttonStyle}>
@@ -397,12 +394,12 @@ class RedditAPIController extends React.Component {
 
 class MediaTitle extends React.Component {
   render() {
-    var index = '';
+    let index = '';
     if (this.props.index > 0) {
       index = '' + this.props.index + '. ';
     }
     // Decode escaped HTML entities from submission title
-    var decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
+    let decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
     return (
       <div className="media-title">
         <a className="permalink" href={this.props.submission.permalink} target="_blank">
@@ -415,8 +412,8 @@ class MediaTitle extends React.Component {
 
 class MediaPlayer extends React.Component {
   initializePlayer() {
-    var component = this;
-    var settings = {
+    let component = this;
+    let settings = {
       autohide: 1,
       showinfo: 0,
       rel: 0,
@@ -438,7 +435,7 @@ class MediaPlayer extends React.Component {
     });
   }
   playerStateChange(e) {
-    var state;
+    let state;
     switch(e.data) {
       case YT.PlayerState.PLAYING:
         state = 'playing';
