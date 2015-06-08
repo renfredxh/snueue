@@ -10,7 +10,7 @@ class Queue extends React.Component {
     if (this.state.submissions.length === 0) {
       Snueue.showMainLoader();
     }
-    $.get("/submissions", params, $.proxy(function(data) {
+    $.get("/submissions", params, $.proxy((data) => {
       history.pushState(params, '', data.source);
       // If no submissions were found on an inital search, display a
       // flash response.
@@ -20,7 +20,7 @@ class Queue extends React.Component {
       // the sever.
       let newSubmissions = submissions.concat(data.submissions);
       this.setState({submissions: newSubmissions});
-    }, this)).always(function() {
+    }, this)).always(() => {
       Snueue.hideMainLoader();
     });
   }
@@ -37,7 +37,7 @@ class Queue extends React.Component {
       // Included the ids of all the currently queued and watched videos
       // to be excluded from the fetch.
       let excluded = newSubmissions.concat(newHistory);
-      excluded = excluded.map(function(sub) { return sub.id; });
+      excluded = excluded.map(sub => sub.id);
       this.fetch(newSubmissions, {
         source: this.state.source,
         sorting: this.state.sorting,
@@ -63,7 +63,7 @@ class Queue extends React.Component {
       // an example.
       $('#search-bar').val(source);
     }
-    this.setState({source: source, sorting: sorting}, function() {
+    this.setState({source: source, sorting: sorting}, () => {
       this.fetch([], {
         source: this.state.source,
         sorting: this.state.sorting,
@@ -138,7 +138,7 @@ class Dropdown extends React.Component {
   render() {
     let contentNodes, dropdown = [null, null];
     if (this.state.open) {
-      contentNodes = this.props.contents.map(function(item, index) {
+      contentNodes = this.props.contents.map((item, index) => {
         return (
           <a key={item.text} href={item.href}>{item.text}</a>
         );
@@ -253,7 +253,7 @@ class MediaList extends React.Component {
   render() {
     let queued = this.props.submissions.slice(1);
     let ready = this.props.submissions[0];
-    let mediaNodes = queued.map(function(submission, index) {
+    let mediaNodes = queued.map((submission, index) => {
       return (
         <div key={submission.id}>
           <QueuedMediaItem submission={submission} index={index} />
@@ -372,9 +372,7 @@ class RedditAPIController extends React.Component {
       url: "/user/vote",
       type: 'PUT',
       data: {submission: this.props.submission.id, direction: direction},
-      success: function(data) {
-        console.log("Voted");
-      }
+      success: (data) => { console.log("Voted"); }
     });
   }
   render() {
@@ -426,9 +424,7 @@ class MediaPlayer extends React.Component {
       videoId: this.props.mediaId,
       playerVars: settings,
       events: {
-        'onReady': function(e) {
-          Snueue.player.playVideo();
-        },
+        'onReady': e => Snueue.player.playVideo(),
         'onStateChange': this.playerStateChange.bind(this),
         'onError': this.playerError.bind(this)
       }
