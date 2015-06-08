@@ -14,8 +14,9 @@ class Queue extends React.Component {
       history.pushState(params, '', data.source);
       // If no submissions were found on an inital search, display a
       // flash response.
-      if (this.state.submissions.length + data.submissions.length === 0)
+      if (this.state.submissions.length + data.submissions.length === 0) {
         this.setState({flash: "No content found for " + this.state.source});
+      }
       // Prepend passed in submissions to ones recieved from
       // the sever.
       let newSubmissions = submissions.concat(data.submissions);
@@ -57,7 +58,7 @@ class Queue extends React.Component {
   handleSearch(source, sorting) {
     this.setState({submissions: [], flash: null});
     // Default to showing /r/music
-    if (source === '') {
+    if (!source) {
       source = "/r/music";
       // It's ok to mutate the value field of this input just to serve as
       // an example.
@@ -187,9 +188,8 @@ class UserMenu extends React.Component {
 
 class Login extends React.Component {
   handleSubmit(e) {
-    if (typeof e !== 'undefined')
-      e.preventDefault();
-      this.props.onLogin();
+    if (typeof e !== 'undefined') e.preventDefault();
+    this.props.onLogin();
   }
   render() {
     return (
@@ -202,15 +202,14 @@ class Login extends React.Component {
 
 class Search extends React.Component {
   handleSubmit(e) {
-    if (typeof e !== 'undefined')
-      e.preventDefault();
+    if (typeof e !== 'undefined') e.preventDefault();
     let source = this.refs.source.getDOMNode().value.trim();
     let sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
     this.props.onSearch(source, sorting);
     return;
   }
   componentDidMount() {
-    if (Snueue.sourceFromURL !== null) {
+    if (Snueue.sourceFromURL) {
       this.refs.source.getDOMNode().value = Snueue.sourceFromURL;
       this.handleSubmit();
     }
@@ -287,8 +286,7 @@ class MediaItem extends React.Component {
   }
   handleItemStateChange(newPlayerState) {
     this.setState({playerStatus: newPlayerState});
-    if (this.state.playerStatus === 'ended')
-      this.props.onSkip();
+    if (this.state.playerStatus === 'ended') this.props.onSkip();
   }
   render() {
     let submission = this.props.submission;
@@ -328,7 +326,7 @@ class MediaController extends React.Component {
     // below, because components are immuatble. So you can't just count them up after
     // creating them and dynamically assign controlCount.
     let controlCount = 3;
-    if (this.props.user !== null) {
+    if (this.props.user) {
       controlCount = 5;
     }
     let buttonMargin = 2;
@@ -346,7 +344,7 @@ class MediaController extends React.Component {
         <i className="fa fa-forward"></i>
       </div>
     ];
-    if (this.props.user !== null) {
+    if (this.props.user) {
       redditControls = <RedditAPIController submission={this.props.submission} buttonStyle={buttonStyle} />;
     }
     return (
