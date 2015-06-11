@@ -1,4 +1,4 @@
-import { renderQueue } from './queue.jsx';
+import App from './components/app.jsx';
 import * as fullscreen from './fullscreen.js';
 
 window.Snueue = {
@@ -20,5 +20,8 @@ window.Snueue = {
 };
 
 $(document).ready(() => {
-  renderQueue();
+  React.render(
+    <App />,
+    document.getElementById('main')
+  );
 });

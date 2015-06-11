@@ -42,6 +42,7 @@ def bundle_javascripts():
         'javascripts/vendor/jquery.js',
         'javascripts/vendor/fixedsticky.js',
         'javascripts/vendor/react/react-with-addons.js',
+        'javascripts/vendor/alt.js',
     )
     application = Bundle(
         'javascripts/app.js',
