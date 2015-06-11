@@ -44,9 +44,9 @@ def bundle_javascripts():
         'javascripts/vendor/react/react-with-addons.js',
     )
     application = Bundle(
-        'javascripts/application.js',
+        'javascripts/app.js',
         filters='browserify',
-        output='build/application.js',
+        output='build/app.js',
         depends=('javascripts/**')
     )
     js = Bundle(
