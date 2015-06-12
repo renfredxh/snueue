@@ -1,35 +1,4 @@
-class MediaList extends React.Component {
-  render() {
-    let queued = this.props.submissions.slice(1);
-    let ready = this.props.submissions[0];
-    let mediaNodes = queued.map((submission, index) => {
-      return (
-        <div key={submission.id}>
-          <QueuedMediaItem submission={submission} index={index} />
-        </div>
-      );
-    });
-    return (
-      <div className="media-list">
-        <MediaItem submission={ready} user={this.props.user}
-                   onSkip={this.props.onSkip} onPrevious={this.props.onPrevious}/>
-        {mediaNodes}
-      </div>
-    );
-  }
-}
-
-class QueuedMediaItem extends React.Component {
-  render() {
-    return (
-      <div className="queued-media-item ">
-        <MediaTitle submission={this.props.submission} index={this.props.index + 1} />
-      </div>
-    );
-  }
-}
-
-class MediaItem extends React.Component {
+class MediaPlayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {playerStatus: 'unstarted'};
@@ -40,16 +9,30 @@ class MediaItem extends React.Component {
   }
   render() {
     let submission = this.props.submission;
-    let mediaPlayer = <MediaPlayer onPlayerStateChange={this.handleItemStateChange.bind(this)}
+    let mediaPlayer = <YouTubePlayer onPlayerStateChange={this.handleItemStateChange.bind(this)}
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div id="current-media-item">
         <MediaController submission={submission} user={this.props.user} status={this.state.playerStatus}
           onConrollerStateChange={this.handleItemStateChange.bind(this)} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
         <div className="media-item">
-          <MediaTitle submission={submission} index={0} />
+          <PlayerTitle submission={submission} />
           {mediaPlayer}
         </div>
+      </div>
+    );
+  }
+}
+
+class PlayerTitle extends React.Component {
+  render() {
+    // Decode escaped HTML entities from submission title
+    let decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
+    return (
+      <div className="media-title">
+        <a className="permalink" href={this.props.submission.permalink} target="_blank">
+          {decodedTitle}
+        </a>
       </div>
     );
   }
@@ -138,25 +121,7 @@ class RedditAPIController extends React.Component {
   }
 }
 
-class MediaTitle extends React.Component {
-  render() {
-    let index = '';
-    if (this.props.index > 0) {
-      index = '' + this.props.index + '. ';
-    }
-    // Decode escaped HTML entities from submission title
-    let decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
-    return (
-      <div className="media-title">
-        <a className="permalink" href={this.props.submission.permalink} target="_blank">
-          {index}{decodedTitle}
-        </a>
-      </div>
-    );
-  }
-}
-
-class MediaPlayer extends React.Component {
+class YouTubePlayer extends React.Component {
   initializePlayer() {
     let component = this;
     let settings = {
@@ -239,4 +204,4 @@ class MediaPlayer extends React.Component {
   }
 }
 
-export { MediaList };
+export default MediaPlayer;
