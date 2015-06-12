@@ -1,3 +1,11 @@
+/**
+ * Escape HTML entities (eg. "&lt;") from text.
+ */
+export function decodeHTML(encodedText) {
+  // Escape text using a well known jQuery trick
+  return $('<textarea/>').html(encodedText).text();
+}
+
 export class Dropdown extends React.Component {
   constructor(props) {
     super(props);

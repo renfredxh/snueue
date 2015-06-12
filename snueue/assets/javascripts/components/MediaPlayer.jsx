@@ -1,3 +1,5 @@
+import { decodeHTML } from './utils.jsx';
+
 class MediaPlayer extends React.Component {
   constructor(props) {
     super(props);
@@ -26,12 +28,11 @@ class MediaPlayer extends React.Component {
 
 class PlayerTitle extends React.Component {
   render() {
-    // Decode escaped HTML entities from submission title
-    let decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
+    let title = decodeHTML(this.props.submission.title);
     return (
       <div className="media-title">
         <a className="permalink" href={this.props.submission.permalink} target="_blank">
-          {decodedTitle}
+          {title}
         </a>
       </div>
     );

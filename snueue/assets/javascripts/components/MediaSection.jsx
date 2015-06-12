@@ -1,4 +1,5 @@
 import MediaPlayer from './MediaPlayer.jsx';
+import { decodeHTML } from './utils.jsx';
 
 class MediaSection extends React.Component {
   render() {
@@ -40,16 +41,12 @@ class QueuedSubmission extends React.Component {
 
 class SubmissionTitle extends React.Component {
   render() {
-    let index = '';
-    if (this.props.index > 0) {
-      index = '' + this.props.index + '. ';
-    }
-    // Decode escaped HTML entities from submission title
-    let decodedTitle = $('<textarea/>').html(this.props.submission.title).text();
+    let index = '' + this.props.index + '. ';
+    let title = decodeHTML(this.props.submission.title);
     return (
       <div className="media-title">
         <a className="permalink" href={this.props.submission.permalink} target="_blank">
-          {decodedTitle}
+          {index}{title}
         </a>
       </div>
     );
