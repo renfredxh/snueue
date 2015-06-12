@@ -1,6 +1,10 @@
 const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-import { MediaList, FlashMessage, UserMenu, Login, Search } from './queue.jsx';
+import { MediaList } from './queue.jsx';
+import SearchBar from './searchBar.jsx';
+import Login from './login.jsx';
+import UserMenu from './userMenu.jsx';
+import { FlashMessage } from './utils.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -104,7 +108,7 @@ class App extends React.Component {
       <div id="queue" className="queue">
         <div className="source-bar-container">
           <div className="source-bar">
-            <Search onSearch={this.handleSearch.bind(this)} />
+            <SearchBar onSearch={this.handleSearch.bind(this)} />
             <div className="user-button">
               {oauth}
             </div>
