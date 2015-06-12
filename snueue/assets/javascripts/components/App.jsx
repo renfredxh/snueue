@@ -1,9 +1,9 @@
 const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-import { MediaList } from './queue.jsx';
-import SearchBar from './searchBar.jsx';
-import Login from './login.jsx';
-import UserMenu from './userMenu.jsx';
+import { MediaList } from './Queue.jsx';
+import SearchBar from './SearchBar.jsx';
+import Login from './Login.jsx';
+import UserMenu from './UserMenu.jsx';
 import { FlashMessage } from './utils.jsx';
 
 class App extends React.Component {

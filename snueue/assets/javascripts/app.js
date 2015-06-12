@@ -1,4 +1,4 @@
-import App from './components/app.jsx';
+import App from './components/App.jsx';
 import * as fullscreen from './fullscreen.js';
 
 window.Snueue = {
