@@ -1,7 +1,7 @@
 import MediaPlayer from './MediaPlayer.jsx';
 import { decodeHTML } from './utils.jsx';
 
-class MediaSection extends React.Component {
+class SubmissionSection extends React.Component {
   render() {
     let queued = this.props.submissions.slice(1);
     let ready = this.props.submissions[0];
@@ -53,4 +53,4 @@ class SubmissionTitle extends React.Component {
   }
 }
 
-export default MediaSection;
+export default SubmissionSection;

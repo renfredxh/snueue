@@ -1,6 +1,6 @@
 const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-import MediaSection from './MediaSection.jsx';
+import SubmissionSection from './SubmissionSection.jsx';
 import SearchBar from './SearchBar.jsx';
 import Login from './Login.jsx';
 import UserMenu from './UserMenu.jsx';
@@ -96,7 +96,7 @@ class App extends React.Component {
     let oauth;
     let flash, content = [null, null];
     if (this.state.submissions.length > 0)
-      content = <MediaSection submissions={this.state.submissions} user={this.state.user}
+      content = <SubmissionSection submissions={this.state.submissions} user={this.state.user}
                            onSkip={this.handleSkip.bind(this)} onPrevious={this.handlePrevious.bind(this)}/>;
     if (this.state.flash !== null)
       flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose.bind(this)} />;
