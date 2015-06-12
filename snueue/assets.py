@@ -48,7 +48,7 @@ def bundle_javascripts():
         'javascripts/app.js',
         filters='browserify',
         output='build/app.js',
-        depends=('javascripts/**/*')
+        depends=('javascripts/**', 'javascripts/**/*')
     )
     js = Bundle(
         vendor,
