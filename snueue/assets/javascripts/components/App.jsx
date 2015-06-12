@@ -1,5 +1,7 @@
 const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
+import SubmissionActions from '../actions/SubmissionActions.js';
+
 import SubmissionSection from './SubmissionSection.jsx';
 import SearchBar from './SearchBar.jsx';
 import Login from './Login.jsx';
@@ -27,6 +29,7 @@ class App extends React.Component {
       // the sever.
       let newSubmissions = submissions.concat(data.submissions);
       this.setState({submissions: newSubmissions});
+      SubmissionActions.updateSubmissions(newSubmissions);
     }, this)).always(() => {
       Snueue.hideMainLoader();
     });
@@ -95,9 +98,6 @@ class App extends React.Component {
   render() {
     let oauth;
     let flash, content = [null, null];
-    if (this.state.submissions.length > 0)
-      content = <SubmissionSection submissions={this.state.submissions} user={this.state.user}
-                           onSkip={this.handleSkip.bind(this)} onPrevious={this.handlePrevious.bind(this)}/>;
     if (this.state.flash !== null)
       flash = <FlashMessage key={this.state.flash} message={this.state.flash} onClose={this.handleFlashClose.bind(this)} />;
     if (this.state.user !== null)
@@ -117,7 +117,12 @@ class App extends React.Component {
         <ReactCSSTransitionGroup transitionName="flash">
           {flash}
         </ReactCSSTransitionGroup>
-        {content}
+        <SubmissionSection
+          submissions={[]}
+          user={this.state.user}
+          onSkip={this.handleSkip.bind(this)}
+          onPrevious={this.handlePrevious.bind(this)}
+        />
       </div>
     );
   }

@@ -1,8 +1,22 @@
+import SubmissionStore from '../stores/SubmissionStore.js';
+
 import MediaPlayer from './MediaPlayer.jsx';
 import { decodeHTML } from './utils.jsx';
 
 class SubmissionSection extends React.Component {
+  static getStores(props) {
+    return [SubmissionStore];
+  }
+  static getPropsFromStores(props) {
+    return SubmissionStore.getState();
+  }
+  constructor(props) {
+    super(props);
+    this.state = SubmissionStore.getState();
+  }
   render() {
+    if (this.props.submissions.length === 0) return false;
+
     let queued = this.props.submissions.slice(1);
     let ready = this.props.submissions[0];
     let mediaQueue = queued.map((submission, index) => {
@@ -53,4 +67,4 @@ class SubmissionTitle extends React.Component {
   }
 }
 
-export default SubmissionSection;
+export default Alt.addons.connectToStores(SubmissionSection);
