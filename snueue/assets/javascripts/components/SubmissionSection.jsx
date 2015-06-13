@@ -1,6 +1,10 @@
+const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+import SubmissionActions from '../actions/SubmissionActions.js';
 import SubmissionStore from '../stores/SubmissionStore.js';
 
 import MediaPlayer from './MediaPlayer.jsx';
+import { FlashMessage, SpinningLoader } from './utils.jsx';
 import { decodeHTML } from './utils.jsx';
 
 class SubmissionSection extends React.Component {
@@ -15,8 +19,10 @@ class SubmissionSection extends React.Component {
     this.state = SubmissionStore.getState();
   }
   render() {
+    if (this.props.loading) return <SpinningLoader />;
     if (this.props.submissions.length === 0) return false;
 
+    let flash = null;
     let queued = this.props.submissions.slice(1);
     let ready = this.props.submissions[0];
     let mediaQueue = queued.map((submission, index) => {
@@ -26,13 +32,21 @@ class SubmissionSection extends React.Component {
         </div>
       );
     });
+    if (this.props.flash) {
+      flash = <FlashMessage
+        key={this.props.flash}
+        message={this.props.flash}
+        onClose={SubmissionActions.closeFlash}
+      />;
+    }
     return (
       <div className="media-list">
+        <ReactCSSTransitionGroup transitionName="flash">
+          {flash}
+        </ReactCSSTransitionGroup>
         <MediaPlayer
           submission={ready}
           user={this.props.user}
-          onSkip={this.props.onSkip}
-          onPrevious={this.props.onPrevious}
         />
         {mediaQueue}
       </div>

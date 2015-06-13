@@ -1,4 +1,5 @@
 import { decodeHTML } from './utils.jsx';
+import SubmissionActions from '../actions/SubmissionActions.js';
 
 class MediaPlayer extends React.Component {
   constructor(props) {
@@ -15,8 +16,12 @@ class MediaPlayer extends React.Component {
       type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
     return (
       <div id="current-media-item">
-        <MediaController submission={submission} user={this.props.user} status={this.state.playerStatus}
-          onConrollerStateChange={this.handleItemStateChange.bind(this)} onPrevious={this.props.onPrevious} onSkip={this.props.onSkip} />
+        <MediaController
+          submission={submission}
+          user={this.props.user}
+          status={this.state.playerStatus}
+          onConrollerStateChange={this.handleItemStateChange.bind(this)}
+        />
         <div className="media-item">
           <PlayerTitle submission={submission} />
           {mediaPlayer}
@@ -68,13 +73,13 @@ class MediaController extends React.Component {
       width: (100/controlCount + buttonMargin/controlCount) - buttonMargin + "%"
     };
     controls = [
-      <div className="button primary" key="back" onClick={this.props.onPrevious} style={buttonStyle}>
+      <div className="button primary" key="back" onClick={SubmissionActions.previous} style={buttonStyle}>
         <i className="fa fa-backward"></i>
       </div>,
       <div className="button primary" key="play-pause" onClick={this.handleStatusToggle.bind(this)} style={buttonStyle}>
         <i className={toggleButtonClasses}></i>
       </div>,
-      <div className="button primary" key="skip" onClick={this.props.onSkip} style={buttonStyle}>
+      <div className="button primary" key="skip" onClick={SubmissionActions.skip} style={buttonStyle}>
         <i className="fa fa-forward"></i>
       </div>
     ];

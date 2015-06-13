@@ -6,6 +6,14 @@ export function decodeHTML(encodedText) {
   return $('<textarea/>').html(encodedText).text();
 }
 
+export class SpinningLoader extends React.Component {
+  render() {
+    return (
+      <div className="loader"></div>
+    );
+  }
+}
+
 export class Dropdown extends React.Component {
   constructor(props) {
     super(props);

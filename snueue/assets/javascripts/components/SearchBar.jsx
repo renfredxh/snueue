@@ -1,10 +1,18 @@
+import SubmissionActions from '../actions/SubmissionActions.js';
+
 class SearchBar extends React.Component {
   handleSubmit(e) {
-    if (typeof e !== 'undefined') e.preventDefault();
+    if (e) e.preventDefault();
     let source = this.refs.source.getDOMNode().value.trim();
     let sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
-    this.props.onSearch(source, sorting);
-    return;
+    // Default to showing /r/music
+    if (!source) {
+      source = '/r/music';
+      // It's ok to mutate the value field of this input just to serve as
+      // an example.
+      $('#search-bar').val(source);
+    }
+    SubmissionActions.updateSource(source, sorting);
   }
   componentDidMount() {
     if (Snueue.sourceFromURL) {
