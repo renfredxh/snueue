@@ -1,26 +1,28 @@
-import { decodeHTML } from './utils.jsx';
+import PlayerActions from '../actions/PlayerActions.js';
+import PlayerStore from '../stores/PlayerStore.js';
 import SubmissionActions from '../actions/SubmissionActions.js';
 
-class MediaPlayer extends React.Component {
+import { decodeHTML } from './utils.jsx';
+
+class Player extends React.Component {
+  static getStores(props) {
+    return [PlayerStore];
+  }
+  static getPropsFromStores(props) {
+    return PlayerStore.getState();
+  }
   constructor(props) {
     super(props);
-    this.state = {playerStatus: 'unstarted'};
-  }
-  handleItemStateChange(newPlayerState) {
-    this.setState({playerStatus: newPlayerState});
-    if (this.state.playerStatus === 'ended') this.props.onSkip();
   }
   render() {
     let submission = this.props.submission;
-    let mediaPlayer = <YouTubePlayer onPlayerStateChange={this.handleItemStateChange.bind(this)}
-      type={submission.type} url={submission.url} mediaId={submission.media_id} playerStatus={this.state.playerStatus} />;
+    let mediaPlayer = <YouTubePlayer mediaId={submission.media_id}/>;
     return (
       <div id="current-media-item">
-        <MediaController
+        <PlayerController
           submission={submission}
           user={this.props.user}
-          status={this.state.playerStatus}
-          onConrollerStateChange={this.handleItemStateChange.bind(this)}
+          playerState={this.props.playerState}
         />
         <div className="media-item">
           <PlayerTitle submission={submission} />
@@ -44,12 +46,12 @@ class PlayerTitle extends React.Component {
   }
 }
 
-class MediaController extends React.Component {
-  inverseStatus() {
-    return this.props.status === 'playing' ? 'paused' : 'playing';
+class PlayerController extends React.Component {
+  inversePlayerState() {
+    return this.props.playerState === 'playing' ? 'paused' : 'playing';
   }
   handleStatusToggle() {
-    this.props.onConrollerStateChange(this.inverseStatus());
+    PlayerActions.updatePlayerState(this.inversePlayerState());
   }
   componentDidMount() {
     $('.media-controller-container').fixedsticky();
@@ -58,8 +60,8 @@ class MediaController extends React.Component {
     let controls, redditControls  = [null, null];
     let toggleButtonClasses = React.addons.classSet({
       'fa': true,
-      'fa-pause': (this.inverseStatus() === 'paused'),
-      'fa-play': (this.inverseStatus() === 'playing')
+      'fa-pause': (this.inversePlayerState() === 'paused'),
+      'fa-play': (this.inversePlayerState() === 'playing')
     });
     // We have to set this upfront in order to apply styles to the control componenets
     // below, because components are immuatble. So you can't just count them up after
@@ -128,78 +130,13 @@ class RedditAPIController extends React.Component {
 }
 
 class YouTubePlayer extends React.Component {
-  initializePlayer() {
-    let component = this;
-    let settings = {
-      autohide: 1,
-      showinfo: 0,
-      rel: 0,
-      color: "white",
-      modestbranding: 1
-    };
-    Snueue.player = new YT.Player('player', {
-      height: '315',
-      width: '420',
-      videoId: this.props.mediaId,
-      playerVars: settings,
-      events: {
-        'onReady': e => Snueue.player.playVideo(),
-        'onStateChange': this.playerStateChange.bind(this),
-        'onError': this.playerError.bind(this)
-      }
-    });
-  }
-  playerStateChange(e) {
-    let state;
-    switch(e.data) {
-      case YT.PlayerState.PLAYING:
-        state = 'playing';
-        break;
-      case YT.PlayerState.PAUSED:
-        state = 'paused';
-        break;
-      case YT.PlayerState.ENDED:
-        state = 'ended';
-        break;
-      case YT.PlayerState.BUFFERING:
-        state = 'buffering';
-        break;
-      default:
-        state = 'unstarted';
-    }
-    this.props.onPlayerStateChange(state);
-  }
-  playerError(e) {
-    // If the player encounters an error such as the video being deleted,
-    // end it and skip to the next one.
-    this.props.onPlayerStateChange('ended');
-  }
-  toggleStatus(nextStatus) {
-    if (nextStatus === 'playing') {
-      Snueue.player.playVideo();
-    } else if (nextStatus === 'paused') {
-      Snueue.player.pauseVideo();
-    }
-  }
   shouldComponentUpdate(nextProps, nextState) {
     // If the parent state updates while the current submission is still
     // playing, don't re-render or else the video will restart.
     if (this.props.mediaId === nextProps.mediaId) {
-      // If the status has changed, update the player accordingly
-      if (this.props.playerStatus !== nextProps.playerStatus) {
-        this.toggleStatus(nextProps.playerStatus);
-      }
       return false;
     }
     return true;
-  }
-  componentDidMount() {
-    this.initializePlayer();
-  }
-  componentDidUpdate() {
-    // Clear out previous player and update.
-    $('#player').replaceWith("<div id=\"player\"></div>");
-    this.initializePlayer();
   }
   render() {
     return (
@@ -210,4 +147,4 @@ class YouTubePlayer extends React.Component {
   }
 }
 
-export default MediaPlayer;
+export default Alt.addons.connectToStores(Player);

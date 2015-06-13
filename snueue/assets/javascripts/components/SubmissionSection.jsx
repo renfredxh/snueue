@@ -3,7 +3,7 @@ const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 import SubmissionActions from '../actions/SubmissionActions.js';
 import SubmissionStore from '../stores/SubmissionStore.js';
 
-import MediaPlayer from './MediaPlayer.jsx';
+import Player from './Player.jsx';
 import { FlashMessage, SpinningLoader } from './utils.jsx';
 import { decodeHTML } from './utils.jsx';
 
@@ -45,7 +45,7 @@ class SubmissionSection extends React.Component {
     });
     return (
       <div className="media-list">
-        <MediaPlayer
+        <Player
           submission={ready}
           user={this.props.user}
         />
