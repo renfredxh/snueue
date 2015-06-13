@@ -1,4 +1,5 @@
 import SubmissionActions from '../actions/SubmissionActions.js';
+import SubmissionStore from '../stores/SubmissionStore.js';
 
 class SearchBar extends React.Component {
   handleSubmit(e) {
@@ -13,6 +14,7 @@ class SearchBar extends React.Component {
       $('#search-bar').val(source);
     }
     SubmissionActions.updateSource(source, sorting);
+    SubmissionStore.fetchSubmissions();
   }
   componentDidMount() {
     if (Snueue.sourceFromURL) {

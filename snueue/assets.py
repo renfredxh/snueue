@@ -38,9 +38,11 @@ def bundle_stylesheets():
 
 def bundle_javascripts():
     vendor = Bundle(
+        'javascripts/vendor/browser-polyfill.js',
         'javascripts/vendor/modernizr.js',
         'javascripts/vendor/jquery.js',
         'javascripts/vendor/fixedsticky.js',
+        'javascripts/vendor/axios.js',
         'javascripts/vendor/react-with-addons.js',
         'javascripts/vendor/alt-with-addons.js'
     )

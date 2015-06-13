@@ -1,20 +1,23 @@
 import alt from '../alt.js';
 import SubmissionActions from '../actions/SubmissionActions.js';
-import SubmissionFetcher from '../utils/SubmissionFetcher.js';
+import SubmissionSource from '../sources/SubmissionSource.js';
 
 class SubmissionStore {
   constructor() {
     this.bindActions(SubmissionActions);
+    this.registerAsync(SubmissionSource);
     this.submissions = [];
     this.history = [];
     this.flash = '';
     this.loading = false;
   }
-  onFetchSubmissions() {
+  onLoadingSubmissions() {
+    this.flash = '';
     this.loading = true;
   }
-  onUpdateSubmissions(newSubmissions) {
+  onUpdateSubmissions(response) {
     this.loading = false;
+    let newSubmissions = response.data.submissions;
     // If no submissions were found on an inital search, display a
     // flash response.
     if (newSubmissions.length === 0) {
@@ -22,8 +25,14 @@ class SubmissionStore {
     }
     this.submissions = newSubmissions;
   }
+  onSubmissionsLoadingFailure() {
+    this.loading = false;
+    this.flash = `Error loading ${this.source}`;
+  }
   onUpdateSource(params) {
-    [this.source, this.sorting] = [params.source, params.sorting];
+    let { source, sorting } = params;
+    this.source = source;
+    this.sorting = sorting;
     this.submissions = [];
   }
   onSkip() {
