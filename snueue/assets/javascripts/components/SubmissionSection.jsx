@@ -30,7 +30,10 @@ class SubmissionSection extends React.Component {
     );
     if (this.props.loading) return <SpinningLoader />;
     if (this.props.submissions.length === 0) return false;
-
+    // When there are only a few submissions left, fetch more
+    if (this.props.submissions.length <= 5) {
+      SubmissionStore.refetchSubmissions();
+    }
     let queued = this.props.submissions.slice(1);
     let ready = this.props.submissions[0];
     let mediaQueue = queued.map((submission, index) => {

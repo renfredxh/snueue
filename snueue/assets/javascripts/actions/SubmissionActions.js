@@ -4,7 +4,7 @@ class SubmissionActions {
   constructor() {
     this.generateActions(
       'loadingSubmissions', 'updateSubmissions', 'submissionsLoadingFailure',
-      'skip', 'previous', 'closeFlash'
+      'appendSubmissions', 'skip', 'previous', 'closeFlash'
     );
   }
   updateSource(source, sorting) {

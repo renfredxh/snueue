@@ -25,6 +25,10 @@ class SubmissionStore {
     }
     this.submissions = newSubmissions;
   }
+  onAppendSubmissions(response) {
+    let newSubmissions = response.data.submissions;
+    this.submissions = this.submissions.concat(newSubmissions);
+  }
   onSubmissionsLoadingFailure() {
     this.loading = false;
     this.flash = `Error loading ${this.source}`;
@@ -38,22 +42,6 @@ class SubmissionStore {
   onSkip() {
     this.history.push(this.submissions[0]);
     this.submissions = this.submissions.slice(1);
-    // When there are only a few submissions left, fetch more
-    if (this.submissions.length <= 5) {
-      // Included the ids of all the currently queued and watched submissions
-      // to be excluded from the fetch.
-      let excluded = this.submissions.concat(this.history);
-      excluded = excluded.map(sub => sub.id);
-      let params = {
-        source: this.source,
-        sorting: this.sorting,
-        excluded: excluded
-      };
-      SubmissionFetcher.fetch(params)
-        .then((data) => {
-          this.submissions = this.submissions.concat(data.submissions);
-        });
-    }
   }
   onPrevious() {
     if (this.history.length === 0) return;

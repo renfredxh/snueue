@@ -4,9 +4,8 @@ const SubmissionSource = {
   fetchSubmissions: {
     remote(state) {
       let { source, sorting } = state;
-      let excluded = [];
       return axios.get('/submissions', {
-        params: { source, sorting, excluded }
+        params: { source, sorting }
       });
     },
     loading: SubmissionActions.loadingSubmissions,
@@ -15,6 +14,19 @@ const SubmissionSource = {
     shouldFetch(state) {
       return true;
     }
+  },
+  refetchSubmissions: {
+    remote(state) {
+      let { source, sorting } = state;
+      // Included the ids of all the currently queued and watched submissions
+      // to be excluded from the fetch.
+      let excluded = state.submissions.concat(state.history);
+      excluded = excluded.map(sub => sub.id);
+      return axios.get('/submissions', {
+        params: { source, sorting, 'excluded[]': excluded }
+      });
+    },
+    success: SubmissionActions.appendSubmissions,
   }
 };
 
