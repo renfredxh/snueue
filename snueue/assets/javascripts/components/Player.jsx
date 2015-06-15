@@ -8,12 +8,15 @@ class Player extends React.Component {
   static getStores(props) {
     return [PlayerStore];
   }
+
   static getPropsFromStores(props) {
     return PlayerStore.getState();
   }
+
   constructor(props) {
     super(props);
   }
+
   render() {
     let submission = this.props.submission;
     let mediaPlayer = <YouTubePlayer mediaId={submission.media_id}/>;
@@ -50,12 +53,15 @@ class PlayerController extends React.Component {
   inversePlayerState() {
     return this.props.playerState === 'playing' ? 'paused' : 'playing';
   }
+
   handleStatusToggle() {
     PlayerActions.updatePlayerState(this.inversePlayerState());
   }
+
   componentDidMount() {
     $('.media-controller-container').fixedsticky();
   }
+
   render() {
     let controls, redditControls  = [null, null];
     let toggleButtonClasses = React.addons.classSet({
@@ -103,9 +109,11 @@ class RedditAPIController extends React.Component {
   handleUpvote() {
     this.submitVote(1);
   }
+
   handleDownvote() {
     this.submitVote(-1);
   }
+
   submitVote(direction) {
     $.ajax({
       url: "/user/vote",
@@ -114,6 +122,7 @@ class RedditAPIController extends React.Component {
       success: (data) => { console.log("Voted"); }
     });
   }
+
   render() {
     let buttonStyle = this.props.buttonStyle;
     return (
@@ -138,6 +147,7 @@ class YouTubePlayer extends React.Component {
     }
     return true;
   }
+
   render() {
     return (
       <div className="media-player">

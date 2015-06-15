@@ -3,6 +3,7 @@ class Login extends React.Component {
     if (typeof e !== 'undefined') e.preventDefault();
     this.props.onLogin();
   }
+
   render() {
     return (
       <form id="login-form" className="login-form" onSubmit={this.handleSubmit.bind(this)} ref="form">

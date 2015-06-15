@@ -11,13 +11,16 @@ class SubmissionSection extends React.Component {
   static getStores(props) {
     return [SubmissionStore];
   }
+
   static getPropsFromStores(props) {
     return SubmissionStore.getState();
   }
+
   constructor(props) {
     super(props);
     this.state = SubmissionStore.getState();
   }
+
   render() {
     if (this.props.flash) return (
       <ReactCSSTransitionGroup transitionName="flash">

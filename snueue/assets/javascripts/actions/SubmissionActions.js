@@ -7,6 +7,7 @@ class SubmissionActions {
       'appendSubmissions', 'skip', 'previous', 'closeFlash'
     );
   }
+
   updateSource(source, sorting) {
     history.pushState({}, '', source);
     this.dispatch({ source, sorting });

@@ -11,9 +11,6 @@ const SubmissionSource = {
     loading: SubmissionActions.loadingSubmissions,
     success: SubmissionActions.updateSubmissions,
     error: SubmissionActions.submissionsLoadingFailure,
-    shouldFetch(state) {
-      return true;
-    }
   },
   refetchSubmissions: {
     remote(state) {

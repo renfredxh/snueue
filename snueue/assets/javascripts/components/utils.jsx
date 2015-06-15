@@ -19,9 +19,11 @@ export class Dropdown extends React.Component {
     super(props);
     this.state = {open: false};
   }
+
   toggleDropdown(event) {
     this.setState({open: !this.state.open});
   }
+
   render() {
     let contentNodes, dropdown = [null, null];
     if (this.state.open) {

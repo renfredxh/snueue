@@ -11,10 +11,12 @@ class SubmissionStore {
     this.flash = '';
     this.loading = false;
   }
+
   onLoadingSubmissions() {
     this.flash = '';
     this.loading = true;
   }
+
   onUpdateSubmissions(response) {
     this.loading = false;
     let newSubmissions = response.data.submissions;
@@ -25,24 +27,29 @@ class SubmissionStore {
     }
     this.submissions = newSubmissions;
   }
+
   onAppendSubmissions(response) {
     let newSubmissions = response.data.submissions;
     this.submissions = this.submissions.concat(newSubmissions);
   }
+
   onSubmissionsLoadingFailure() {
     this.loading = false;
     this.flash = `Error loading ${this.source}`;
   }
+
   onUpdateSource(params) {
     let { source, sorting } = params;
     this.source = source;
     this.sorting = sorting;
     this.submissions = [];
   }
+
   onSkip() {
     this.history.push(this.submissions[0]);
     this.submissions = this.submissions.slice(1);
   }
+
   onPrevious() {
     if (this.history.length === 0) return;
     // Get up to the last element from history and prepend it
@@ -51,6 +58,7 @@ class SubmissionStore {
     // Remove the last item from the history.
     this.history = this.history.slice(0, -1);
   }
+
   onCloseFlash() {
     this.flash = '';
   }

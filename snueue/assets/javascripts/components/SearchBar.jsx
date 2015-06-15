@@ -16,12 +16,14 @@ class SearchBar extends React.Component {
     SubmissionActions.updateSource(source, sorting);
     SubmissionStore.fetchSubmissions();
   }
+
   componentDidMount() {
     if (Snueue.sourceFromURL) {
       this.refs.source.getDOMNode().value = Snueue.sourceFromURL;
       this.handleSubmit();
     }
   }
+
   render() {
     return (
       <form id="source-form" className="search-form" onSubmit={this.handleSubmit.bind(this)} ref="form">
