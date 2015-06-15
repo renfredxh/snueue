@@ -3,7 +3,7 @@ python:
   - "3.4"
 before_install:
   - gem install compass
-  - npm install -g browserify && npm install --save-dev babelify
+  - npm install -g browserify && npm install --save-dev babelify resolvify
 install:
   - pip install -r requirements.txt
 script:

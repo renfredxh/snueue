@@ -20,7 +20,7 @@ RUN gem install --no-rdoc --no-ri compass
 # Node for installing Browserify and Babel
 RUN apt-add-repository ppa:chris-lea/node.js
 RUN apt-get update && apt-get install -y nodejs
-RUN npm install -g browserify && npm install --save-dev babelify
+RUN npm install -g browserify && npm install --save-dev babelify resolvify
 
 RUN git clone https://github.com/renfredxh/snueue.git snueue
 # Install the latest version of pip

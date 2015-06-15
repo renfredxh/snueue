@@ -1,4 +1,5 @@
-const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+import React from 'react/addons';
+import connectToStores from 'alt/utils/connectToStores';
 
 import SubmissionActions from '../actions/SubmissionActions.js';
 import SubmissionStore from '../stores/SubmissionStore.js';
@@ -6,6 +7,8 @@ import SubmissionStore from '../stores/SubmissionStore.js';
 import Player from './Player.jsx';
 import { FlashMessage, SpinningLoader } from './utils.jsx';
 import { decodeHTML } from './utils.jsx';
+
+const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 class SubmissionSection extends React.Component {
   static getStores(props) {
@@ -85,4 +88,4 @@ class SubmissionTitle extends React.Component {
   }
 }
 
-export default Alt.addons.connectToStores(SubmissionSection);
+export default connectToStores(SubmissionSection);

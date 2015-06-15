@@ -1,3 +1,5 @@
+import React from 'react';
+
 import SubmissionActions from '../actions/SubmissionActions.js';
 import SubmissionStore from '../stores/SubmissionStore.js';
 

@@ -1,3 +1,5 @@
+import React from 'react';
+
 /**
  * Escape HTML entities (eg. "&lt;") from text.
  */

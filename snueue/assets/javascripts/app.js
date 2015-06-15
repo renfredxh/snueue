@@ -1,6 +1,11 @@
+import React from 'react/addons';
+
 import App from './components/App.jsx';
 import * as fullscreen from './fullscreen.js';
 import PlayerActions from './actions/PlayerActions.js';
+
+// Bind React to the global space to enable the react dev tools chrome plugin.
+window.React = React;
 
 window.Snueue = {
   sourceFromURL: null,

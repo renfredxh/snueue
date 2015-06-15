@@ -1,3 +1,6 @@
+import React from 'react';
+import connectToStores from 'alt/utils/connectToStores';
+
 import PlayerActions from '../actions/PlayerActions.js';
 import PlayerStore from '../stores/PlayerStore.js';
 import SubmissionActions from '../actions/SubmissionActions.js';
@@ -157,4 +160,4 @@ class YouTubePlayer extends React.Component {
   }
 }
 
-export default Alt.addons.connectToStores(Player);
+export default connectToStores(Player);

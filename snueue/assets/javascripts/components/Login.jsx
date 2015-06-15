@@ -1,3 +1,5 @@
+import React from 'react';
+
 class Login extends React.Component {
   handleSubmit(e) {
     if (typeof e !== 'undefined') e.preventDefault();

@@ -14,10 +14,15 @@ class BrowserifyFilter(ExternalTool):
     max_debug_level = None
 
     def input(self, infile, outfile, **kwargs):
-        transforms = ['babelify']
         args = ['browserify']
 
-        args.extend(['--transform'] + transforms)
+        transforms = ['babelify']
+        for transform in transforms:
+            args.extend(('--transform', transform))
+        # Use the resolvify module to include npm modules from the
+        # vendor directory.
+        args.extend(('--transform', '[resolvify',
+                     'vendor', 'vendor/node_modules]'))
         args.append(kwargs['source_path'])
         if app.config['DEBUG']:
             args.append('--debug')
@@ -39,12 +44,8 @@ def bundle_stylesheets():
 def bundle_javascripts():
     vendor = Bundle(
         'javascripts/vendor/browser-polyfill.js',
-        'javascripts/vendor/modernizr.js',
         'javascripts/vendor/jquery.js',
         'javascripts/vendor/fixedsticky.js',
-        'javascripts/vendor/axios.js',
-        'javascripts/vendor/react-with-addons.js',
-        'javascripts/vendor/alt-with-addons.js'
     )
     application = Bundle(
         'javascripts/app.js',

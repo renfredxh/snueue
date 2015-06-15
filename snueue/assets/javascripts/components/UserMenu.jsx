@@ -1,3 +1,5 @@
+import React from 'react/addons';
+
 import { Dropdown } from './utils.jsx';
 
 class UserMenu extends React.Component {
