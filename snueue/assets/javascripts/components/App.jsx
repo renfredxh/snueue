@@ -14,10 +14,6 @@ class App extends React.Component {
     this.state = { user };
   }
 
-  login() {
-    window.location.replace('/authorize/reddit');
-  }
-
   handlePopstate(e) {
     // When the back button is pressed, load the previous search if there was one.
     if (e.state === null) {
@@ -35,7 +31,7 @@ class App extends React.Component {
     let oauth;
     let content = null;
     if (this.state.user !== null) oauth = <UserMenu user={this.state.user}/>;
-    else oauth = <Login onLogin={this.login.bind(this)}/>;
+    else oauth = <Login />;
     return (
       <div id="queue" className="queue">
         <div className="source-bar-container">

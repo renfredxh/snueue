@@ -1,14 +1,14 @@
 import React from 'react';
 
 class Login extends React.Component {
-  handleSubmit(e) {
+  handleLogin(e) {
     if (typeof e !== 'undefined') e.preventDefault();
-    this.props.onLogin();
+    window.location.replace('/authorize/reddit');
   }
 
   render() {
     return (
-      <form id="login-form" className="login-form" onSubmit={this.handleSubmit.bind(this)} ref="form">
+      <form id="login-form" className="login-form" onSubmit={this.handleLogin.bind(this)} ref="form">
         <button type="submit" className="button login-button"><i className="fa fa-reddit"></i> Login</button>
       </form>
     );
