@@ -5,7 +5,7 @@ import { Navigation } from 'react-router';
 
 import SubmissionStore from '../stores/SubmissionStore.js';
 
-class SearchBar extends React.Component {
+class Search extends React.Component {
   static getStores(props) {
     return [SubmissionStore];
   }
@@ -78,5 +78,5 @@ class SearchSortingSelect extends React.Component {
   }
 }
 
-reactMixin.onClass(SearchBar, Navigation);
-export default connectToStores(SearchBar);
+reactMixin.onClass(Search, Navigation);
+export default connectToStores(Search);

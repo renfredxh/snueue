@@ -1,0 +1,45 @@
+/* Header */
+.header-container {
+  background-color: $satsuki-blue;
+}
+
+.header-controls {
+  @include outer-container;
+  padding: 1rem 0;
+  input, select, button {
+    border: none;
+    margin-bottom: 0;
+  }
+}
+
+.user-button {
+  @include span-columns(2);
+  @include omega();
+}
+
+.login-button {
+  @extend .navy-button;
+}
+
+/* Search */
+.search-form {
+  @include span-columns(10);
+  .search-bar, .results-sorting-select {
+    height: 3.3625rem;
+  }
+  .search-bar-container {
+    @include span-columns(8 of 10);
+    .search-bar {
+      @include border-left-radius($ui-radius);
+      width: 85%;
+    }
+    .results-sorting-select {
+      @include border-right-radius($ui-radius);
+      width: 15%;
+    }
+  }
+  .submit-button {
+    @include span-columns(2 of 10);
+    @extend .navy-button;
+  }
+}

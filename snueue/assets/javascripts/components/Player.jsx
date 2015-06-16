@@ -24,13 +24,13 @@ class Player extends React.Component {
     let submission = this.props.submission;
     let mediaPlayer = <YouTubePlayer mediaId={submission.media_id}/>;
     return (
-      <div id="current-media-item">
+      <div id="current-submission">
         <PlayerController
           submission={submission}
           user={this.props.user}
           playerState={this.props.playerState}
         />
-        <div className="media-item">
+        <div className="current-submission">
           <PlayerTitle submission={submission} />
           {mediaPlayer}
         </div>
@@ -43,7 +43,7 @@ class PlayerTitle extends React.Component {
   render() {
     let title = decodeHTML(this.props.submission.title);
     return (
-      <div className="media-title">
+      <div className="submission-title">
         <a className="permalink" href={this.props.submission.permalink} target="_blank">
           {title}
         </a>
@@ -62,7 +62,7 @@ class PlayerController extends React.Component {
   }
 
   componentDidMount() {
-    $('.media-controller-container').fixedsticky();
+    $('.submission-controller-container').fixedsticky();
   }
 
   render() {
@@ -98,8 +98,8 @@ class PlayerController extends React.Component {
       redditControls = <RedditAPIController submission={this.props.submission} buttonStyle={buttonStyle} />;
     }
     return (
-      <div className="media-controller-container">
-        <div id="media-controller" className="media-controller">
+      <div className="submission-controller-container">
+        <div id="submission-controller" className="submission-controller">
           {redditControls}
           {controls}
         </div>
@@ -129,7 +129,7 @@ class RedditAPIController extends React.Component {
   render() {
     let buttonStyle = this.props.buttonStyle;
     return (
-      <span id="reddit-media-controller">
+      <span id="reddit-submission-controller">
         <div className="button primary" key="upvote" onClick={this.handleUpvote.bind(this)} style={buttonStyle}>
           <i className="fa fa-arrow-up"></i>
         </div>

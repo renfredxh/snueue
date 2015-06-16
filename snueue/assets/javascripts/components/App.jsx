@@ -1,9 +1,7 @@
 import React from 'react';
 import { RouteHandler } from 'react-router';
 
-import SearchBar from './SearchBar.jsx';
-import Login from './Login.jsx';
-import UserMenu from './UserMenu.jsx';
+import Header from './Header.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,20 +11,9 @@ class App extends React.Component {
   }
 
   render() {
-    let oauth;
-    let content = null;
-    if (this.state.user !== null) oauth = <UserMenu user={this.state.user}/>;
-    else oauth = <Login />;
     return (
-      <div id="queue" className="queue">
-        <div className="source-bar-container">
-          <div className="source-bar">
-            <SearchBar />
-            <div className="user-button">
-              {oauth}
-            </div>
-          </div>
-        </div>
+      <div id="app">
+        <Header user={this.state.user} />
         <RouteHandler user={this.state.user} />
       </div>
     );

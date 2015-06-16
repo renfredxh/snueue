@@ -7,7 +7,9 @@
 @import "globals";
 @import "transitions";
 @import "ui";
-@import "components/queue";
+@import "components/app";
+@import "components/header";
+@import "components/submission-section";
 
 // For the sticky footer
 html, body{

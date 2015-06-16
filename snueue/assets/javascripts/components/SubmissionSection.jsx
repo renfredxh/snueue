@@ -75,7 +75,7 @@ class SubmissionSection extends React.Component {
     }
     let queued = this.props.submissions.slice(1);
     let ready = this.props.submissions[0];
-    let mediaQueue = queued.map((submission, index) => {
+    let submissionQueue = queued.map((submission, index) => {
       return (
         <div key={submission.id}>
           <QueuedSubmission submission={submission} index={index} />
@@ -83,12 +83,12 @@ class SubmissionSection extends React.Component {
       );
     });
     return (
-      <div className="media-list">
+      <div className="submission-list">
         <Player
           submission={ready}
           user={this.props.user}
         />
-        {mediaQueue}
+        {submissionQueue}
       </div>
     );
   }
@@ -97,7 +97,7 @@ class SubmissionSection extends React.Component {
 class QueuedSubmission extends React.Component {
   render() {
     return (
-      <div className="queued-media-item">
+      <div className="queued-submission">
         <SubmissionTitle
           submission={this.props.submission}
           index={this.props.index + 1}
@@ -112,7 +112,7 @@ class SubmissionTitle extends React.Component {
     let index = '' + this.props.index + '. ';
     let title = decodeHTML(this.props.submission.title);
     return (
-      <div className="media-title">
+      <div className="submission-title">
         <a className="permalink" href={this.props.submission.permalink} target="_blank">
           {index}{title}
         </a>
