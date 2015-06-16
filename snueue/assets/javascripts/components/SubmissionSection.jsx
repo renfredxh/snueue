@@ -1,5 +1,7 @@
 import React from 'react/addons';
 import connectToStores from 'alt/utils/connectToStores';
+import reactMixin from 'react-mixin';
+import { State } from 'react-router';
 
 import SubmissionActions from '../actions/SubmissionActions.js';
 import SubmissionStore from '../stores/SubmissionStore.js';
@@ -29,7 +31,17 @@ class SubmissionSection extends React.Component {
    * and fetch new submissions for that source.
    */
   updateSource(props) {
-    let source = `/r/${props.params.subreddit}`;
+    let source;
+    let routes = this.getRoutes();
+    let currentRoute = routes[routes.length-1].name;
+    switch(currentRoute) {
+      case 'subreddit':
+        source = `/r/${props.params.subreddit}`;
+        break;
+      case 'test':
+        source = `/s/${props.params.name}`;
+        break;
+    }
     let sorting = props.query.sorting || 'hot';
     SubmissionActions.updateSource(source, sorting);
     SubmissionStore.fetchSubmissions();
@@ -109,4 +121,5 @@ class SubmissionTitle extends React.Component {
   }
 }
 
+reactMixin.onClass(SubmissionSection, State);
 export default connectToStores(SubmissionSection);

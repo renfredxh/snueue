@@ -1,7 +1,7 @@
 import React from 'react';
-import { Navigation } from 'react-router';
 import connectToStores from 'alt/utils/connectToStores';
 import reactMixin from 'react-mixin';
+import { Navigation } from 'react-router';
 
 import SubmissionStore from '../stores/SubmissionStore.js';
 
@@ -14,18 +14,27 @@ class SearchBar extends React.Component {
     return SubmissionStore.getState();
   }
 
+  resolveSearchRoute(source, sorting) {
+    // The default sorting is hot so it can be left out of the params.
+    let query = sorting === 'hot' ? {} : { sorting };
+    const subredditPattern = /(?:\/?(?:r\/))?(\w*)/;
+    const testPattern = /\/?s\/(\w*)/;
+    if (testPattern.test(source)) {
+      let name = testPattern.exec(source)[1];
+      this.transitionTo('test', { name }, query);
+    } else if (subredditPattern.test(source)) {
+      let subreddit = subredditPattern.exec(source)[1];
+      this.transitionTo('subreddit', { subreddit }, query);
+    }
+  }
+
   handleSearch(e) {
     if (e) e.preventDefault();
     let source = this.refs.source.getDOMNode().value.trim();
     let sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
     // Default to showing /r/music
     if (!source) source = '/r/music';
-    const subredditPattern = /\/?(r\/)?(\w*)/;
-    // Extract the optional "/r/" from the front.
-    let subreddit = subredditPattern.exec(source)[2];
-    // The default sorting is hot so it can be left out of the params.
-    let query = sorting === 'hot' ? {} : { sorting };
-    this.transitionTo('subreddit', { subreddit }, query);
+    this.resolveSearchRoute(source, sorting);
   }
 
   componentDidUpdate() {

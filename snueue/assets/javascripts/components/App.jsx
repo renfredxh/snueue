@@ -1,9 +1,6 @@
 import React from 'react';
 import { RouteHandler } from 'react-router';
 
-import SubmissionActions from '../actions/SubmissionActions.js';
-
-import SubmissionSection from './SubmissionSection.jsx';
 import SearchBar from './SearchBar.jsx';
 import Login from './Login.jsx';
 import UserMenu from './UserMenu.jsx';
