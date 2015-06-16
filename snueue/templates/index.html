@@ -11,9 +11,6 @@
     <i class="fa fa-expand"></i>
   </div>
   <script>
-    {% if source %}
-      Snueue.sourceFromURL = '{{ source }}';
-    {% endif %}
     {% if current_user.is_authenticated() %}
       Snueue.user = '{{ current_user.username }}';
     {% endif %}

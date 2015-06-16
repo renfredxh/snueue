@@ -21,7 +21,7 @@ def index():
 
 @app.route('/<type>/<subreddit>')
 def index_with_subreddit(type, subreddit):
-    return render_template('index.html', source='/{}/{}'.format(type, subreddit))
+    return render_template('index.html')
 
 @app.route('/submissions', methods=['GET'])
 def submissions():

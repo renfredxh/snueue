@@ -9,7 +9,6 @@ import PlayerActions from './actions/PlayerActions.js';
 window.React = React;
 
 window.Snueue = {
-  sourceFromURL: null,
   user: null,
 };
 
