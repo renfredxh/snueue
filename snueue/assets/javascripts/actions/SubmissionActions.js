@@ -9,7 +9,6 @@ class SubmissionActions {
   }
 
   updateSource(source, sorting) {
-    history.pushState({}, '', source);
     this.dispatch({ source, sorting });
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { RouteHandler } from 'react-router';
 
 import SubmissionActions from '../actions/SubmissionActions.js';
 
@@ -12,19 +13,6 @@ class App extends React.Component {
     super(props);
     let user = Snueue.user;
     this.state = { user };
-  }
-
-  handlePopstate(e) {
-    // When the back button is pressed, load the previous search if there was one.
-    if (e.state === null) {
-      window.location = '/';
-    } else {
-      this.handleSearch(e.state.source, e.state.sorting);
-    }
-  }
-
-  componentDidMount() {
-    window.addEventListener('popstate', this.handlePopstate);
   }
 
   render() {
@@ -42,7 +30,7 @@ class App extends React.Component {
             </div>
           </div>
         </div>
-        <SubmissionSection user={this.state.user}/>
+        <RouteHandler user={this.state.user} />
       </div>
     );
   }

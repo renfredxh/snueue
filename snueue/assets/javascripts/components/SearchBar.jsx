@@ -1,34 +1,43 @@
 import React from 'react';
+import { Navigation } from 'react-router';
+import connectToStores from 'alt/utils/connectToStores';
+import reactMixin from 'react-mixin';
 
-import SubmissionActions from '../actions/SubmissionActions.js';
 import SubmissionStore from '../stores/SubmissionStore.js';
 
 class SearchBar extends React.Component {
-  handleSubmit(e) {
+  static getStores(props) {
+    return [SubmissionStore];
+  }
+
+  static getPropsFromStores(props) {
+    return SubmissionStore.getState();
+  }
+
+  handleSearch(e) {
     if (e) e.preventDefault();
     let source = this.refs.source.getDOMNode().value.trim();
     let sorting = this.refs.select.refs.sorting.getDOMNode().value.trim();
     // Default to showing /r/music
-    if (!source) {
-      source = '/r/music';
-      // It's ok to mutate the value field of this input just to serve as
-      // an example.
-      $('#search-bar').val(source);
-    }
-    SubmissionActions.updateSource(source, sorting);
-    SubmissionStore.fetchSubmissions();
+    if (!source) source = '/r/music';
+    const subredditPattern = /\/?(r\/)?(\w*)/;
+    // Extract the optional "/r/" from the front.
+    let subreddit = subredditPattern.exec(source)[2];
+    // The default sorting is hot so it can be left out of the params.
+    let query = sorting === 'hot' ? {} : { sorting };
+    this.transitionTo('subreddit', { subreddit }, query);
   }
 
-  componentDidMount() {
-    if (Snueue.sourceFromURL) {
-      this.refs.source.getDOMNode().value = Snueue.sourceFromURL;
-      this.handleSubmit();
+  componentDidUpdate() {
+    // Keep the search bar text in sync with the source of the current submissions.
+    if (this.props.loading) {
+      this.refs.source.getDOMNode().value = this.props.source;
     }
   }
 
   render() {
     return (
-      <form id="source-form" className="search-form" onSubmit={this.handleSubmit.bind(this)} ref="form">
+      <form id="source-form" className="search-form" onSubmit={this.handleSearch.bind(this)} ref="form">
         {/* name="q" is there so that the field can be saved as a search engine. */}
         <div className="search-bar-container">
           <input id="search-bar" className="search-bar" name="q" type="text" placeholder="/r/music" ref="source"/>
@@ -60,4 +69,5 @@ class SearchSortingSelect extends React.Component {
   }
 }
 
-export default SearchBar;
+reactMixin.onClass(SearchBar, Navigation);
+export default connectToStores(SearchBar);

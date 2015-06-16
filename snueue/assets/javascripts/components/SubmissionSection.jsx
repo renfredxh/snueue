@@ -24,6 +24,27 @@ class SubmissionSection extends React.Component {
     this.state = SubmissionStore.getState();
   }
 
+  /**
+   * Update the current source for submissions to match the url params
+   * and fetch new submissions for that source.
+   */
+  updateSource(props) {
+    let source = `/r/${props.params.subreddit}`;
+    let sorting = props.query.sorting || 'hot';
+    SubmissionActions.updateSource(source, sorting);
+    SubmissionStore.fetchSubmissions();
+  }
+
+  componentDidMount() {
+    this.updateSource(this.props);
+  }
+
+  componentWillUpdate(nextProps) {
+    if (this.props.params.subreddit !== nextProps.params.subreddit) {
+      this.updateSource(nextProps);
+    }
+  }
+
   render() {
     if (this.props.flash) return (
       <ReactCSSTransitionGroup transitionName="flash">

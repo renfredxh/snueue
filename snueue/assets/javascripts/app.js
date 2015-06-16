@@ -1,6 +1,7 @@
 import React from 'react/addons';
+import Router from 'react-router';
 
-import App from './components/App.jsx';
+import routes from './routes';
 import * as fullscreen from './fullscreen.js';
 import PlayerActions from './actions/PlayerActions.js';
 
@@ -21,8 +22,7 @@ window.onYouTubeIframeAPIReady = () => {
 };
 
 $(document).ready(() => {
-  React.render(
-    <App />,
-    document.getElementById('main')
-  );
+  Router.run(routes, Router.HistoryLocation, (Root) => {
+    React.render(<Root />, document.getElementById('main'));
+  });
 });

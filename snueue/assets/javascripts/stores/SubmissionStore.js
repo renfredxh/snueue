@@ -9,7 +9,7 @@ class SubmissionStore {
     this.submissions = [];
     this.history = [];
     this.flash = '';
-    this.loading = false;
+    this.loading = true;
   }
 
   onLoadingSubmissions() {
