@@ -18,7 +18,6 @@ class UserMenu extends React.Component {
     };
     let dropdownContent = [
       {text: "Logout", href: "/logout"},
-      {text: "Login", href: "/logout"}
     ];
     return (
       <Dropdown text={username} contents={dropdownContent} classes="navy-button" style={dropdownStyle} />
